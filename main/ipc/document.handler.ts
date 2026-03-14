@@ -1,34 +1,41 @@
+import { injectable, inject } from 'tsyringe';
 import { ipcMain } from 'electron';
-import { container } from 'tsyringe';
+import { TOKENS } from '../infrastructure/tokens';
 import { IPC_CHANNELS } from '../../shared/ipc-channels';
 import { ok, fail } from '../../shared/ipc-response';
-import { DocumentService } from '../domains/documents/document.service';
+import type { DocumentUseCase } from '../use-cases/document.use-case';
 
-export function registerDocumentHandlers(): void {
-  const service = container.resolve(DocumentService);
+@injectable()
+export class DocumentHandler {
+  constructor(
+    @inject(TOKENS.DocumentUseCase)
+    private readonly useCase: DocumentUseCase
+  ) { }
 
-  ipcMain.handle(IPC_CHANNELS.DOCUMENTS_LIST, () => {
-    try {
-      return ok(service.findAll());
-    } catch (e) {
-      return fail((e as Error).message);
-    }
-  });
+  register(): void {
+    ipcMain.handle(IPC_CHANNELS.DOCUMENTS_LIST, () => {
+      try {
+        return ok(this.useCase.findAll());
+      } catch (e) {
+        return fail((e as Error).message);
+      }
+    });
 
-  ipcMain.handle(IPC_CHANNELS.DOCUMENTS_SAVE, (_, dto) => {
-    try {
-      return ok(service.save(dto));
-    } catch (e) {
-      return fail((e as Error).message);
-    }
-  });
+    ipcMain.handle(IPC_CHANNELS.DOCUMENTS_SAVE, (_, dto) => {
+      try {
+        return ok(this.useCase.save(dto));
+      } catch (e) {
+        return fail((e as Error).message);
+      }
+    });
 
-  ipcMain.handle(IPC_CHANNELS.DOCUMENTS_DELETE, (_, id) => {
-    try {
-      service.delete(id);
-      return ok(null);
-    } catch (e) {
-      return fail((e as Error).message);
-    }
-  });
+    ipcMain.handle(IPC_CHANNELS.DOCUMENTS_DELETE, (_, id) => {
+      try {
+        this.useCase.delete(id);
+        return ok(null);
+      } catch (e) {
+        return fail((e as Error).message);
+      }
+    });
+  }
 }

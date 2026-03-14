@@ -1,5 +1,6 @@
-import { registerDocumentHandlers } from './document.handler';
+import { container } from 'tsyringe';
+import { DocumentHandler } from './document.handler';
 
 export function registerAllHandlers(): void {
-  registerDocumentHandlers();
+  container.resolve(DocumentHandler).register();
 }
