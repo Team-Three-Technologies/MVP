@@ -20,7 +20,7 @@ export class DocumentsComponent implements OnInit {
   constructor(
     private readonly documentService: DocumentService,
     private readonly cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   async ngOnInit(): Promise<void> {
     await this.load();

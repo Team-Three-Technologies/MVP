@@ -1,9 +1,9 @@
 import { injectable, inject } from 'tsyringe';
-import { ipcMain } from 'electron';
 import { TOKENS } from '../infrastructure/tokens';
-import { IPC_CHANNELS } from '../../shared/ipc-channels';
 import { ok, fail } from '../../shared/ipc-response';
 import type { DocumentUseCase } from '../use-cases/document.use-case';
+import type { IpcResponse } from '../../shared/ipc-response';
+import type { DocumentDto, CreateDocumentDto } from '../../shared/dto';
 
 @injectable()
 export class DocumentHandler {
@@ -12,30 +12,29 @@ export class DocumentHandler {
     private readonly useCase: DocumentUseCase
   ) { }
 
-  register(): void {
-    ipcMain.handle(IPC_CHANNELS.DOCUMENTS_LIST, () => {
-      try {
-        return ok(this.useCase.findAll());
-      } catch (e) {
-        return fail((e as Error).message);
-      }
-    });
-
-    ipcMain.handle(IPC_CHANNELS.DOCUMENTS_SAVE, (_, dto) => {
-      try {
-        return ok(this.useCase.save(dto));
-      } catch (e) {
-        return fail((e as Error).message);
-      }
-    });
-
-    ipcMain.handle(IPC_CHANNELS.DOCUMENTS_DELETE, (_, id) => {
-      try {
-        this.useCase.delete(id);
-        return ok(null);
-      } catch (e) {
-        return fail((e as Error).message);
-      }
-    });
+  list(): IpcResponse<DocumentDto[]> {
+    try {
+      return ok(this.useCase.findAll());
+    } catch (e) {
+      return fail((e as Error).message);
+    }
   }
+
+  save(dto: CreateDocumentDto): IpcResponse<DocumentDto> {
+    try {
+      return ok(this.useCase.save(dto));
+    } catch (e) {
+      return fail((e as Error).message);
+    }
+  }
+
+  delete(id: string): IpcResponse<null> {
+    try {
+      this.useCase.delete(id);
+      return ok(null);
+    } catch (e) {
+      return fail((e as Error).message);
+    }
+  }
+
 }

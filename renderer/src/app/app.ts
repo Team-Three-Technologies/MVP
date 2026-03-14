@@ -8,4 +8,4 @@ import { DocumentsComponent } from './features/documents/documents.component';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {}
+export class App { }
