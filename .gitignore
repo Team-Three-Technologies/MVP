@@ -1,0 +1,27 @@
+# Node
+node_modules/
+
+# Compiled output
+dist/
+release/
+
+# Source maps
+*.js.map
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/
+
+# env
+.env
+.env.*
