@@ -12,7 +12,11 @@
     "importHelpers": true
   },
   "include": [
-    "main/**/*.ts",
+    "main/*.ts",
+    "main/src/**/*.ts",
     "shared/**/*.ts"
+  ],
+  "exclude": [
+    "main/test/**/*.ts"
   ]
 }

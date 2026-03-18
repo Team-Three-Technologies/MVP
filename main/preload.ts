@@ -1,12 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { IPC_CHANNELS } from '../shared/ipc-channels';
-import type { CreateDocumentDto } from '../shared/dto';
+import type { ImportDiPDTO } from '../shared/import-dip.dto';
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  documents: {
-    list: () => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENTS_LIST),
-    save: (dto: CreateDocumentDto) => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENTS_SAVE, dto),
-    delete: (id: string) => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENTS_DELETE, id),
+  dialog: {
+    openZipDialog: () => ipcRenderer.invoke(IPC_CHANNELS.DIALOG_OPEN_ZIP),
+  },
+  dip: {
+    import: (dto: ImportDiPDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_IMPORT, dto),
   },
   on: (channel: string, callback: (data: unknown) => void) => {
     ipcRenderer.on(channel, (_, data) => callback(data));

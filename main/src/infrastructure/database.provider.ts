@@ -3,14 +3,14 @@ import Database from 'better-sqlite3';
 import * as path from 'path';
 import * as fs from 'fs';
 import { TOKENS } from './tokens';
-import { DbConfig } from './database.config';
+import { DatabaseConfig } from './database.config';
 
 @injectable()
 export class DatabaseProvider {
   private db: Database.Database;
 
   constructor(
-    @inject(TOKENS.DbConfig) private readonly config: DbConfig
+    @inject(TOKENS.DatabaseConfig) private readonly config: DatabaseConfig
   ) {
     this.db = new Database(config.dbPath);
     this.db.pragma('journal_mode = WAL');

@@ -1,4 +1,4 @@
-export interface DbConfig {
+export interface DatabaseConfig {
   dbPath: string;
   migrationsPath: string;
 }
