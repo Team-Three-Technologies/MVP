@@ -1,10 +1,11 @@
 export const TOKENS = {
   DocumentUseCase: Symbol('DocumentUseCase'),
-  OpenDialogUseCase: Symbol('OpenDialogUseCase'),
-  AutoImportDiPUseCase: Symbol('AutoImportDiPUseCase'),
-  ImportDiPUseCase: Symbol('ImportDiPUseCase'),
-  ZipService: Symbol('IZipService'),
-  XmlService: Symbol('IXmlService'),
-  DocumentRepository: Symbol('IDocumentRepository'),
-  DatabaseConfig: Symbol('DatabaseConfig'),
+  OpenZipDialogUseCase: Symbol('OpenZipDialogUseCase'),
+  AutoImportDipUseCase: Symbol('AutoImportDipUseCase'),
+  ImportDipUseCase: Symbol('ImportDipUseCase'),
+  IHashService: Symbol('IHashService'),
+  IZipService: Symbol('IZipService'),
+  IXmlService: Symbol('IXmlService'),
+  IDipRepository: Symbol('IDipRepository'),
+  AppConfig: Symbol('AppConfig'),
 } as const;

@@ -1,3 +1,3 @@
-export interface ImportDiPUseCase {
+export interface ImportDipUseCase {
   execute(dipPath: string): Promise<void>;
 }

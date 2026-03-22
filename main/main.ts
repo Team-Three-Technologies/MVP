@@ -3,14 +3,15 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import { registerDependencies } from './src/infrastructure/container';
 import { registerAllHandlers } from './src/ipc/router';
-import { IPC_CHANNELS } from '../shared/ipc-channels';
+import { IPC_CHANNELS } from './ipc-channels';
 
 app.whenReady().then(() => {
   registerDependencies();
   registerAllHandlers();
   createWindow();
 
-  // TODO: da controllare se ci si trova all'interno di un DiP, come boh
+  // TODO: da controllare se ci si trova all'interno di un Dip, come boh
+  // path.dirname(process.execPath)
   ipcMain.emit(IPC_CHANNELS.DIP_AUTO_IMPORT, null);
 });
 

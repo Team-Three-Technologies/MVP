@@ -1,3 +1,3 @@
 export interface IZipService {
-  extract(zipPath: string): Promise<string>
+  extract(zipPath: string, destPath: string): Promise<void>
 }

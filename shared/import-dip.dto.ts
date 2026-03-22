@@ -1,3 +1,3 @@
-export interface ImportDiPDTO {
+export interface ImportDipDTO {
   dipPath: string;
 }

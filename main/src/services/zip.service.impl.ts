@@ -1,25 +1,20 @@
 import { injectable } from 'tsyringe';
 import { IZipService } from './zip.service.interface';
-import * as unzipper from 'unzipper';
-import * as fs from 'fs';
+import * as Seven from 'node-7z';
+import sevenBin from '7zip-bin';
 import * as fsp from 'fs/promises';
-import * as path from 'path';
-import * as os from 'os';
 
 @injectable()
 export class ZipServiceImpl implements IZipService {
-  async extract(zipPath: string): Promise<string> {
-    const tempDir = await fsp.mkdtemp(
-      path.join(os.tmpdir(), 'dipreader-')
-    );
+  async extract(zipPath: string, destPath: string): Promise<void> {
+    await fsp.mkdir(destPath, { recursive: true });
 
     await new Promise<void>((resolve, reject) => {
-      fs.createReadStream(zipPath)
-        .pipe(unzipper.Extract({ path: tempDir }))
-        .on('close', resolve)
-        .on('error', reject);
+      const stream = Seven.extractFull(zipPath, destPath, {
+        $bin: sevenBin.path7za
+      });
+      stream.on('end', resolve);
+      stream.on('error', reject);
     });
-
-    return tempDir;
   }
 }

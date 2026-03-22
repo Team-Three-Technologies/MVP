@@ -1,8 +1,8 @@
 import { injectable } from 'tsyringe';
-import { AutoImportDiPUseCase } from './auto-import-dip.use-case';
+import { AutoImportDipUseCase } from './auto-import-dip.use-case';
 
 @injectable()
-export class AutoImportDiPService implements AutoImportDiPUseCase {
+export class AutoImportDipService implements AutoImportDipUseCase {
   constructor() { } 
 
   async execute(): Promise<void> {

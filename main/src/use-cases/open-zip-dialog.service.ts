@@ -1,9 +1,9 @@
 import { injectable } from 'tsyringe';
 import { dialog } from 'electron';
-import { OpenDialogUseCase } from './open-dialog.use-case';
+import { OpenZipDialogUseCase } from './open-zip-dialog.use-case';
 
 @injectable()
-export class OpenDialogService implements OpenDialogUseCase {
+export class OpenZipDialogService implements OpenZipDialogUseCase {
   async execute(): Promise<string | null> {
     const result = await dialog.showOpenDialog({
       title: 'Seleziona un DIP',
