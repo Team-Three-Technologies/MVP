@@ -24,7 +24,7 @@ export class AutoImportDipService implements AutoImportDipUseCase {
 
     const dipIndex = await this.dipParserService.parseDipIndex(dipIndexPath);
     console.log(dipIndex);
-    // TODO: parsing del resto dei file (metadata, report, sip, aip e quello che serve)\
+    // TODO: parsing del resto dei file (metadata, report, sip, aip e quello che serve)
     // TODO: usare repository per salvare le informazioni
   }
 }

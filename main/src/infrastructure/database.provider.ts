@@ -10,7 +10,8 @@ export class DatabaseProvider {
   private db: Database.Database;
 
   constructor(
-    @inject(TOKENS.AppConfig) private readonly config: AppConfig
+    @inject(TOKENS.AppConfig)
+    private readonly config: AppConfig
   ) {
     this.db = new Database(config.dbPath);
     this.db.pragma('journal_mode = WAL');

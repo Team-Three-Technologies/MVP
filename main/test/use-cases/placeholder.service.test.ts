@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-describe('OpenDialogService', () => {
+describe('PlaceholderService', () => {
   beforeEach(() => {
     container.clearInstances();
   });

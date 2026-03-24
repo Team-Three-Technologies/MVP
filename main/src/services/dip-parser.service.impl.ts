@@ -2,7 +2,7 @@ import { injectable } from 'tsyringe';
 import { IDipParserService } from './dip-parser.service.interface';
 import { XMLParser } from 'fast-xml-parser';
 import * as fsp from 'fs/promises';
-import type { XmlDipIndex, XmlDocumentClass, XmlAip, XmlDocument, XmlDocumentFiles } from '../models/dip-index.xml';
+import type { XmlDipIndex, XmlDocumentClass, XmlAip, XmlDocument, XmlDocumentFiles } from './dip-index.xml';
 
 @injectable()
 export class DipParserServiceImpl implements IDipParserService {
