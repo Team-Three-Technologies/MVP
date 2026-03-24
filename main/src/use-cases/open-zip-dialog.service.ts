@@ -4,7 +4,7 @@ import { OpenZipDialogUseCase } from './open-zip-dialog.use-case';
 
 @injectable()
 export class OpenZipDialogService implements OpenZipDialogUseCase {
-  async execute(): Promise<string | null> {
+  public async execute(): Promise<string | null> {
     const result = await dialog.showOpenDialog({
       title: 'Seleziona un DIP',
       filters: [{ name: 'Archivio ZIP', extensions: ['zip'] }],

@@ -1,5 +1,6 @@
 export interface AppConfig {
+  appDir: string;
   dbPath: string;
   migrationsPath: string;
-  extractPath: string;
+  documentsPath: string;
 }

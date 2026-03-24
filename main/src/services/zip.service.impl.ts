@@ -6,7 +6,7 @@ import * as fsp from 'fs/promises';
 
 @injectable()
 export class ZipServiceImpl implements IZipService {
-  async extract(zipPath: string, destPath: string): Promise<void> {
+  public async extract(zipPath: string, destPath: string): Promise<void> {
     await fsp.mkdir(destPath, { recursive: true });
 
     await new Promise<void>((resolve, reject) => {

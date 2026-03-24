@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -7,4 +7,27 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App { }
+export class App implements OnInit {
+  private api = (window as any).electronAPI;
+  message: string = 'prova';
+
+  constructor(
+    private readonly cdr: ChangeDetectorRef
+  ) { }
+
+  async test(): Promise<void> {
+    const res = await this.api.dip.autoImport();
+    if (res.error) throw new Error(res.error);
+  }
+
+  async ngOnInit() {
+    try {
+      await this.test();
+      this.message = 'worka';
+    } catch (e) {
+      this.message = (e as Error).message;
+    } finally {
+      this.cdr.detectChanges();
+    }
+  }
+}

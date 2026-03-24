@@ -10,6 +10,6 @@ export function registerAllHandlers(): void {
 
   ipcMain.handle(IPC_CHANNELS.DIALOG_OPEN_ZIP, () => dialogHandler.openZipDialog());
 
-  ipcMain.handle(IPC_CHANNELS.DIP_IMPORT, (_, dto) => dipHandler.import(dto));
-  ipcMain.on(IPC_CHANNELS.DIP_AUTO_IMPORT, () => dipHandler.autoImport());
+  ipcMain.handle(IPC_CHANNELS.DIP_IMPORT, (_, dto) => dipHandler.zipImport(dto));
+  ipcMain.handle(IPC_CHANNELS.DIP_AUTO_IMPORT, () => dipHandler.autoImport());
 }

@@ -3,7 +3,7 @@ import Database from 'better-sqlite3';
 import * as path from 'path';
 import * as fs from 'fs';
 import { TOKENS } from './tokens';
-import { AppConfig } from './app.config';
+import type { AppConfig } from './app.config';
 
 @injectable()
 export class DatabaseProvider {
@@ -18,7 +18,7 @@ export class DatabaseProvider {
     this.runMigrations();
   }
 
-  get instance(): Database.Database {
+  public get instance(): Database.Database {
     return this.db;
   }
 

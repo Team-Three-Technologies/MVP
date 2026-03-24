@@ -5,7 +5,7 @@ import * as fs from 'fs';
 
 @injectable()
 export class SHA256HashServiceImpl implements IHashService {
-  async compute(filePath: string): Promise<string> {
+  public async compute(filePath: string): Promise<string> {
     const hash = crypto.createHash('sha256');
     const stream = fs.createReadStream(filePath);
 

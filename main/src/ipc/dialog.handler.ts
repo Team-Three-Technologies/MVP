@@ -10,7 +10,7 @@ export class DialogHandler {
     private readonly openZipDialogUseCase: OpenZipDialogUseCase
   ) { }
 
-  async openZipDialog(): Promise<IpcResponse<string | null>> {
+  public async openZipDialog(): Promise<IpcResponse<string | null>> {
     try {
       return ok(await this.openZipDialogUseCase.execute());
     } catch (e) {
