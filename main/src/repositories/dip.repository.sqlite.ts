@@ -10,11 +10,11 @@ export class SQLiteDipRepository implements IDipRepository {
   public save(dip: Dip): Dip {
     this.db
       .prepare(`
-        INSERT INTO pacchetti_dip (uuid_processo, data_creazione, numero_documenti, numero_aip)
+        INSERT INTO archivio_dip (uuid, data_creazione, numero_documenti, numero_aip)
         VALUES (@uuid, @date, @docsCount, @aipCount)
       `)
       .run({
-        uuid: dip.uuid,
+        uuid: dip.uuid.toString(),
         date: dip.creationDate.toISOString(),
         docsCount: dip.docsCount,
         aipCount: dip.aipCount

@@ -50,11 +50,21 @@ export class DatabaseProvider {
     }
   }
 
+  private ensureDir(dir: string): void {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  }
+
   private getDbPath(dipUuid: string): string {
-    return path.join(this.config.documentsPath, dipUuid, `${dipUuid}.db`);
+    const dir = path.join(this.config.documentsPath, dipUuid);
+    this.ensureDir(dir);
+    return path.join(dir, `${dipUuid}.db`);
   }
 
   private runMigrations(db: Database.Database): void {
+    this.ensureDir(this.config.migrationsPath);
+
     const files = fs.readdirSync(this.config.migrationsPath).sort();
 
     db.exec(`

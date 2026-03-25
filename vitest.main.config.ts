@@ -8,7 +8,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ['reflect-metadata'],
     coverage: {
-      provider: 'v8'
+      provider: 'v8',
+      reporter: ['text', 'json', 'html']
     }
   },
   plugins: [

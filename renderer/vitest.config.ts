@@ -5,10 +5,6 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['src/**/*.spec.ts'],
     globals: true,
-    reporters: process.env['CI'] ? ['junit', 'default'] : ['default'],
-    outputFile: {
-      junit: '../test-results/renderer.xml',
-    },
     coverage: {
       provider: 'v8'
     }
