@@ -3,6 +3,7 @@ export const TOKENS = {
   IFileService: Symbol('IFileService'),
   IHashService: Symbol('IHashService'),
   IDipParserService: Symbol('IDipParserService'),
-  IDipRepository: Symbol('IDipRepository'),
+  IRepositoryFactory: Symbol('IRepositoryFactory'),
+  DatabaseProvider: Symbol('DatabaseProvider'),
   AppConfig: Symbol('AppConfig'),
 } as const;

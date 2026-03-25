@@ -9,5 +9,8 @@ export default defineConfig({
     outputFile: {
       junit: '../test-results/renderer.xml',
     },
+    coverage: {
+      provider: 'v8'
+    }
   },
 });

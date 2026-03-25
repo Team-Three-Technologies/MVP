@@ -7,26 +7,57 @@ import type { AppConfig } from './app.config';
 
 @injectable()
 export class DatabaseProvider {
-  private db: Database.Database;
+  private readonly databases = new Map<string, Database.Database>();
 
   constructor(
     @inject(TOKENS.AppConfig)
     private readonly config: AppConfig
-  ) {
-    this.db = new Database(config.dbPath);
-    this.db.pragma('journal_mode = WAL');
-    this.db.pragma('foreign_keys = ON');
-    this.runMigrations();
+  ) { }
+
+  public getDb(dipUuid: string): Database.Database {
+    if (this.databases.has(dipUuid)) {
+      return this.databases.get(dipUuid)!;
+    }
+
+    const dbPath = this.getDbPath(dipUuid);
+    const db = new Database(dbPath);
+    db.pragma('journal_mode = WAL');
+    db.pragma('foreign_keys = ON');
+    this.runMigrations(db);
+    this.databases.set(dipUuid, db);
+    return db;
   }
 
-  public get instance(): Database.Database {
-    return this.db;
+  public close(dipUuid: string): void {
+    const db = this.databases.get(dipUuid);
+    if (db) {
+      db.close();
+      this.databases.delete(dipUuid);
+    }
   }
 
-  private runMigrations(): void {
+  public closeAll(): void {
+    for (const [dipUuid] of this.databases) {
+      this.close(dipUuid);
+    }
+  }
+
+  public delete(dipUuid: string): void {
+    this.close(dipUuid);
+    const dbPath = this.getDbPath(dipUuid);
+    if (fs.existsSync(dbPath)) {
+      fs.unlinkSync(dbPath);
+    }
+  }
+
+  private getDbPath(dipUuid: string): string {
+    return path.join(this.config.documentsPath, dipUuid, `${dipUuid}.db`);
+  }
+
+  private runMigrations(db: Database.Database): void {
     const files = fs.readdirSync(this.config.migrationsPath).sort();
 
-    this.db.exec(`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS migrations (
         name TEXT PRIMARY KEY,
         run_at TEXT NOT NULL
@@ -34,14 +65,14 @@ export class DatabaseProvider {
     `);
 
     for (const file of files) {
-      const already = this.db
+      const already = db
         .prepare('SELECT name FROM migrations WHERE name = ?')
         .get(file);
 
       if (!already) {
         const sql = fs.readFileSync(path.join(this.config.migrationsPath, file), 'utf-8');
-        this.db.exec(sql);
-        this.db
+        db.exec(sql);
+        db
           .prepare('INSERT INTO migrations (name, run_at) VALUES (?, ?)')
           .run(file, new Date().toISOString());
       }

@@ -7,6 +7,9 @@ export default defineConfig({
     include: ['main/test/**/*.test.ts'],
     globals: true,
     setupFiles: ['reflect-metadata'],
+    coverage: {
+      provider: 'v8'
+    }
   },
   plugins: [
     swc.vite({
