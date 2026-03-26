@@ -5,19 +5,19 @@ import { DipRow } from './dip.row'
 import Database from 'better-sqlite3';
 @injectable()
 export class SQLiteDipRepository implements IDipRepository {
-  constructor(private readonly db: Database.Database) {}
+  constructor(private readonly db: Database.Database) { }
 
   public save(dip: Dip): Dip {
     this.db
       .prepare(`
-        INSERT INTO archivio_dip (uuid, data_creazione, numero_documenti, numero_aip)
+        INSERT INTO archivio_dip (uuid_processo, data_creazione, numero_documenti, numero_aip)
         VALUES (@uuid, @date, @docsCount, @aipCount)
       `)
       .run({
-        uuid: dip.uuid.toString(),
-        date: dip.creationDate.toISOString(),
-        docsCount: dip.docsCount,
-        aipCount: dip.aipCount
+        uuid: dip.getProcessUuid().toString(),
+        date: dip.getCreationDate().toISOString(),
+        docsCount: dip.getDocumentsCount(),
+        aipCount: dip.getAipCount()
       });
     return dip;
   }

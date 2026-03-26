@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS archivio_dip (
-  uuid TEXT PRIMARY KEY,
+  uuid_processo TEXT PRIMARY KEY,
   data_creazione TEXT NOT NULL,
   numero_documenti INTEGER NOT NULL,
   numero_aip INTEGER NOT NULL
@@ -28,10 +28,7 @@ CREATE TABLE IF NOT EXISTS processi_conservazione (
 
 CREATE TABLE IF NOT EXISTS documenti (
   uuid TEXT PRIMARY KEY,
-  nome TEXT NOT NULL,
-  versione TEXT NOT NULL,
-  dimensione_totale TEXT NOT NULL,
-  numero_file INTEGER NOT NULL,
+  percorso TEXT NOT NULL,
   uuid_processo_conservazione TEXT,
   FOREIGN KEY(uuid_processo_conservazione) REFERENCES processi_conservazione(uuid)
 );
@@ -39,6 +36,7 @@ CREATE TABLE IF NOT EXISTS documenti (
 CREATE TABLE IF NOT EXISTS metadata (
   nome TEXT,
   valore TEXT NOT NULL,
+  tipo TEXT NOT NULL,
   uuid_documento TEXT,
   PRIMARY KEY(uuid_documento, nome),
   FOREIGN KEY(uuid_documento) REFERENCES documenti(uuid)

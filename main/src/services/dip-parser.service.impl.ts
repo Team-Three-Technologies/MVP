@@ -28,7 +28,6 @@ export class DipParserServiceImpl implements IDipParserService {
   public async parseDipIndex(xmlPath: string): Promise<XmlDipIndex> {
     const xml = await fsp.readFile(xmlPath, 'utf-8');
     const raw = this.parser.parse(xml);
-
     return this.mapDipIndex(raw.DiPIndex);
   }
 

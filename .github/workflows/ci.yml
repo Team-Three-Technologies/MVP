@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            renderer/package-lock.json
+
+      - name: Install backend deps
+        run: npm ci
+
+      - name: Run backend tests (Vitest + coverage)
+        run: npm run test:main:cov
+
+      - name: Install renderer deps
+        working-directory: renderer
+        run: npm ci
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Set Chrome path
+        run: echo "CHROME_BIN=$(which google-chrome)" >> $GITHUB_ENV
+
+      - name: Run renderer tests (Angular + coverage)
+        working-directory: renderer
+        run: npm run test:cov
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: |
+            ./coverage/lcov.info
+            ./renderer/coverage/**/lcov.info
+          fail_ci_if_error: true
