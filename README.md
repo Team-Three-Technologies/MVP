@@ -1,4 +1,5 @@
 # DIPReader
+[![codecov](https://codecov.io/github/Team-Three-Technologies/MVP/graph/badge.svg?token=KR22V4BT30)](https://codecov.io/github/Team-Three-Technologies/MVP)
 
 Questo repository contiene il _Minimun Viable Product_ (**MVP**) del progetto **C3 - DIPReader** proposto da _Sanmarco Informatica s.r.l_ realizzato dal gruppo 3, **Team Three Technologies**.
 
