@@ -23,20 +23,22 @@ export function registerDependencies(): void {
   });
 
   // infrastructure
+  // db
   container.register(TOKENS.DatabaseProvider, { useClass: DatabaseProvider }, { lifecycle: Lifecycle.Singleton });
+  // fs
+  container.register(TOKENS.FileService, { useClass: FileServiceImpl }, { lifecycle: Lifecycle.Singleton });
+  // hash
+  container.register(TOKENS.HashService, { useClass: SHA256HashServiceImpl }, { lifecycle: Lifecycle.Singleton });
+  // parsing
+  container.register(TOKENS.DipParser, { useClass: DipParserImpl }, { lifecycle: Lifecycle.Singleton });
+  container.register(TOKENS.DipIndexParser, { useClass: DipIndexParserImpl }, { lifecycle: Lifecycle.Singleton });
+  container.register(TOKENS.MetadataParser, { useClass: MetadataParserImpl }, { lifecycle: Lifecycle.Singleton });
 
   // repositories
-  container.register(TOKENS.DipRepository, { useClass: SQLiteDipRepository });
-
-  // services
-  container.register(TOKENS.FileService, { useClass: FileServiceImpl });
-  container.register(TOKENS.HashService, { useClass: SHA256HashServiceImpl });
-  container.register(TOKENS.DipParser, { useClass: DipParserImpl });
-  container.register(TOKENS.DipIndexParser, { useClass: DipIndexParserImpl });
-  container.register(TOKENS.MetadataParser, { useClass: MetadataParserImpl });
+  container.register(TOKENS.DipRepository, { useClass: SQLiteDipRepository }, { lifecycle: Lifecycle.Singleton });
 
   // use cases
-  container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService });
+  container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService }, { lifecycle: Lifecycle.Singleton });
 
   // handlers
   container.registerSingleton(DipHandler);
