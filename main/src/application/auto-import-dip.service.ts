@@ -1,13 +1,10 @@
 import { inject, injectable } from 'tsyringe';
-import { TOKENS } from '../infrastructure/tokens';
+import { TOKENS } from '../infrastructure/di/tokens';
 import { AutoImportDipUseCase } from './auto-import-dip.use-case';
-import { FileService } from '../services/file.service.interface';
-import { DipParser } from '../services/dip.parser.interface';
+import { FileService } from '../infrastructure/fs/file.service.interface';
+import { DipParser } from '../infrastructure/parsing/dip.parser.interface';
 import { DipRepository } from '../repositories/dip.repository.interface';
 import type { AppConfig } from '../infrastructure/app.config';
-import { Dip } from '../domain/dip.model';
-import { UUID } from '../domain/value-objects/uuid.value-object';
-
 @injectable()
 export class AutoImportDipService implements AutoImportDipUseCase {
   constructor(
@@ -28,19 +25,10 @@ export class AutoImportDipService implements AutoImportDipUseCase {
       throw new Error('DiPIndex mancante');
     }
     
-    const dipIndex = (await this.dipParser.parse(dipIndexPath)).DiPIndex;
-
-    // TODO: da sistemare, se teniamo i tipi XML probabilmente è meglio fare un mapper da quelli alle entità di dominio
-    const dip = new Dip(UUID.from(dipIndex.PackageInfo.ProcessUUID), new Date(dipIndex.PackageInfo.CreationDate), Number(dipIndex.PackageInfo.DocumentsCount), Number(dipIndex.PackageInfo.AiPCount));
-    if (!this.dipRepository.findByUuid(dip.getProcessUuid())) {
-      this.dipRepository.save(dip);
-    } else {
-      console.log('Alredy imported');
-      // TODO: decidere come gestire il caso in cui il DiP è già stato importato
-    }
-    // TODO: parsing del resto dei file (metadata, report, sip, aip e quello che serve)
-    // Path = AiPRoot + DocumentPath + (metadata | primary | attachments)
-    // TODO: usare repository per salvare le informazioni
+    const parsed = await this.dipParser.parse(dipIndexPath);
+    console.log(parsed);
     
+    // TODO: mappare da risultato parsing -> dominio
+    // TODO: usare repository per controllare se il DiP è stato importato e eventualmente salvare le informazioni    
   }
 }

@@ -1,5 +1,3 @@
-import { CF } from './value-objects/cf.value-object';
-import { Email } from './value-objects/email.value-object';
 import { Subject } from './subject.model';
 
 export class PFSubject extends Subject {
@@ -7,8 +5,8 @@ export class PFSubject extends Subject {
     id: number,
     private name: string,
     private surname: string,
-    private cf: CF,
-    private digitalAddresses: Email[]
+    private cf: string,
+    private digitalAddresses: string[]
   ) {
     super(id);
   }
@@ -21,11 +19,11 @@ export class PFSubject extends Subject {
     return this.surname;
   }
 
-  public getCf(): CF {
+  public getCf(): string {
     return this.cf;
   }
 
-  public getDigitalAddresses(): Email[] {
+  public getDigitalAddresses(): string[] {
     return this.digitalAddresses;
   }
 
@@ -37,11 +35,11 @@ export class PFSubject extends Subject {
     this.surname = surname;
   }
 
-  public setCf(cf: CF): void {
+  public setCf(cf: string): void {
     this.cf = cf;
   }
 
-  public setDigitalAddresses(digitalAddresses: Email[]): void {
+  public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
   }
 }

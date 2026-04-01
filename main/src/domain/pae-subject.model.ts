@@ -1,12 +1,11 @@
 import { Subject } from './subject.model';
-import { Email } from './value-objects/email.value-object';
 
 export class PAESubject extends Subject {
   constructor(
     id: number,
     private administrationDen: string,
     private officeDen: string,
-    private digitalAddresses: Email[]
+    private digitalAddresses: string[]
   ) {
     super(id);
   }
@@ -19,7 +18,7 @@ export class PAESubject extends Subject {
     return this.officeDen;
   }
 
-  public getDigitalAddresses(): Email[] {
+  public getDigitalAddresses(): string[] {
     return this.digitalAddresses;
   }
 
@@ -31,7 +30,7 @@ export class PAESubject extends Subject {
     this.officeDen = officeDen;
   }
 
-  public setDigitalAddresses(digitalAddresses: Email[]): void {
+  public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
   }
 }

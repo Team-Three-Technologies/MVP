@@ -1,14 +1,12 @@
-import { UUID } from './value-objects/uuid.value-object';
-
 export class File {
   constructor(
-    private uuid: UUID,
+    private uuid: string,
     private path: string,
     private extension: string,
     private size: string
   ) { }
 
-  getUuid(): UUID {
+  getUuid(): string {
     return this.uuid;
   }
 
@@ -24,7 +22,7 @@ export class File {
     return this.size;
   }
 
-  setUuid(uuid: UUID): void {
+  setUuid(uuid: string): void {
     this.uuid = uuid;
   }
 

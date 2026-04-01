@@ -1,5 +1,5 @@
 import { inject, injectable } from 'tsyringe';
-import { TOKENS } from '../infrastructure/tokens';
+import { TOKENS } from '../infrastructure/di/tokens';
 import { AutoImportDipUseCase } from '../application/auto-import-dip.use-case';
 import { IpcResponse } from '../../../shared/ipc-response';
 import { ok, fail } from './ipc-response.utils';

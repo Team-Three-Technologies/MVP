@@ -1,16 +1,14 @@
 import { Subject } from './subject.model';
-import { CF } from './value-objects/cf.value-object';
-import { Email } from './value-objects/email.value-object';
 
 export class ASSubject extends Subject {
   constructor(
     id: number,
     private name: string,
     private surname: string,
-    private cf: CF,
+    private cf: string,
     private organizationDen: string,
     private officeDen: string,
-    private digitalAddresses: Email[]
+    private digitalAddresses: string[]
   ) {
     super(id);
   }
@@ -23,7 +21,7 @@ export class ASSubject extends Subject {
     return this.surname;
   }
 
-  public getCf(): CF {
+  public getCf(): string {
     return this.cf;
   }
 
@@ -35,7 +33,7 @@ export class ASSubject extends Subject {
     return this.officeDen;
   }
 
-  public getDigitalAddresses(): Email[] {
+  public getDigitalAddresses(): string[] {
     return this.digitalAddresses;
   }
 
@@ -47,7 +45,7 @@ export class ASSubject extends Subject {
     this.surname = surname;
   }
 
-  public setCf(cf: CF): void {
+  public setCf(cf: string): void {
     this.cf = cf;
   }
 
@@ -59,7 +57,7 @@ export class ASSubject extends Subject {
     this.officeDen = officeDen;
   }
 
-  public setDigitalAddresses(digitalAddresses: Email[]): void {
+  public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
   }
 }

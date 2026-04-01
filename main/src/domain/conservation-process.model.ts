@@ -1,17 +1,15 @@
-import { UUID } from './value-objects/uuid.value-object';
-
 export class ConservationProcess {
   constructor(
-    private uuid: UUID,
+    private uuid: string,
     private creationDate: Date,
     private totalSize: string,
     private sipCount: number,
     private documentsCount: number,
     private filesCount: number,
-    private documentClassUuid: UUID
+    private documentClassUuid: string
   ) { }
 
-  public getUuid(): UUID {
+  public getUuid(): string {
     return this.uuid;
   }
 
@@ -35,11 +33,11 @@ export class ConservationProcess {
     return this.filesCount;
   }
 
-  public getDocumentClassUuid(): UUID {
+  public getDocumentClassUuid(): string {
     return this.documentClassUuid;
   }
 
-  public setUuid(uuid: UUID): void {
+  public setUuid(uuid: string): void {
     this.uuid = uuid;
   }
 
@@ -63,7 +61,7 @@ export class ConservationProcess {
     this.filesCount = filesCount;
   }
 
-  public setDocumentClassUuid(documentClassUuid: UUID): void {
+  public setDocumentClassUuid(documentClassUuid: string): void {
     this.documentClassUuid = documentClassUuid;
   }
 }

@@ -1,14 +1,12 @@
 import { Subject } from './subject.model';
-import { VatCode } from './value-objects/vat-code.value-object';
-import { Email } from './value-objects/email.value-object';
 
 export class PGSubject extends Subject {
   constructor(
     id: number,
     private organizationDen: string,
-    private vatCode: VatCode,
+    private vatCode: string,
     private officeDen: string,
-    private digitalAddresses: Email[]
+    private digitalAddresses: string[]
   ) {
     super(id);
   }
@@ -17,7 +15,7 @@ export class PGSubject extends Subject {
     return this.organizationDen;
   }
 
-  public getVatCode(): VatCode {
+  public getVatCode(): string {
     return this.vatCode;
   }
 
@@ -25,7 +23,7 @@ export class PGSubject extends Subject {
     return this.officeDen;
   }
 
-  public getDigitalAddresses(): Email[] {
+  public getDigitalAddresses(): string[] {
     return this.digitalAddresses;
   }
 
@@ -33,7 +31,7 @@ export class PGSubject extends Subject {
     this.organizationDen = organizationDen;
   }
 
-  public setVatCode(vatCode: VatCode): void {
+  public setVatCode(vatCode: string): void {
     this.vatCode = vatCode;
   }
 
@@ -41,7 +39,7 @@ export class PGSubject extends Subject {
     this.officeDen = officeDen;
   }
 
-  public setDigitalAddresses(digitalAddresses: Email[]): void {
+  public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
   }
 }

@@ -1,16 +1,14 @@
-import { UUID } from './value-objects/uuid.value-object';
-
 export class DocumentClass {
   constructor(
-    private uuid: UUID,
+    private uuid: string,
     private name: string,
     private version: string,
     private validFrom: Date,
     private validTo: Date | undefined,
-    private dipUuid: UUID
+    private dipUuid: string
   ) { }
 
-  public getUuid(): UUID {
+  public getUuid(): string {
     return this.uuid;
   }
 
@@ -30,11 +28,11 @@ export class DocumentClass {
     return this.validTo;
   }
 
-  public getDipUuid(): UUID {
+  public getDipUuid(): string {
     return this.dipUuid;
   }
 
-  public setUuid(uuid: UUID): void {
+  public setUuid(uuid: string): void {
     this.uuid = uuid;
   }
 
@@ -54,7 +52,7 @@ export class DocumentClass {
     this.validTo = validTo;
   }
 
-  public setDipUuid(dipUuid: UUID): void {
+  public setDipUuid(dipUuid: string): void {
     this.dipUuid = dipUuid;
   }
 }

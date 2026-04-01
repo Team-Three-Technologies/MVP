@@ -9,6 +9,31 @@ La struttura del progetto rispecchia quella imposta da Electron, nella cartella 
 
 ## Stack tecnologico
 
+- electron v40.8.2
+- better-sqlite3 v12.6.2
+- fast-xml-parser v5.5.9
+- tsyringe v4.10.0
+- ...
+- angular v21.2.0
+- ...
+
+## Utilizzo
+
+### Modalità dev
+
+``` bash
+# Installazione delle dipendenze Electron + main process
+npm install
+
+# Installazione delle dipendenze Angular
+cd renderer/
+npm install
+
+# Avvio
+cd ..
+npm run dev
+```
+
 ## Membri
 - Francesco Balestro
 - Filippo Compagno

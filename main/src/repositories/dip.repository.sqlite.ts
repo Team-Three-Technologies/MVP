@@ -1,10 +1,9 @@
 import { inject, injectable } from 'tsyringe';
-import { TOKENS } from '../infrastructure/tokens';
+import { TOKENS } from '../infrastructure/di/tokens';
 import { DipRepository } from './dip.repository.interface';
-import { DatabaseProvider } from '../infrastructure/database.provider';
+import { DatabaseProvider } from '../infrastructure/database/database.provider';
 import { Dip } from '../domain/dip.model'
 import { DipRow } from './dip.row'
-import { UUID } from '../domain/value-objects/uuid.value-object';
 
 @injectable()
 export class SQLiteDipRepository implements DipRepository {
@@ -28,15 +27,15 @@ export class SQLiteDipRepository implements DipRepository {
     return dip;
   }
 
-  public findByUuid(uuid: UUID): Dip | null {
+  public findByUuid(uuid: string): Dip | null {
     const row = this.dbProvider.istance
       .prepare(`
         SELECT * FROM archivi_dip
         WHERE uuid_processo = ?
       `)
-      .get(uuid.toString()) as DipRow;
+      .get(uuid) as DipRow;
 
-      return row ? new Dip(UUID.from(row.uuid_processo), new Date(row.data_creazione), row.numero_documenti, row.numero_aip) : null;
+      return row ? new Dip(row.uuid_processo, new Date(row.data_creazione), row.numero_documenti, row.numero_aip) : null;
   }
 
   public findAll(): Dip[] {
@@ -45,7 +44,7 @@ export class SQLiteDipRepository implements DipRepository {
       .all() as DipRow[];
 
     return rows.map((row: DipRow) => {
-      return new Dip(UUID.from(row.uuid_processo), new Date(row.data_creazione), row.numero_documenti, row.numero_aip);
+      return new Dip(row.uuid_processo, new Date(row.data_creazione), row.numero_documenti, row.numero_aip);
     });
   }
 }

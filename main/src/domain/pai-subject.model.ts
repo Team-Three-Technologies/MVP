@@ -1,5 +1,4 @@
 import { Subject } from './subject.model';
-import { Email } from './value-objects/email.value-object';
 
 export class PAISubject extends Subject {
   constructor(
@@ -7,7 +6,7 @@ export class PAISubject extends Subject {
     private ipaCode: string,
     private ipaAooCode: string,
     private ipaUorCode: string,
-    private digitalAddresses: Email[]
+    private digitalAddresses: string[]
   ) {
     super(id);
   }
@@ -24,7 +23,7 @@ export class PAISubject extends Subject {
     return this.ipaUorCode;
   }
 
-  public getDigitalAddresses(): Email[] {
+  public getDigitalAddresses(): string[] {
     return this.digitalAddresses;
   }
 
@@ -40,7 +39,7 @@ export class PAISubject extends Subject {
     this.ipaUorCode = ipaUorCode;
   }
 
-  public setDigitalAddresses(digitalAddresses: Email[]): void {
+  public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
   }
 }

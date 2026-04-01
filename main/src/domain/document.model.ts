@@ -1,4 +1,3 @@
-import { UUID } from './value-objects/uuid.value-object';
 import { File } from './file.model';
 import { Metadata } from './metadata.model';
 import { Subject } from './subject.model';
@@ -6,16 +5,16 @@ import { RolesTypeEnum } from './roles-type.enum';
 
 export class Document {
   constructor(
-    private uuid: UUID,
+    private uuid: string,
     private path: string,
     private main: File,
     private attachments: File[],
     private metadata: Metadata[],
     private subjects: Map<Subject, RolesTypeEnum>,
-    private conservationProcessUuid: UUID
+    private conservationProcessUuid: string
   ) { }
 
-  public getUuid(): UUID {
+  public getUuid(): string {
     return this.uuid;
   }
 
@@ -39,11 +38,11 @@ export class Document {
     return this.subjects;
   }
 
-  public getConservationProcessUuid(): UUID {
+  public getConservationProcessUuid(): string {
     return this.conservationProcessUuid;
   }
 
-  public setUuid(uuid: UUID): void {
+  public setUuid(uuid: string): void {
     this.uuid = uuid;
   }
 
@@ -67,7 +66,7 @@ export class Document {
     this.subjects = subject;
   }
 
-  public setConservationProcessUuid(conservationProcessUuid: UUID): void {
+  public setConservationProcessUuid(conservationProcessUuid: string): void {
     this.conservationProcessUuid = conservationProcessUuid;
   }
 }

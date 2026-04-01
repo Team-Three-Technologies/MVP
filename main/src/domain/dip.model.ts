@@ -1,14 +1,12 @@
-import { UUID } from './value-objects/uuid.value-object';
-
 export class Dip {
   constructor(
-    private processUuid: UUID,
+    private processUuid: string,
     private creationDate: Date,
     private documentsCount: number,
     private aipCount: number
   ) { }
 
-  public getProcessUuid(): UUID {
+  public getProcessUuid(): string {
     return this.processUuid;
   }
 
@@ -24,7 +22,7 @@ export class Dip {
     return this.aipCount;
   }
 
-  public setProcessUuid(processUuid: UUID): void {
+  public setProcessUuid(processUuid: string): void {
     this.processUuid = processUuid;
   }
 
