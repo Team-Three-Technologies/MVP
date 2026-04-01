@@ -9,7 +9,8 @@ import { Sidebar } from './sidebar/sidebar';
   selector: 'app-root',
   imports: [RouterOutlet, DocumentList, DocumentPreview, Filters, Layout, Sidebar],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
+  standalone: true
 })
 export class App implements OnInit {
   private api = (window as any).electronAPI;
