@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import { registerDependencies } from './src/infrastructure/container';
-import { registerAllHandlers } from './src/ipc/router';
+import { registerAllHandlers } from './src/presentation/router';
 
 app.whenReady().then(() => {
   registerDependencies();

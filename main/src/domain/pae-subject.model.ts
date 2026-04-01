@@ -1,5 +1,5 @@
 import { Subject } from './subject.model';
-import { Email } from '../value-objects/email.value-object';
+import { Email } from './value-objects/email.value-object';
 
 export class PAESubject extends Subject {
   constructor(

@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TOKENS } from '../../src/infrastructure/tokens';
-import { AutoImportDipService } from '../../src/use-cases/auto-import-dip.service';
+import { AutoImportDipService } from '../../src/application/auto-import-dip.service';
 
 describe('AutoImportDipService', () => {
   beforeEach(() => {
@@ -9,23 +9,20 @@ describe('AutoImportDipService', () => {
   });
 
   it('Lancia errore se non trova il DiPIndex', async () => {
-    container.register(TOKENS.IFileService, {
+    container.register(TOKENS.FileService, {
       useValue: {
         findDipIndex: vi.fn().mockResolvedValue(null),
       }
     });
 
-    container.register(TOKENS.IDipParserService, { useValue: {} });
-    container.register(TOKENS.IRepositoryFactory, { useValue: {} });
+    container.register(TOKENS.DipParser, { useValue: {} });
+    container.register(TOKENS.DipRepository, { useValue: {} });
+    container.register(TOKENS.AppConfig, { useValue: {} });
 
-    container.register(TOKENS.AppConfig, {  useValue: {} });
+    container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService });
 
-    container.register(TOKENS.AutoImportDipUseCase, {
-      useClass: AutoImportDipService
-    });
-
-    const service = container.resolve(TOKENS.AutoImportDipUseCase);
-
+    const service = container.resolve(TOKENS.AutoImportDipUseCase) as AutoImportDipService;
+  
     await expect(service.execute()).rejects.toThrow('DiPIndex mancante');
   });
 });

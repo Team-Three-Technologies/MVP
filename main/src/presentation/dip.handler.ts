@@ -1,7 +1,8 @@
 import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '../infrastructure/tokens';
-import { fail, ok, IpcResponse } from '../../../shared/ipc-response';
-import { AutoImportDipUseCase } from '../use-cases/auto-import-dip.use-case';
+import { AutoImportDipUseCase } from '../application/auto-import-dip.use-case';
+import { IpcResponse } from '../../../shared/ipc-response';
+import { ok, fail } from './ipc-response.utils';
 
 @injectable()
 export class DipHandler {

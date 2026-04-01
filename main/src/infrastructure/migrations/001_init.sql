@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS archivio_dip (
+CREATE TABLE IF NOT EXISTS archivi_dip (
   uuid_processo TEXT PRIMARY KEY,
   data_creazione TEXT NOT NULL,
   numero_documenti INTEGER NOT NULL,

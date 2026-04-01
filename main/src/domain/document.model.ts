@@ -1,4 +1,4 @@
-import { UUID } from '../value-objects/uuid.value-object';
+import { UUID } from './value-objects/uuid.value-object';
 import { File } from './file.model';
 import { Metadata } from './metadata.model';
 import { Subject } from './subject.model';

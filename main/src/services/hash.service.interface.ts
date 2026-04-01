@@ -1,3 +1,3 @@
-export interface IHashService {
+export interface HashService {
   compute(filePath: string): Promise<string>;
 }

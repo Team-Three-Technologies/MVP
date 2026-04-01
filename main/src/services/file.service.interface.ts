@@ -1,3 +1,3 @@
-export interface IFileService {
+export interface FileService {
   findDipIndex(dir: string): Promise<string | null>;
 }

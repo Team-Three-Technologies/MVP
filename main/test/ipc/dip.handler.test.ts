@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TOKENS } from '../../src/infrastructure/tokens';
-import { DipHandler } from '../../src/ipc/dip.handler';
+import { DipHandler } from '../../src/presentation/dip.handler';
 
 describe('DipHandler', () => {
   beforeEach(() => {

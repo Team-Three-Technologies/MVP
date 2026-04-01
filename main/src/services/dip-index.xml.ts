@@ -1,95 +1,105 @@
-export interface XmlDipIndex {
-  complianceStatements: XmlComplianceStatement[];
-  packageInfo: XmlPackageInfo;
-  packageContent: XmlPackageContent;
+export interface DiPIndexXml {
+  DiPIndex: DiPIndexTypeXml;
 }
 
-export interface XmlComplianceStatement {
-  title: string;
-  body: string;
-  lang: string;
+export interface DiPIndexTypeXml {
+  ComplianceStatement: ComplianceStatementXml[];
+  PackageInfo: PackageInfoXml;
+  PackageContent: PackageContentXml;
 }
 
-export interface XmlPackageInfo {
-  creatingApplication: XmlCreatingApplication;
-  processUUID: string;
-  creationDate: Date;
-  documentsCount: number;
-  aipCount: number;
+export interface ComplianceStatementXml {
+  Title: string;
+  Body: string;
+  '@_lang': string;
 }
 
-export interface XmlCreatingApplication {
-  name: string;
-  version: string;
-  producer: string;
+export interface PackageInfoXml {
+  CreatingApplication: CreatingApplicationXml;
+  ProcessUUID: string;
+  CreationDate: string;
+  DocumentsCount: number | string;
+  AiPCount: number | string;
 }
 
-export interface XmlPackageContent {
-  dipDocuments: XmlDipDocuments;
-  representationInformation?: XmlRepresentationInformation[];
+export interface CreatingApplicationXml {
+  Name: string;
+  Version: string;
+  Producer: string;
 }
 
-export interface XmlDipDocuments {
-  documentClasses: XmlDocumentClass[];
+export interface PackageContentXml {
+  DiPDocuments: DiPDocumentsXml;
+  RepresentationInformation?: RepresentationInformationXml[];
 }
 
-export interface XmlDocumentClass {
-  uuid: string;
-  name: string;
-  version: string;
-  validFrom: Date;
-  validTo?: Date;
-  representationInformationUUIDs?: string[];
-  aips: XmlAip[];
-  moreData?: XmlMoreData[];
+export interface DiPDocumentsXml {
+  Statement: StatementXml[];
+  DocumentClass: DocumentClassXml[];
 }
 
-export interface XmlAip {
-  uuid: string;
-  aipRoot: string;
-  reports?: XmlReport[];
-  sips?: XmlSip[];
-  documents: XmlDocument[];
+export interface StatementXml {
+  '#text': string;
+  '@_lang': string;
 }
 
-export interface XmlReport {
-  uuid: string;
-  name: string;
-  path: string;
+export interface DocumentClassXml {
+  '@_uuid': string;
+  '@_name': string;
+  '@_version': string;
+  '@_validFrom': string;
+  '@_validTo'?: string;
+  RappresentationInformationUUID?: string[];
+  AiP: AiPXml[];
+  MoreData?: MoreDataXml[];
 }
 
-export interface XmlSip {
-  uuid: string;
-  path: string;
+export interface AiPXml {
+  '@_uuid': string;
+  AiPRoot: string;
+  Report?: ReportXml[];
+  SiP?: SiPXml[];
+  Document: DocumentXml[];
 }
 
-export interface XmlDocument {
-  uuid: string;
-  documentPath: string;
-  files: XmlDocumentFiles;
+export interface ReportXml {
+  '#text': string;
+  '@_uuid': string;
+  '@_name': string;
 }
 
-export interface XmlDocumentFiles {
-  filesCount: number;
-  metadata: XmlDipFile;
-  primary: XmlDipFile;
-  attachments?: XmlDipFile[];
+export interface SiPXml {
+  '#text': string;
+  '@_uuid': string;
 }
 
-export interface XmlDipFile {
-  uuid: string;
-  path: string;
+export interface DocumentXml {
+  '@_uuid': string;
+  DocumentPath: string;
+  Files: DocumentFilesXml;
 }
 
-export interface XmlRepresentationInformation {
-  uuid: string;
-  name: string;
-  description: string;
-  mimeType: string;
-  contents: XmlDipFile[];
+export interface DocumentFilesXml {
+  '@_FilesCount': number | string;
+  Metadata: FileXml;
+  Primary: FileXml;
+  Attachments?: FileXml[];
 }
 
-export interface XmlMoreData {
-  name: string;
-  value: string;
+export interface FileXml {
+  '#text': string;
+  '@_uuid': string;
+}
+
+export interface RepresentationInformationXml {
+  '@_uuid': string;
+  Name: string;
+  Description: string;
+  MimeType: string;
+  Content: FileXml[];
+}
+
+export interface MoreDataXml {
+  '#text': string;
+  '@_name': string;
 }

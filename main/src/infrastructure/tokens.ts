@@ -1,9 +1,11 @@
 export const TOKENS = {
   AutoImportDipUseCase: Symbol('AutoImportDipUseCase'),
-  IFileService: Symbol('IFileService'),
-  IHashService: Symbol('IHashService'),
-  IDipParserService: Symbol('IDipParserService'),
-  IRepositoryFactory: Symbol('IRepositoryFactory'),
+  FileService: Symbol('FileService'),
+  HashService: Symbol('HashService'),
+  DipParser: Symbol('DipParser'),
+  DipIndexParser: Symbol('DipIndexParser'),
+  MetadataParser: Symbol('MetadataParser'),
+  DipRepository: Symbol('DipRepository'),
   DatabaseProvider: Symbol('DatabaseProvider'),
   AppConfig: Symbol('AppConfig'),
 } as const;

@@ -1,6 +1,6 @@
 import { Subject } from './subject.model';
-import { VatCode } from '../value-objects/vat-code.value-object';
-import { Email } from '../value-objects/email.value-object';
+import { VatCode } from './value-objects/vat-code.value-object';
+import { Email } from './value-objects/email.value-object';
 
 export class PGSubject extends Subject {
   constructor(

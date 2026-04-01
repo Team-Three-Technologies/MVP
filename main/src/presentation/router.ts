@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import { ipcMain } from 'electron';
-import { IPC_CHANNELS } from '../../ipc-channels';
 import { DipHandler } from './dip.handler';
+import { IPC_CHANNELS } from '../../ipc-channels';
 
 export function registerAllHandlers(): void {
   const dipHandler = container.resolve(DipHandler);

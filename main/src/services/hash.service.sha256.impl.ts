@@ -1,10 +1,10 @@
 import { injectable } from 'tsyringe';
-import { IHashService } from './hash.service.interface';
+import { HashService } from './hash.service.interface';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 
 @injectable()
-export class SHA256HashServiceImpl implements IHashService {
+export class SHA256HashServiceImpl implements HashService {
   public async compute(filePath: string): Promise<string> {
     const hash = crypto.createHash('sha256');
     const stream = fs.createReadStream(filePath);

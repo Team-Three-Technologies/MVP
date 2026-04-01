@@ -1,13 +1,15 @@
-import { CF } from '../value-objects/cf.value-object';
-import { Email } from '../value-objects/email.value-object';
 import { Subject } from './subject.model';
+import { CF } from './value-objects/cf.value-object';
+import { Email } from './value-objects/email.value-object';
 
-export class PFSubject extends Subject {
+export class ASSubject extends Subject {
   constructor(
     id: number,
     private name: string,
     private surname: string,
     private cf: CF,
+    private organizationDen: string,
+    private officeDen: string,
     private digitalAddresses: Email[]
   ) {
     super(id);
@@ -25,6 +27,14 @@ export class PFSubject extends Subject {
     return this.cf;
   }
 
+  public getOrganizationDen(): string {
+    return this.organizationDen;
+  }
+
+  public getOfficeDen(): string {
+    return this.officeDen;
+  }
+
   public getDigitalAddresses(): Email[] {
     return this.digitalAddresses;
   }
@@ -39,6 +49,14 @@ export class PFSubject extends Subject {
 
   public setCf(cf: CF): void {
     this.cf = cf;
+  }
+
+  public setOrganizationDen(organizationDen: string): void {
+    this.organizationDen = organizationDen;
+  }
+
+  public setOfficeDen(officeDen: string): void {
+    this.officeDen = officeDen;
   }
 
   public setDigitalAddresses(digitalAddresses: Email[]): void {

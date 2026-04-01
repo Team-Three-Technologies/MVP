@@ -1,4 +1,4 @@
-import { UUID } from '../value-objects/uuid.value-object';
+import { UUID } from './value-objects/uuid.value-object';
 
 export class Dip {
   constructor(

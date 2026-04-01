@@ -1,15 +1,17 @@
-import { container } from 'tsyringe';
+import { container, Lifecycle } from 'tsyringe';
+import { TOKENS } from './tokens';
+import type { AppConfig } from './app.config';
 import * as path from 'path';
 import { app } from 'electron';
-import { TOKENS } from './tokens';
 import { DatabaseProvider } from './database.provider';
-import { SQLiteRepositoryFactory } from '../repositories/repository.factory.sqlite';
+import { SQLiteDipRepository } from '../repositories/dip.repository.sqlite';
 import { FileServiceImpl } from '../services/file.service.impl';
 import { SHA256HashServiceImpl } from '../services/hash.service.sha256.impl';
-import { DipParserServiceImpl } from '../services/dip-parser.service.impl';
-import { AutoImportDipService } from '../use-cases/auto-import-dip.service';
-import { DipHandler } from '../ipc/dip.handler';
-import type { AppConfig } from './app.config';
+import { DipParserImpl } from '../services/dip.parser.impl';
+import { DipIndexParserImpl } from '../services/dip-index.parser.impl';
+import { MetadataParserImpl } from '../services/metadata.parser.impl';
+import { AutoImportDipService } from '../application/auto-import-dip.service';
+import { DipHandler } from '../presentation/dip.handler';
 
 export function registerDependencies(): void {
   container.register(TOKENS.AppConfig, {
@@ -21,15 +23,17 @@ export function registerDependencies(): void {
   });
 
   // infrastructure
-  container.register(TOKENS.DatabaseProvider, { useClass: DatabaseProvider });
+  container.register(TOKENS.DatabaseProvider, { useClass: DatabaseProvider }, { lifecycle: Lifecycle.Singleton });
 
   // repositories
-  container.register(TOKENS.IRepositoryFactory, { useClass: SQLiteRepositoryFactory });
+  container.register(TOKENS.DipRepository, { useClass: SQLiteDipRepository });
 
   // services
-  container.register(TOKENS.IFileService, { useClass: FileServiceImpl });
-  container.register(TOKENS.IHashService, { useClass: SHA256HashServiceImpl });
-  container.register(TOKENS.IDipParserService, { useClass: DipParserServiceImpl });
+  container.register(TOKENS.FileService, { useClass: FileServiceImpl });
+  container.register(TOKENS.HashService, { useClass: SHA256HashServiceImpl });
+  container.register(TOKENS.DipParser, { useClass: DipParserImpl });
+  container.register(TOKENS.DipIndexParser, { useClass: DipIndexParserImpl });
+  container.register(TOKENS.MetadataParser, { useClass: MetadataParserImpl });
 
   // use cases
   container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService });
