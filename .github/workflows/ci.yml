@@ -1,3 +1,7 @@
+# file di continuous integration
+# runna i test
+# scrive la coverage (codecov)
+
 name: CI
 
 on:

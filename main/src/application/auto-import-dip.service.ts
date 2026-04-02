@@ -19,12 +19,14 @@ export class AutoImportDipService implements AutoImportDipUseCase {
   ) { } 
 
   public async execute(): Promise<void> {
-    const dipIndexPath = await this.fileService.findDipIndex('D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'/*this.config.appDir*/);
+    const dipIndexPath = await this.fileService.findDipIndex('D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'/*this.config.appDir*/); // cerca il dip index
     
+    // se non trova il dip index
     if (!dipIndexPath) {
       throw new Error('DiPIndex mancante');
     }
     
+    // parsing del dip
     const parsed = await this.dipParser.parse(dipIndexPath);
     console.log(parsed);
     

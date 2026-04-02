@@ -10,6 +10,7 @@ app.whenReady().then(() => {
   createWindow();
 });
 
+// crea la finestra
 function createWindow(): void {
   const win = new BrowserWindow({
     width: 1280,
@@ -24,9 +25,9 @@ function createWindow(): void {
 
   const isDev = process.env['NODE_ENV'] === 'development';
 
-  if (isDev) {
+  if (isDev) {  // modalità dev
     win.loadURL('http://localhost:4200');
-  } else {
+  } else {      // distribuzione
     win.loadFile(path.join(app.getAppPath(), 'dist/renderer/browser/index.html'));
   }
 }

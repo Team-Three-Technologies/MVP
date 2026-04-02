@@ -13,7 +13,7 @@ export class DipHandler {
 
   public async autoImport(): Promise<IpcResponse<void>> {
     try {
-      await this.autoImportDipUseCase.execute();
+      await this.autoImportDipUseCase.execute(); // cerca un dip index nella cartella in cui è stata avviata l'applicazione -> parsing dei dati -> caricati nel db -> visualizza contenuto cartella
       return ok(undefined);
     } catch (e) {
       return fail((e as Error).message);
