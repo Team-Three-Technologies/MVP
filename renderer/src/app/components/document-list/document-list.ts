@@ -8,6 +8,8 @@ import { DipPresenter } from '../dip-presenter';
   styleUrl: './document-list.css',
   standalone: true
 })
+
+
 export class DocumentListComponent extends DipPresenter {
   @Input() documents: DocumentModel[] = [];
 
