@@ -2,12 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { DocumentModel } from './models/models/document';
 import { BackendFacade } from './components/facades/backend.facade';
-
-//creare filter.model.ts che contiene solo l'interfaccia?
-export interface Filter {
-  type: string;
-  value: string;
-}
+import { FilterModel } from './models/models/filter';
 
 @Injectable()
 export class DipPresenter implements OnDestroy {
@@ -24,12 +19,12 @@ export class DipPresenter implements OnDestroy {
 
   constructor(private facade: BackendFacade) {}
 
-  async searchDocuments(filters: Filter[]): Promise<void> {
+  async searchDocuments(filters: FilterModel[]): Promise<void> {
     this.isLoadingSubject.next(true);
     this.errorMessageSubject.next(null);
 
     try {
-      await this.facade.loadDocuments();
+      await this.facade.searchDocuments(filters);
       this.documentsSubject.next(this.facade.documentList());
     } catch (err) {
       this.errorMessageSubject.next((err as Error).message ?? 'Error during search');
@@ -38,8 +33,8 @@ export class DipPresenter implements OnDestroy {
     }
   }
 
-  selectDocument(id: string): void {
-    console.warn('Documento selezionato nel Presenter:', id);
+  async selectDocument(id: string): Promise<void> {
+    await this.facade.selectDocument(id);
   }
 
   ngOnDestroy(): void {
@@ -47,10 +42,4 @@ export class DipPresenter implements OnDestroy {
     this.destroy$.complete();
   }
 }
-// facade con selectDocument e searchDocument?
-// aggigunere in DipPresenter:
-// documents$: Observable<DocumentModel[]>
-// isLoading$: Observable<boolean> 
-// errorMessage$: Observable<string | null>
-// searchDocuments(filters: Filter[]): void
 
