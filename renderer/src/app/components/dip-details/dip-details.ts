@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DipInfoModel } from '../../models/models/dip-info';
 
 @Component({
   selector: 'app-dip-details',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './dip-details.html',
-  styleUrl: './dip-details.css',
+  styleUrls: ['./dip-details.css']
 })
 export class DipDetails {
-
+  @Input() dipInfo: DipInfoModel | null = null;
 }

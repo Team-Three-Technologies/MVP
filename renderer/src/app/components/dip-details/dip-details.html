@@ -1,1 +1,33 @@
-<p>dip-details works!</p>
+<div class="dip-details-card">
+  <div class="card-header">
+    <h3>Informazioni del pacchetto (DIP)</h3>
+  </div>
+
+  @if (dipInfo) {
+    <div class="card-body">
+      <div class="info-row">
+        <span class="info-label">Data Creazione:</span>
+        <span class="info-value">{{ dipInfo.creation_date }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="info-label">Programma usato per la creazione:</span>
+        <span class="info-value">{{ dipInfo.software_name }} (v. {{ dipInfo.software_version }})</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Produttore:</span>
+        <span class="info-value">{{ dipInfo.software_vendor }}</span>
+      </div>
+
+      <div class="info-row highlight">
+        <span class="info-label">Documenti Contenuti:</span>
+        <span>{{ dipInfo.documents_count }}</span>
+      </div>
+    </div>
+  } @else {
+    <div class="card-body empty-state">
+      <p>Nessun pacchetto caricato. Carica un pacchetto e visualizza i dettagli qui.</p>
+    </div>
+  }
+</div>
