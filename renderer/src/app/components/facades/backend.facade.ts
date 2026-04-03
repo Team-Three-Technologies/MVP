@@ -13,7 +13,26 @@ export class BackendFacade {
 
   public async loadDocuments(): Promise<void> {
     this.isLoading.set(true);
-    this.documentList.set([]);
+    //develop this method to load documents from the backend and update the documentList signal
+  }
+
+  public async selectDocument(id: string): Promise<void> {
+    this.isLoading.set(true);
+    this.selectedDocumentState.set(null);
+    const document = this.documentList().find((doc) => doc.id === id);
+    if (document) {
+      this.selectedDocumentState.set(document);
+    }
+  }
+  public async searchDocuments(filter: string): Promise<void> {
+    this.clearSelection();
+    //develop this method to filter documents based on the provided filter string
+  }
+  public async clearSelection(): Promise<void> {
+    this.selectedDocumentState.set(null);
+  }
 }
+
+
 
 
