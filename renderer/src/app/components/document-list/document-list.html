@@ -1,61 +1,25 @@
-<div class="document-list-panel" aria-labelledby="documenti-title">
-    <header class="panel-header">
-        <h3 id="documenti-title">Documenti</h3>
-    </header>
+<div class="document-list-panel">
 
-    <ul class="document-list" role="list">
-        @for (doc of risultati; track doc['uuid_documento']) {
-        <li class="document-item">
-            <button type="button" class="document-button" (click)="selezionaDoc(doc)"
-                [attr.aria-label]="'Apri dettagli documento ' + doc['nome_documento']">
-                <span class="document-name">{{ doc['nome_documento'] }}</span>
-                <span class="document-id">{{ doc['uuid_documento'] }}</span>
-            </button>
-        </li>
-        }
-        @empty {
-        <li class="empty-state">Nessun documento trovato.</li>
-        }
-    </ul>
+  @if (isLoading) {
+    <p>Loading...</p>
+  } @else if (errorMessage) {
+  <p class="error">{{ errorMessage }}</p>
+} @else {
 
-    <aside class="dip-box" aria-labelledby="dip-title">
-        <h3 id="dip-title">Dettagli DIP (pacchetto)</h3>
-        <p><strong>Nome file:</strong> {{ dettagli_dip.nome_file }}</p>
-        <p><strong>UUID:</strong> {{ dettagli_dip.processUUID }}</p>
-        <p><strong>Data creazione:</strong> {{ dettagli_dip.creation_date }}</p>
-        <p><strong>Numero documenti:</strong> {{ dettagli_dip.documents_count }}</p>
-        <p><strong>Numero process. conservazione:</strong> {{ dettagli_dip.aip_count }}</p>
-    </aside>
-</div>
-
-<div class="main-content" aria-labelledby="documento-title">
-    @if (documentoSelezionato) {
-    <h3 id="documento-title">Dettagli documento</h3>
-
-    <div class="detail-grid">
-        <p><strong>UUID:</strong> {{ documentoSelezionato['uuid_documento'] }}</p>
-        <p><strong>Oggetto:</strong> {{ documentoSelezionato['oggetto'] }}</p>
-        <p><strong>Versione:</strong> {{ documentoSelezionato['versione'] }}</p>
-        <p><strong>N. file:</strong> {{ documentoSelezionato['files_count'] }}</p>
-        <p><strong>Dimensione tot.:</strong> {{ documentoSelezionato['total_size'] }} bytes</p>
-        <p><strong>Numero file allegati:</strong> {{ documentoSelezionato['num_allegati'] }}</p>
-    </div>
-
-    <h3>Allegati ({{ documentoSelezionato['num_allegati'] }})</h3>
-
-    @if (documentoSelezionato['num_allegati'] > 0) {
-    <ul class="attachments-list" role="list">
-        @for (file of documentoSelezionato['allegati']; track file['percorso']) {
-        <li class="attachment-item">
-            <span class="attachment-path">{{ file['percorso'] }}</span>
-            <span class="attachment-format">{{ file['formato'] }}</span>
-        </li>
-        }
-    </ul>
-    } @else {
-    <p class="empty-state">Nessun allegato.</p>
+  <ul role="list">
+    @for (doc of documents; track doc.uuid_documento) {
+      <li>
+        <button type="button" (click)="onRowClick(doc.uuid_documento)">
+          <span>{{ doc.nome_documento }}</span>
+          <span>{{ doc.formato }}</span>
+          <span>{{ doc.uuid_documento }}</span>
+          <span>{{ doc.data_registrazione }} {{ doc.ora_registrazione }}</span>
+        </button>
+      </li>
     }
-    } @else {
-    <p class="placeholder-testo">Seleziona un documento dalla lista a sinistra per vederne i dettagli.</p>
+    @empty {
+      <li>Nessun documento corrispondente alla ricerca.</li>
     }
+  </ul>
+}
 </div>
