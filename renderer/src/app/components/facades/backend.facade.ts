@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DocumentModel } from '../models/document.model';
+import { DocumentModel } from '../../models/models/document';
 import { signal } from '@angular/core';
 
 @Injectable({
@@ -32,7 +32,3 @@ export class BackendFacade {
     this.selectedDocumentState.set(null);
   }
 }
-
-
-
-

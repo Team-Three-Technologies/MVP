@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {DocumentList} from './document-list/document-list';
+import {DocumentList} from './components/document-list/document-list';
 import {DocumentPreview} from './components/document-preview/document-preview';
 import {Filters} from './components/filters/filters';
 import { Layout } from './layout/layout';

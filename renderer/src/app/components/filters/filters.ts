@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-
-interface Filtro { tipo: string; valore: string; }
+import { Filter } from '../../dip-presenter';
 
 @Component({
   selector: 'app-filters',
@@ -13,8 +12,8 @@ interface Filtro { tipo: string; valore: string; }
 })
 export class Filters {
 
+  @Output() searchRequested = new EventEmitter<Filter[]>();
 
-  //si potrebbero dividere in sottocategorie tipo Identificativi, Soggetti... con delle label
 opzioniFiltro = [
   "Identificativo documento",
   "Modalità di formazione",
@@ -22,7 +21,7 @@ opzioniFiltro = [
   "Tipologia di flusso",
   "Tipo registro",
   "Data registrazione",
-  "Ora registrazione",    //si potrebbe mettere il type per tutti cosi da avere diverse caselle di testo in base all'input che ci va
+  "Ora registrazione",   
   "Numero documento",
   "Codice registro",
   "Ruolo",
@@ -70,43 +69,24 @@ opzioniFiltro = [
   "Tempo di conservazione",
   "Note"
 ];
-  filtriAttivi: Filtro[] = [];
-  
-  dettagli_dip = {
-    nome_file: "dip_struttura_base.zip",
-    processUUID: "00000000-0000-0000-0000-000000000000",
-    creation_date: "2026-03-29",
-    documents_count: 1,
-    aip_count: 1
-  };
+  filtriAttivi: Filter[] = [];
 
-  // doc prova
-  risultati: any[] = [
-    {
-      uuid_documento: "doc-mvp-001",
-      nome_documento: "Documento di Test UI",
-      oggetto: "Test visivo dell'interfaccia",
-      versione: "1.0",
-      files_count: 2,
-      total_size: 2048,
-      num_allegati: 1,
-      allegati: [
-        { percorso: "/test/file_finto.pdf", formato: "application/pdf" }
-      ]
-    }
-  ]; 
-
-  documentoSelezionato: any = null;
-
-  addFilters() {
-    this.filtriAttivi.push({ tipo: this.opzioniFiltro[0], valore: '' });
+  addFilters(): void {
+    this.filtriAttivi.push({ type: this.opzioniFiltro[0], value: '' });
   }
 
-  removeFilters(index: number) {
+  removeFilters(index: number): void {
     this.filtriAttivi.splice(index, 1);
   }
 
-  startSearch() {
-    console.log("Ricerca premuta! Filtri attuali:", this.filtriAttivi);
+  startSearch(): void {
+    //validazione??
+    const filtriValidi = this.filtriAttivi.filter(f => f.value.trim() !== '');
+    
+    // verso il padre
+    this.searchRequested.emit(filtriValidi);
+    console.log("Ricerca richiesta con filtri:", filtriValidi);
   }
+
+
 }

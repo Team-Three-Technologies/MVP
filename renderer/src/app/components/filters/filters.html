@@ -1,23 +1,17 @@
-<div class="filters">
-  <div class="sidebar">
+<div class="sezione-filtri">
+  <button class="btn-base" (click)="addFilters()">+ Aggiungi Filtro</button>
 
-    <div class="sezione-filtri">
-      <button class="btn-base" (click)="addFilters()">+ Aggiungi Filtro</button>
-
-      @for (filtro of filtriAttivi; track $index) {
-      <div class="riga-filtro">
-        <select [(ngModel)]="filtro.tipo">
-          @for (opzione of opzioniFiltro; track opzione) {
+  @for (filtro of filtriAttivi; track $index) {
+    <div class="riga-filtro">
+      <select [(ngModel)]="filtro.type">
+        @for (opzione of opzioniFiltro; track opzione) {
           <option [value]="opzione">{{ opzione }}</option>
-          }
-        </select>
-        <input type="text" [(ngModel)]="filtro.valore" placeholder="Valore...">
-        <button (click)="removeFilters($index)">X</button>
-      </div>
-      }
-
-      <button class="btn-base btn-cerca" (click)="avviaRicerca()">Cerca</button>
+        }
+      </select>
+      <input type="text" [(ngModel)]="filtro.value" placeholder="Valore...">
+      <button (click)="removeFilters($index)">X</button>
     </div>
+  }
 
-</div>
+  <button class="btn-base btn-cerca" (click)="startSearch()">Cerca</button>
 </div>
