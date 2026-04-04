@@ -1,0 +1,90 @@
+/* Contenitore principale */
+.sezione-filtri {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: sans-serif;
+  padding: 16px;
+}
+
+.lista-filtri {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.riga-filtro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.input-base {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  background-color: white;
+  height: 36px;
+  color: #333;
+}
+
+.input-base:focus {
+  border-color: blue; 
+}
+
+.btn-icona {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.btn-icona:hover {
+  color: #cc0000;
+}
+
+.azioni-filtri {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btn-aggiungi {
+  background-color: white;
+  color: #555; 
+  border: 1px solid #555;
+  border-radius: 20px; 
+  padding: 6px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-aggiungi:hover {
+  background-color: #f5f5f5; 
+  color: #222;
+  border-color: #222;
+}
+
+.btn-cerca {
+  background-color: white;
+  color: #1a73e8; 
+  border: 1px solid #1a73e8;
+  border-radius: 20px;
+  padding: 6px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-cerca:hover {
+  background-color: #f0f4f8; 
+  color: blue;
+  border-color: blue;
+
+}
