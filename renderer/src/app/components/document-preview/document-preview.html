@@ -9,9 +9,13 @@
   <div class="card-body">
     @if (safeUrl) {
       <iframe [src]="safeUrl" width="100%" height="600px" style="border: none;"></iframe>
-    } @else if (document) {
+    } @else if (isLoadingPreview) {
       <div class="loading-state">
         <p>Caricamento anteprima in corso...</p>
+      </div>
+    } @else if (document) {
+      <div class="empty-state">
+        <p>Anteprima non disponibile per questo documento.</p>
       </div>
     } @else {
       <div class="empty-state">

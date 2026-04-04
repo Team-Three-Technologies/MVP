@@ -10,10 +10,10 @@ import { DocumentModel } from '../../models/models/document';
   templateUrl: './document-preview.html',
   styleUrls: ['./document-preview.css']
 })
-export class DocumentPreviewComponent implements OnChanges {
+export class DocumentPreview implements OnChanges {
   @Input() document: DocumentModel | null = null;
-  
-  @Input() pdfBase64: string | null = null; 
+  @Input() pdfBase64: string | null = null;
+  @Input() isLoadingPreview: boolean = false;
 
   safeUrl: SafeResourceUrl | null = null;
 
@@ -22,7 +22,6 @@ export class DocumentPreviewComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.pdfBase64) {
       const dataUri = `data:application/pdf;base64,${this.pdfBase64}`;
-
       this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dataUri);
     } else {
       this.safeUrl = null;

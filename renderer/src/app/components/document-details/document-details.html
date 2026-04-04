@@ -1,0 +1,50 @@
+<div class="document-details-card">
+  <div class="card-header">
+    <h3>Dettagli Documento</h3>
+  </div>
+
+  @if (document) {
+    <div class="card-body">
+      <div class="info-row">
+        <span class="info-label">Nome file:</span>
+        <span class="info-value">{{ document.nome_documento }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Formato:</span>
+        <span class="info-value">{{ document.formato }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Identificativo:</span>
+        <span class="info-value">{{ document.uuid_documento }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Data e ora registrazione:</span>
+        <span class="info-value">{{ document.data_registrazione }} {{ document.ora_registrazione }}</span>
+      </div>
+
+      <div class="allegati-section">
+        <span class="info-label">Allegati ({{ document.num_allegati }}):</span>
+
+        @if (document.allegati.length > 0) {
+          <ul class="allegati-list">
+            @for (allegato of document.allegati; track allegato.id_allegato) {
+              <li class="allegato-item">
+                <span class="allegato-nome">{{ allegato.percorso }}</span>
+                <span class="allegato-formato">{{ allegato.formato }}</span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="empty-allegati">Nessun allegato presente.</p>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="card-body empty-state">
+      <p>Seleziona un documento per visualizzarne i dettagli.</p>
+    </div>
+  }
+</div>

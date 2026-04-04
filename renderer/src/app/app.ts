@@ -3,11 +3,10 @@ import { RouterOutlet } from '@angular/router';
 import {DocumentList} from './components/document-list/document-list';
 import {DocumentPreview} from './components/document-preview/document-preview';
 import {Filters} from './components/filters/filters';
-import { Layout } from './layout/layout';
-import { Sidebar } from './sidebar/sidebar';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DocumentList, DocumentPreview, Filters, Layout, Sidebar],
+  imports: [RouterOutlet, DocumentList, DocumentPreview, Filters],
   templateUrl: './app.html',
   styleUrl: './app.css',
   standalone: true
