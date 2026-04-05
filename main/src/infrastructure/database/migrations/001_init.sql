@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS classi_documentali (
 CREATE TABLE IF NOT EXISTS processi_conservazione (
   uuid TEXT PRIMARY KEY,
   data_creazione TEXT NOT NULL,
-  dimensione_totale TEXT NOT NULL,
+  dimensione_totale INTEGER NOT NULL,
   numero_sip INTEGER NOT NULL,
   numero_documenti INTEGER NOT NULL,
   numero_file_documenti INTEGER NOT NULL,

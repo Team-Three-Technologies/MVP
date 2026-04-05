@@ -2,7 +2,7 @@ export class ConservationProcess {
   constructor(
     private uuid: string,
     private creationDate: Date,
-    private totalSize: string,
+    private totalSize: number,
     private sipCount: number,
     private documentsCount: number,
     private filesCount: number,
@@ -17,7 +17,7 @@ export class ConservationProcess {
     return this.creationDate;
   }
 
-  public getTotalSize(): string {
+  public getTotalSize(): number {
     return this.totalSize;
   }
 
@@ -45,7 +45,7 @@ export class ConservationProcess {
     this.creationDate = creationDate;
   }
 
-  public setTotalSize(totalSize: string): void {
+  public setTotalSize(totalSize: number): void {
     this.totalSize = totalSize;
   }
 
