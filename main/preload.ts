@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   dip: {
     autoImport: () => ipcRenderer.invoke(IPC_CHANNELS.DIP_AUTO_IMPORT),
+    loadDocuments: () => ipcRenderer.invoke(IPC_CHANNELS.DIP_LOAD_DOCUMENTS),
+    searchDocuments: (filters: unknown) => ipcRenderer.invoke(IPC_CHANNELS.DIP_SEARCH_DOCUMENTS, filters),
   },
   on: (channel: string, callback: (data: unknown) => void) => {
     ipcRenderer.on(channel, (_, data) => callback(data));

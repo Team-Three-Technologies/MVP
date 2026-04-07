@@ -1,38 +1,19 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {DocumentList} from './components/document-list/document-list';
-import {DocumentPreview} from './components/document-preview/document-preview';
-import {Filters} from './components/filters/filters';
 import { Layout } from './layout/layout';
 import { Sidebar } from './sidebar/sidebar';
+import { BackendFacade } from './components/facades/backend.facade';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DocumentList, DocumentPreview, Filters, Layout, Sidebar],
+  imports: [RouterOutlet, Layout, Sidebar],
   templateUrl: './app.html',
   styleUrl: './app.css',
   standalone: true
 })
 export class App implements OnInit {
-  private api = (window as any).electronAPI;
-  message: string = 'prova';
-
-  constructor(
-    private readonly cdr: ChangeDetectorRef
-  ) { }
-
-  async test(): Promise<void> {
-    const res = await this.api.dip.autoImport();
-    if (res.error) throw new Error(res.error);
-  }
+  private backendFacade = inject(BackendFacade);
 
   async ngOnInit() {
-    try {
-      await this.test();
-      this.message = 'worka';
-    } catch (e) {
-      this.message = (e as Error).message;
-    } finally {
-      this.cdr.detectChanges();
-    }
+    await this.backendFacade.autoImport();
   }
 }
