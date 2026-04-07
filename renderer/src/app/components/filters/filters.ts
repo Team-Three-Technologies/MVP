@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { Filter } from '../../dip-presenter';
+import { FilterModel } from '../../models/models/filter';
 
 @Component({
   selector: 'app-filters',
@@ -12,7 +12,7 @@ import { Filter } from '../../dip-presenter';
 })
 export class Filters {
 
-  @Output() searchRequested = new EventEmitter<Filter[]>();
+  @Output() searchRequested = new EventEmitter<FilterModel[]>();
 
 opzioniFiltro = [
   "Identificativo documento",
@@ -69,7 +69,7 @@ opzioniFiltro = [
   "Tempo di conservazione",
   "Note"
 ];
-  filtriAttivi: Filter[] = [];
+  filtriAttivi: FilterModel[] = [];
 
   addFilters(): void {
     this.filtriAttivi.push({ type: this.opzioniFiltro[0], value: '' });

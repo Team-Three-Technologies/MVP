@@ -1,25 +1,37 @@
 <div class="document-list-panel">
 
   @if (isLoading) {
-    <p>Loading...</p>
+    <p class="messaggio-stato">Caricamento in corso...</p>
   } @else if (errorMessage) {
-  <p class="error">{{ errorMessage }}</p>
-} @else {
+    <p class="messaggio-stato errore">{{ errorMessage }}</p>
+  } @else {
 
-  <ul role="list">
-    @for (doc of documents; track doc.uuid_documento) {
-      <li>
-        <button type="button" (click)="onRowClick(doc.uuid_documento)">
-          <span>{{ doc.nome_documento }}</span>
-          <span>{{ doc.formato }}</span>
-          <span>{{ doc.uuid_documento }}</span>
-          <span>{{ doc.data_registrazione }} {{ doc.ora_registrazione }}</span>
-        </button>
-      </li>
-    }
-    @empty {
-      <li>Nessun documento corrispondente alla ricerca.</li>
-    }
-  </ul>
-}
+    <h3 class="titolo-lista">Documenti</h3>
+
+    <ul class="lista-principale" role="list">
+      @for (doc of documents; track doc.uuid_documento) {
+        <li class="item-doc">
+          
+          <button class="btn-link" type="button" (click)="onRowClick(doc.uuid_documento)">
+            {{ doc.nome_documento }}
+          </button>
+
+          @if (doc.allegati.length > 0) {
+            <ul class="lista-allegati" role="list">
+              @for (allegato of doc.allegati; track allegato.id_allegato) {
+                <li class="item-allegato">
+                  - <button class="btn-link btn-allegato" type="button" (click)="onAttachmentClick(doc, allegato, $event)">
+                      {{ allegato.percorso.split('/').pop() || allegato.percorso }}
+                    </button>
+                </li>              }
+            </ul>
+          }
+
+        </li>
+      }
+      @empty {
+        <li class="messaggio-stato">Nessun documento trovato.</li>
+      }
+    </ul>
+  }
 </div>
