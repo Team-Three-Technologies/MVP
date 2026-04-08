@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { DocumentModel } from '../../models/models/document';
+import { DocumentModel } from '../models/document';
 import { signal } from '@angular/core';
-import { ElectronIpc } from '../../services/electron-ipc';
-import { Filter } from '../../dip-presenter';
+import { ElectronIpc } from '../services/electron-ipc';
+import { FilterModel } from '../models/filter';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +10,8 @@ import { Filter } from '../../dip-presenter';
 export class BackendFacade {
   private readonly electronIpc = inject(ElectronIpc);
 
-  selectedDocumentState= signal<DocumentModel | null>(null);
-  errorMessage= signal<string | null>(null);
+  selectedDocumentState = signal<DocumentModel | null>(null);
+  errorMessage = signal<string | null>(null);
   private _documentList = signal<DocumentModel[]>([]);
   public documentList = this._documentList.asReadonly();
   private _isLoading = signal<boolean>(false);
@@ -19,7 +19,7 @@ export class BackendFacade {
 
   public async loadDocuments(): Promise<void> {
     this._isLoading.set(true);
-    try {   
+    try {
       this._documentList.set(await this.electronIpc.loadDocuments());
     } catch (error) {
       console.error('Error loading documents:', error);
@@ -38,7 +38,7 @@ export class BackendFacade {
     }
     this._isLoading.set(false);
   }
-  public async searchDocuments(filters: Filter[]): Promise<void> {
+  public async searchDocuments(filters: FilterModel[]): Promise<void> {
     this.clearSelection();
     this._isLoading.set(true);
     this.errorMessage.set(null);

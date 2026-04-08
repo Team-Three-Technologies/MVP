@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DipInfoModel } from '../../models/models/dip-info';
+import { DipInfoModel } from '../../models/dip-info';
 
 @Component({
   selector: 'app-dip-details',

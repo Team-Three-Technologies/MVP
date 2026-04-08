@@ -1,1 +1,31 @@
-<p>dip-dashboard-container works!</p>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <section class="filters-section">
+      <app-filters 
+        (searchRequested)="onSearch($event)">
+      </app-filters>
+    </section>
+
+    <section class="dip-info-section">
+      <app-dip-details></app-dip-details>
+    </section>
+  </aside>
+  <main class="main-content">
+    <section class="list-section">
+      <app-document-list 
+        [documents]="documentList()" 
+        [isLoading]="isLoading()"
+        (documentSelected)="onDocumentSelected($event)">
+      </app-document-list>
+    </section>
+    @if (selectedDocument()) {
+      <app-document-preview 
+        [document]="selectedDocument()">
+      </app-document-preview>
+    } @else {
+      <div class="empty-state">
+        <p>Seleziona un documento dalla lista qui a fianco per visualizzarlo.</p>
+      </div>
+    }
+  </main>
+</div>

@@ -1,19 +1,19 @@
-import { Component, inject } from '@angular/core';
-import { BackendFacade } from 'src/app/components/facades/backend.facade';
-import {DocumentList} from '../../components/document-list/document-list';
-import {DocumentPreview} from '../../components/document-preview/document-preview';
-import {Filters} from '../../components/filters/filters';
-import { Filter } from 'src/app/dip-presenter';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { BackendFacade } from '../../facades/backend.facade';
+import { DocumentList } from '../../components/document-list/document-list';
+import { DocumentPreview } from '../../components/document-preview/document-preview';
+import { Filters } from '../../components/filters/filters';
+import {DipDetails} from '../../components/dip-details/dip-details';
+import { FilterModel } from '../../models/filter';
 
 @Component({
   selector: 'app-dip-dashboard-container',
-  imports: [DocumentList, DocumentPreview, Filters],
+  imports: [DocumentList, DocumentPreview, Filters, DipDetails],
   templateUrl: './dip-dashboard-container.html',
   styleUrl: './dip-dashboard-container.css',
 })
-
 export class DipDashboardContainer implements OnInit, OnDestroy {
-  private facade=inject(BackendFacade);
+  private facade = inject(BackendFacade);
   public documentList = this.facade.documentList;
   public selectedDocument = this.facade.selectedDocumentState;
   public isLoading = this.facade.isLoading;
@@ -25,7 +25,7 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
   public async ngOnInit(): Promise<void> {
     await this.facade.loadDocuments();
   }
-   public async onSearch(filters: Filter[]): Promise<void> {
+  public async onSearch(filters: FilterModel[]): Promise<void> {
     await this.facade.searchDocuments(filters);
   }
 
@@ -33,5 +33,3 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
     await this.facade.clearSelection();
   }
 }
-
-

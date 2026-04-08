@@ -1,12 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { DocumentModel } from './models/models/document';
-import { BackendFacade } from './components/facades/backend.facade';
-import { FilterModel } from './models/models/filter';
+import { DocumentModel } from '../models/document';
+import { BackendFacade } from '../facades/backend.facade';
+import { FilterModel } from '../models/filter';
 
 @Injectable()
 export class DipPresenter implements OnDestroy {
-
   private documentsSubject = new BehaviorSubject<DocumentModel[]>([]);
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   private errorMessageSubject = new BehaviorSubject<string | null>(null);
@@ -42,4 +41,3 @@ export class DipPresenter implements OnDestroy {
     this.destroy$.complete();
   }
 }
-

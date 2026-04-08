@@ -24,15 +24,17 @@
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 12px;
   outline: none;
   background-color: white;
   height: 36px;
   color: #333;
+  width: 110px; 
+  max-width: 100%;
 }
 
 .input-base:focus {
-  border-color: blue; 
+  border-color: blue;
 }
 
 .btn-icona {
@@ -56,9 +58,9 @@
 
 .btn-aggiungi {
   background-color: white;
-  color: #555; 
+  color: #555;
   border: 1px solid #555;
-  border-radius: 20px; 
+  border-radius: 20px;
   padding: 6px 24px;
   font-size: 14px;
   font-weight: 500;
@@ -66,14 +68,14 @@
 }
 
 .btn-aggiungi:hover {
-  background-color: #f5f5f5; 
+  background-color: #f5f5f5;
   color: #222;
   border-color: #222;
 }
 
 .btn-cerca {
   background-color: white;
-  color: #1a73e8; 
+  color: #1a73e8;
   border: 1px solid #1a73e8;
   border-radius: 20px;
   padding: 6px 24px;
@@ -83,7 +85,7 @@
 }
 
 .btn-cerca:hover {
-  background-color: #f0f4f8; 
+  background-color: #f0f4f8;
   color: blue;
   border-color: blue;
 

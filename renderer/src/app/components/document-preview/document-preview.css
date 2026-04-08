@@ -35,7 +35,8 @@
   align-items: center;
 }
 
-.empty-state, .loading-state {
+.empty-state,
+.loading-state {
   color: white;
   text-align: center;
   font-size: 14px;

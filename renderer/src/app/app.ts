@@ -1,15 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import {DocumentList} from './components/document-list/document-list';
-import {DocumentPreview} from './components/document-preview/document-preview';
-import {Filters} from './components/filters/filters';
+import { Component, inject, OnInit } from '@angular/core';
+import { DipDashboardContainer } from './dip-dashboard/dip-dashboard-container/dip-dashboard-container';
+import { BackendFacade } from './facades/backend.facade';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DocumentList, DocumentPreview, Filters],
+  imports: [DipDashboardContainer],
   templateUrl: './app.html',
   styleUrl: './app.css',
-  standalone: true
+  standalone: true,
 })
 export class App implements OnInit {
   private backendFacade = inject(BackendFacade);

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { DocumentModel } from '../models/models/document';
-import { Filter } from '../dip-presenter';
+import { DocumentModel } from '../models/document';
+import { FilterModel } from '../models/filter';
+import './electron-api.d'; 
 
 @Injectable({
   providedIn: 'root',
 })
 export class ElectronIpc {
-  private api = (window as any).electronAPI;
+  private api = window.electronAPI;
 
-  //develop this service to handle IPC communication with the Electron main process
   public async autoImport(): Promise<void> {
     try {
       await this.api.dip.autoImport();
@@ -28,7 +28,7 @@ export class ElectronIpc {
     }
   }
 
-  public async searchDocuments(filters: Filter[]): Promise<DocumentModel[]> {
+  public async searchDocuments(filters: FilterModel[]): Promise<DocumentModel[]> {
     try {
       const filteredDocuments = await this.api.dip.searchDocuments(filters);
       return filteredDocuments as DocumentModel[];

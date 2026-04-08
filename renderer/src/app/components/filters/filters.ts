@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { FilterModel } from '../../models/models/filter';
+import { FilterModel } from '../../models/filter';
 
 @Component({
   selector: 'app-filters',

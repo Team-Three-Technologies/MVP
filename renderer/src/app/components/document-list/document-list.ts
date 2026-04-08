@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DocumentModel } from '../../models/models/document';
-import { Allegato } from '../../models/models/document';
+import { DocumentModel } from '../../models/document';
+import { Allegato } from '../../models/document';
 
 @Component({
   selector: 'app-document-list',

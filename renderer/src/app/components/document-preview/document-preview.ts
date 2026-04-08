@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { DocumentModel } from '../../models/models/document';
+import { DocumentModel } from '../../models/document';
 
 @Component({
   selector: 'app-document-preview',

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DocumentModel, Allegato } from '../../models/models/document';
+import { DocumentModel, Allegato } from '../../models/document';
 
 @Component({
   selector: 'app-document-details',
