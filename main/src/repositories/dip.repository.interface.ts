@@ -1,7 +1,10 @@
 import {Dip, DocumentClass, ConservationProcess, Document} from '../domain/dip-structure.barrel';
 
 export interface DipRepository {
-    save(dip: Dip, documentClass: DocumentClass[], conservationProcesses: ConservationProcess[], documents:Document[]): void;
+    saveDip(dip: Dip): void;
+    saveDocumentClass(docClass: DocumentClass): void;
+    saveConservationProcess(consProc: ConservationProcess): void;
+    saveDocument(doc:Document): void;
     /*
     removeDip(uuid:string): void;
     getDocument(uuid:string):Document;
