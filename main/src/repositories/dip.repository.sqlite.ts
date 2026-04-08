@@ -12,7 +12,7 @@ export class SQLiteDipRepository implements DipRepository {
         private readonly dbProvider: DatabaseProvider
     ) { }
 
-    public save(dip: Dip, documentClass: DocumentClass[], conservationProcesses: ConservationProcess[], documents:Document[]): Dip {
+    public save(dip: Dip, documentClass: DocumentClass[], conservationProcesses: ConservationProcess[], documents:Document[]): void {
 
         this.dbProvider.istance
         .prepare(`

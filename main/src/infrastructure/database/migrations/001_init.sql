@@ -26,11 +26,29 @@ CREATE TABLE IF NOT EXISTS processi_conservazione (
   FOREIGN KEY(uuid_classe_documentale) REFERENCES classi_documentali(uuid)
 );
 
+CREATE TABLE IF NOT EXISTS file (
+  uuid TEXT PRIMARY KEY,
+  percorso TEXT NOT NULL,
+  formato TEXT NOT NULL,
+  dimensione TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS documenti (
   uuid TEXT PRIMARY KEY,
   percorso TEXT NOT NULL,
   uuid_processo_conservazione TEXT,
-  FOREIGN KEY(uuid_processo_conservazione) REFERENCES processi_conservazione(uuid)
+  file_principale TEXT NOT NULL,
+
+  FOREIGN KEY(uuid_processo_conservazione) REFERENCES processi_conservazione(uuid),
+  FOREIGN KEY(file_principale) REFERENCES file(uuid)
+);
+
+CREATE TABLE IF NOT EXISTS allegati (
+    uuid_documento TEXT NOT NULL,
+    uuid_file TEXT NOT NULL,
+    PRIMARY KEY(uuid_documento, uuid_file),
+    FOREIGN KEY(uuid_documento) REFERENCES documenti(uuid),
+    FOREIGN KEY(uuid_file) REFERENCES file(uuid)
 );
 
 CREATE TABLE IF NOT EXISTS metadata (
@@ -40,13 +58,6 @@ CREATE TABLE IF NOT EXISTS metadata (
   uuid_documento TEXT,
   PRIMARY KEY(uuid_documento, nome),
   FOREIGN KEY(uuid_documento) REFERENCES documenti(uuid)
-);
-
-CREATE TABLE IF NOT EXISTS file (
-  uuid TEXT PRIMARY KEY,
-  percorso TEXT NOT NULL,
-  formato TEXT NOT NULL,
-  dimensione TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS soggetti (
