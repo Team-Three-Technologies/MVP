@@ -17,6 +17,9 @@ describe('AutoImportDipService', () => {
 
     container.register(TOKENS.DipParser, { useValue: {} });
     container.register(TOKENS.DipRepository, { useValue: {} });
+    container.register(TOKENS.DocumentClassRepository, { useValue: {} });
+    container.register(TOKENS.ConservationProcessRepository, { useValue: {} });
+    container.register(TOKENS.DocumentRepository, { useValue: {} });
     container.register(TOKENS.AppConfig, { useValue: {} });
 
     container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService });

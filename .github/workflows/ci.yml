@@ -27,14 +27,14 @@ jobs:
             renderer/package-lock.json
 
       - name: Install backend deps
-        run: npm ci
+        run: npm ci --include=optional
 
       - name: Run backend tests (Vitest + coverage)
         run: npm run test:main:cov
 
       - name: Install renderer deps
         working-directory: renderer
-        run: npm ci
+        run: npm ci --include=optional
 
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
