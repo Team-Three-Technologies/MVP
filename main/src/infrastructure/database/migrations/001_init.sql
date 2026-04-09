@@ -62,10 +62,6 @@ CREATE TABLE IF NOT EXISTS metadata (
   FOREIGN KEY (uuid_documento) REFERENCES documenti(uuid)
 );
 
-CREATE UNIQUE INDEX ux_files_primary_per_document
-ON files(uuid_documento)
-WHERE ruolo = 'PRIMARY';
-
 CREATE TABLE IF NOT EXISTS soggetti (
   id INTEGER PRIMARY KEY,
   tipo TEXT NOT NULL
