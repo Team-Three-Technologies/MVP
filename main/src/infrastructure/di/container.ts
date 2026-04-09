@@ -43,13 +43,6 @@ export function registerDependencies(): void {
   container.register(TOKENS.ConservationProcessRepository, { useClass: SQLiteConservationProcessRepository });
   container.register(TOKENS.DocumentRepository, { useClass: SQLiteDocumentRepository });
 
-  // services
-  container.register(TOKENS.FileService, { useClass: FileServiceImpl });
-  container.register(TOKENS.HashService, { useClass: SHA256HashServiceImpl });
-  container.register(TOKENS.DipParser, { useClass: DipParserImpl });
-  container.register(TOKENS.DipIndexParser, { useClass: DipIndexParserImpl });
-  container.register(TOKENS.MetadataParser, { useClass: MetadataParserImpl });
-
   // use cases
   container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService }, { lifecycle: Lifecycle.Singleton });
 
