@@ -1,8 +1,8 @@
 import { injectable } from 'tsyringe';
 import { DipIndexParser } from './dip-index.parser.interface';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import * as fsp from 'fs/promises';
-import type { DiPIndexXml } from './dip-index.xml';
+import * as fsp from 'node:fs/promises';
+import { DiPIndexXml } from './dip-index.xml';
 
 @injectable()
 export class DipIndexParserImpl implements DipIndexParser {

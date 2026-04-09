@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe';
 import { MetadataParser } from './metadata.parser.interface';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import * as fsp from 'fs/promises';
+import * as fsp from 'node:fs/promises';
 import { DocumentMetadataXml } from './document-metadata.xml';
 
 @injectable()
@@ -15,6 +15,7 @@ export class MetadataParserImpl implements MetadataParser {
       isArray: (name) => [
         'Ruolo',
         'ParoleChiave',
+        'TracciatureModificheDocumento',
         'IndirizziDigitaliDiRiferimento',
         'IndiceAllegati',
         'TipoAgg',

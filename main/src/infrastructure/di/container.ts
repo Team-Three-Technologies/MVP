@@ -1,10 +1,13 @@
 import { container, Lifecycle } from 'tsyringe';
 import { TOKENS } from './tokens';
 import type { AppConfig } from '../app.config';
-import * as path from 'path';
+import * as path from 'node:path';
 import { app } from 'electron';
 import { DatabaseProvider } from '../database/database.provider';
 import { SQLiteDipRepository } from '../../repositories/dip.repository.sqlite';
+import { SQLiteDocumentClassRepository } from '../../repositories/document-class.repository.sqlite';
+import { SQLiteConservationProcessRepository } from '../../repositories/conservation-process.repository.sqlite';
+import { SQLiteDocumentRepository } from '../../repositories/document.repository.sqlite';
 import { FileServiceImpl } from '../../infrastructure/fs/file.service.impl';
 import { SHA256HashServiceImpl } from '../../infrastructure/hash/hash.service.sha256.impl';
 import { DipParserImpl } from '../../infrastructure/parsing/dip.parser.impl';
@@ -35,7 +38,17 @@ export function registerDependencies(): void {
   container.register(TOKENS.MetadataParser, { useClass: MetadataParserImpl }, { lifecycle: Lifecycle.Singleton });
 
   // repositories
-  container.register(TOKENS.DipRepository, { useClass: SQLiteDipRepository }, { lifecycle: Lifecycle.Singleton });
+  container.register(TOKENS.DipRepository, { useClass: SQLiteDipRepository });
+  container.register(TOKENS.DocumentClassRepository, { useClass: SQLiteDocumentClassRepository });
+  container.register(TOKENS.ConservationProcessRepository, { useClass: SQLiteConservationProcessRepository });
+  container.register(TOKENS.DocumentRepository, { useClass: SQLiteDocumentRepository });
+
+  // services
+  container.register(TOKENS.FileService, { useClass: FileServiceImpl });
+  container.register(TOKENS.HashService, { useClass: SHA256HashServiceImpl });
+  container.register(TOKENS.DipParser, { useClass: DipParserImpl });
+  container.register(TOKENS.DipIndexParser, { useClass: DipIndexParserImpl });
+  container.register(TOKENS.MetadataParser, { useClass: MetadataParserImpl });
 
   // use cases
   container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService }, { lifecycle: Lifecycle.Singleton });

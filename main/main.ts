@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { app, BrowserWindow } from 'electron';
-import * as path from 'path';
+import * as path from 'node:path';
 import { registerDependencies } from './src/infrastructure/di/container';
 import { registerAllHandlers } from './src/presentation/router';
 
@@ -19,7 +19,7 @@ function createWindow(): void {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false,
+      sandbox: true,
     },
   });
 

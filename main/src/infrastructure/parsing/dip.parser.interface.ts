@@ -1,5 +1,8 @@
-import { DipParsingResult } from './dip-parsing-result';
+import { DiPIndexXml } from './dip-index.xml';
+import { DocumentParsingResult } from './dip-parsing-result';
 
 export interface DipParser {
-  parse(dipIndexPath: string): Promise<DipParsingResult>;
+  parseDipIndex(dipIndexPath: string): Promise<DiPIndexXml>;
+  parseDocumentsStream(dipIndex: DiPIndexXml, dir: string): AsyncIterable<DocumentParsingResult>;
+  // parse(dipIndexPath: string): Promise<DipParsingResult>;
 }

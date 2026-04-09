@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
-import { TOKENS } from '../infrastructure/di/tokens';
 import { DipRepository } from './dip.repository.interface';
+import { TOKENS } from '../infrastructure/di/tokens';
 import { DatabaseProvider } from '../infrastructure/database/database.provider';
 import { Dip } from '../domain/dip.model'
 import { DipRow } from './dip.row'
@@ -12,39 +12,30 @@ export class SQLiteDipRepository implements DipRepository {
     private readonly dbProvider: DatabaseProvider
   ) { }
 
-  public save(dip: Dip): Dip {
-    this.dbProvider.istance
+  public async save(dip: Dip): Promise<Dip> {
+    this.dbProvider.instance
       .prepare(`
         INSERT INTO archivi_dip (uuid_processo, data_creazione, numero_documenti, numero_aip)
         VALUES (@uuid, @date, @docsCount, @aipCount);
       `)
       .run({
-        uuid: dip.getProcessUuid().toString(),
+        uuid: dip.getProcessUuid(),
         date: dip.getCreationDate().toISOString(),
         docsCount: dip.getDocumentsCount(),
         aipCount: dip.getAipCount()
       });
+
     return dip;
   }
 
-  public findByUuid(uuid: string): Dip | null {
-    const row = this.dbProvider.istance
+  public async findByUuid(uuid: string): Promise<Dip | null> {
+    const row = this.dbProvider.instance
       .prepare(`
         SELECT * FROM archivi_dip
-        WHERE uuid_processo = ?
+        WHERE uuid_processo = ?;
       `)
       .get(uuid) as DipRow;
 
-      return row ? new Dip(row.uuid_processo, new Date(row.data_creazione), row.numero_documenti, row.numero_aip) : null;
-  }
-
-  public findAll(): Dip[] {
-    const rows = this.dbProvider.istance
-      .prepare(`SELECT * FROM archivi_dip;`)
-      .all() as DipRow[];
-
-    return rows.map((row: DipRow) => {
-      return new Dip(row.uuid_processo, new Date(row.data_creazione), row.numero_documenti, row.numero_aip);
-    });
+    return row ? new Dip(row.uuid_processo, new Date(row.data_creazione), row.numero_documenti, row.numero_aip) : null;
   }
 }
