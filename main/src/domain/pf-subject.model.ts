@@ -1,27 +1,26 @@
 import { Subject } from './subject.model';
 import {SubjectVisitor} from './subject.visitor.abstract';
+import {Person} from './person.model';
 
 export class PFSubject extends Subject {
   constructor(
     id: number,
-    private name: string,
-    private surname: string,
-    private cf: string,
+    private person: Person,
     private digitalAddresses: string[]
   ) {
     super(id);
   }
 
   public getName(): string {
-    return this.name;
+    return this.person.getName();
   }
 
   public getSurname(): string {
-    return this.surname;
+    return this.person.getSurname();
   }
 
   public getCf(): string {
-    return this.cf;
+    return this.person.getCF();
   }
 
   public getDigitalAddresses(): string[] {
@@ -29,15 +28,15 @@ export class PFSubject extends Subject {
   }
 
   public setName(name: string): void {
-    this.name = name;
+    this.person.setName(name);
   }
 
   public setSurname(surname: string): void {
-    this.surname = surname;
+    this.person.setSurname(surname);
   }
 
   public setCf(cf: string): void {
-    this.cf = cf;
+    this.person.setCF(cf);
   }
 
   public setDigitalAddresses(digitalAddresses: string[]): void {
