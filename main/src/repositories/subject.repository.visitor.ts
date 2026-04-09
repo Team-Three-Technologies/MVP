@@ -85,23 +85,83 @@ export class SubjectRepositoryVisitor extends SubjectVisitor{
                      VALUES (@id, @ipa, @aoo, @uor, @indirizzo);
             `)
             .run({
-                id: subject.getId(),
+                id: subject.getId(), 
+                ipa: subject.getIpaCode(),
+                aoo: subject.getIpaAooCode(),
+                uor: subject.getIpaUorCode(),
                 indirizzo: subject.getDigitalAddresses()
             });
-
    
     }
 
     public visitPfSubject(subject: PFSubject): void {
-        
+         this.dbProvider.instance
+            .prepare(`INSERT INTO soggetti(id,tipo)
+                     VALUES (@id, @tipo);
+            `)
+            .run({
+                id: subject.getId(),
+                tipo: SubjectTypeEnum.PF
+            });
+
+        this.dbProvider.instance
+            .prepare(`INSERT INTO soggetto_pf
+                     (id, cognome, nome, cf, indirizzo_dig_riferimento)
+                     VALUES (@id, @cognome, @nome, @cf, @indirizzo);
+            `)
+            .run({
+                id: subject.getId(),
+                cognome: subject.getSurname(),
+                nome: subject.getName(),
+                cf:subject.getCf(),
+                indirizzo: subject.getDigitalAddresses()
+            });
     }
 
     public visitPgSubject(subject: PGSubject): void {
-        
+          this.dbProvider.instance
+            .prepare(`INSERT INTO soggetti(id,tipo)
+                     VALUES (@id, @tipo);
+            `)
+            .run({
+                id: subject.getId(),
+                tipo: SubjectTypeEnum.PG
+            });
+
+        this.dbProvider.instance
+            .prepare(`INSERT INTO soggetto_pg
+                     (id, den_organizzazione, p_iva, den_ufficio, indirizzo_dig_riferimento)
+                     VALUES (@id, @den_org, @p_iva, @den_uff, @indirizzo);
+            `)
+            .run({
+                id: subject.getId(),
+                den_org: subject.getOrganizationDen(),
+                p_iva: subject.getVatCode(),
+                den_uff: subject.getOfficeDen(),
+                indirizzo: subject.getDigitalAddresses()
+            });
     }
 
     public visitSWSubject(subject: SWSubject): void {
-        
+           this.dbProvider.instance
+            .prepare(`INSERT INTO soggetti(id,tipo)
+                     VALUES (@id, @tipo);
+            `)
+            .run({
+                id: subject.getId(),
+                tipo: SubjectTypeEnum.SW
+            });
+
+        this.dbProvider.instance
+            .prepare(`INSERT INTO soggetto_sw
+                     (id, den_sistema)
+                     VALUES (@id, @den_sis);
+            `)
+            .run({
+                id: subject.getId(),
+                den_sis: subject.getSystemDen()
+            });
+       
     }
 
 }
