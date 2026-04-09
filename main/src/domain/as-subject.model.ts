@@ -1,4 +1,5 @@
 import { Subject } from './subject.model';
+import {SubjectVisitor} from './subject.visitor.abstract';
 
 export class ASSubject extends Subject {
   constructor(
@@ -59,5 +60,8 @@ export class ASSubject extends Subject {
 
   public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
+  }
+  public accept(vis: SubjectVisitor): void {
+      vis.visitAsSubject(this);
   }
 }
