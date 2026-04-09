@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe';
 import { HashService } from './hash.service.interface';
-import * as crypto from 'crypto';
-import * as fs from 'fs';
+import * as crypto from 'node:crypto';
+import * as fs from 'node:fs';
 
 @injectable()
 export class SHA256HashServiceImpl implements HashService {

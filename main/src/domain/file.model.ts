@@ -2,7 +2,6 @@ export class File {
   constructor(
     private uuid: string,
     private path: string,
-    private extension: string,
     private size: string
   ) { }
 
@@ -12,10 +11,6 @@ export class File {
 
   getPath(): string {
     return this.path;
-  }
-
-  getExtension(): string {
-    return this.extension;
   }
 
   getSize(): string {
@@ -28,10 +23,6 @@ export class File {
 
   setPath(path: string): void {
     this.path = path;
-  }
-
-  setExtension(extension: string): void {
-    this.extension = extension;
   }
 
   setSize(size: string): void {

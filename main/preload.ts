@@ -1,9 +1,10 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { IPC_CHANNELS } from './ipc-channels';
+
+const IPC_CHANNELS = {
+  DIP_AUTO_IMPORT: 'dip:auto-import',
+}
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  dialog: {
-  },
   dip: {
     autoImport: () => ipcRenderer.invoke(IPC_CHANNELS.DIP_AUTO_IMPORT),
   },

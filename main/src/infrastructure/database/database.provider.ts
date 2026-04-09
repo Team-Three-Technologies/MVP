@@ -2,8 +2,8 @@ import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '../di/tokens';
 import Database from 'better-sqlite3';
 import type { AppConfig } from '../app.config';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 @injectable()
 export class DatabaseProvider {
@@ -19,7 +19,7 @@ export class DatabaseProvider {
     this.runMigrations();
   }
 
-  public get istance(): Database.Database {
+  public get instance(): Database.Database {
     return this.db;
   }
 

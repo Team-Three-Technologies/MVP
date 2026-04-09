@@ -24,8 +24,8 @@ export interface DocumentoInformaticoXml {
   IdIdentificativoDocumentoPrimario?: IdDocXml;
   NomeDelDocumento: string;
   VersioneDelDocumento: string;
-  TracciatureModificheDocumento?: TracciatureModificheDocumentoXml;
-  TempoDiConservazione?: number | string;
+  TracciatureModificheDocumento?: TracciatureModificheDocumentoXml[];
+  TempoDiConservazione?: number;
   Note?: string;
 }
 

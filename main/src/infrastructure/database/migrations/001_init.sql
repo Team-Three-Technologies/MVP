@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS classi_documentali (
   valida_da TEXT NOT NULL,
   valida_fino TEXT,
   uuid_dip TEXT,
-  FOREIGN KEY(uuid_dip) REFERENCES archivi_dip(uuid)
+  FOREIGN KEY (uuid_dip) REFERENCES archivi_dip(uuid_processo)
 );
 
 CREATE TABLE IF NOT EXISTS processi_conservazione (
@@ -23,14 +23,14 @@ CREATE TABLE IF NOT EXISTS processi_conservazione (
   numero_documenti INTEGER NOT NULL,
   numero_file_documenti INTEGER NOT NULL,
   uuid_classe_documentale TEXT,
-  FOREIGN KEY(uuid_classe_documentale) REFERENCES classi_documentali(uuid)
+  FOREIGN KEY (uuid_classe_documentale) REFERENCES classi_documentali(uuid)
 );
 
 CREATE TABLE IF NOT EXISTS documenti (
   uuid TEXT PRIMARY KEY,
   percorso TEXT NOT NULL,
   uuid_processo_conservazione TEXT,
-  FOREIGN KEY(uuid_processo_conservazione) REFERENCES processi_conservazione(uuid)
+  FOREIGN KEY (uuid_processo_conservazione) REFERENCES processi_conservazione(uuid)
 );
 
 CREATE TABLE IF NOT EXISTS metadata (
@@ -38,16 +38,22 @@ CREATE TABLE IF NOT EXISTS metadata (
   valore TEXT NOT NULL,
   tipo TEXT NOT NULL,
   uuid_documento TEXT,
-  PRIMARY KEY(uuid_documento, nome),
-  FOREIGN KEY(uuid_documento) REFERENCES documenti(uuid)
+  PRIMARY KEY (uuid_documento, nome),
+  FOREIGN KEY (uuid_documento) REFERENCES documenti(uuid)
 );
 
-CREATE TABLE IF NOT EXISTS file (
+CREATE TABLE IF NOT EXISTS files (
   uuid TEXT PRIMARY KEY,
   percorso TEXT NOT NULL,
-  formato TEXT NOT NULL,
-  dimensione TEXT NOT NULL
+  dimensione TEXT NOT NULL,
+  ruolo TEXT NOT NULL CHECK (ruolo IN ('PRIMARY', 'ATTACHMENT')),
+  uuid_documento TEXT,
+  FOREIGN KEY (uuid_documento) REFERENCES documenti(uuid)
 );
+
+CREATE UNIQUE INDEX ux_files_primary_per_document
+ON files(uuid_documento)
+WHERE ruolo = 'PRIMARY';
 
 CREATE TABLE IF NOT EXISTS soggetti (
   id INTEGER PRIMARY KEY,
@@ -60,7 +66,7 @@ CREATE TABLE IF NOT EXISTS soggetti_pf (
   nome TEXT NOT NULL,
   cf TEXT,
   indirizzo_dig_riferimento TEXT,
-  FOREIGN KEY(id) REFERENCES soggetto(id) 
+  FOREIGN KEY (id) REFERENCES soggetto(id) 
 );
 
 CREATE TABLE IF NOT EXISTS soggetti_pg (
@@ -69,7 +75,7 @@ CREATE TABLE IF NOT EXISTS soggetti_pg (
   p_iva TEXT,
   den_ufficio TEXT,
   indirizzo_dig_riferimento TEXT,
-  FOREIGN KEY(id) REFERENCES soggetto(id)
+  FOREIGN KEY (id) REFERENCES soggetto(id)
 );
 
 CREATE TABLE IF NOT EXISTS soggetti_pai (
@@ -78,7 +84,7 @@ CREATE TABLE IF NOT EXISTS soggetti_pai (
   codice_ipa_aoo TEXT,
   codice_ipa_uor TEXT,
   indirizzo_dig_riferimento TEXT,
-  FOREIGN KEY(id) REFERENCES soggetto(id)
+  FOREIGN KEY (id) REFERENCES soggetto(id)
 );
 
 CREATE TABLE IF NOT EXISTS soggetti_pae (
@@ -86,7 +92,7 @@ CREATE TABLE IF NOT EXISTS soggetti_pae (
   den_amministrazione TEXT NOT NULL,
   den_ufficio TEXT,
   indirizzo_dig_riferimento TEXT,
-  FOREIGN KEY(id) REFERENCES soggetto(id)
+  FOREIGN KEY (id) REFERENCES soggetto(id)
 );
 
 CREATE TABLE IF NOT EXISTS soggetto_as (
@@ -97,7 +103,7 @@ CREATE TABLE IF NOT EXISTS soggetto_as (
   den_organizzazione TEXT NOT NULL,
   den_ufficio TEXT NOT NULL,
   indirizzo_dig_riferimento TEXT,
-  FOREIGN KEY(id) REFERENCES soggetto(id)
+  FOREIGN KEY (id) REFERENCES soggetto(id)
 );
 
 CREATE TABLE IF NOT EXISTS soggetto_sw (
@@ -110,7 +116,7 @@ CREATE TABLE IF NOT EXISTS ruoli (
   uuid_documento TEXT,
   id_soggetto INTEGER,
   ruolo TEXT,
-  FOREIGN KEY(uuid_documento) REFERENCES documenti(uuid),
-  FOREIGN KEY(id_soggetto) REFERENCES soggetti(id),
-  PRIMARY KEY(uuid_documento, id_soggetto)
+  FOREIGN KEY (uuid_documento) REFERENCES documenti(uuid),
+  FOREIGN KEY (id_soggetto) REFERENCES soggetti(id),
+  PRIMARY KEY (uuid_documento, id_soggetto)
 );

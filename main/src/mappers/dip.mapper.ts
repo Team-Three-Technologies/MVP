@@ -1,13 +1,13 @@
-import { DiPIndexXml } from '../infrastructure/parsing/dip-index.xml';
+import { PackageInfoXml } from '../infrastructure/parsing/dip-index.xml';
 import { Dip } from '../domain/dip.model';
 
 export class DipMapper {
-  toDomain(dipIndexXml: DiPIndexXml): Dip {
+  public toDomain(packageInfo: PackageInfoXml): Dip {
     return new Dip(
-      dipIndexXml.DiPIndex.PackageInfo.ProcessUUID,
-      new Date(dipIndexXml.DiPIndex.PackageInfo.CreationDate),
-      Number(dipIndexXml.DiPIndex.PackageInfo.DocumentsCount),
-      Number(dipIndexXml.DiPIndex.PackageInfo.AiPCount)
+      packageInfo.ProcessUUID,
+      new Date(packageInfo.CreationDate),
+      Number(packageInfo.DocumentsCount),
+      Number(packageInfo.AiPCount)
     );
   }
 }

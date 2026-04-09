@@ -3,9 +3,9 @@ import { TOKENS } from '../di/tokens';
 import { DipParser } from './dip.parser.interface';
 import { DipIndexParser } from './dip-index.parser.interface';
 import { MetadataParser } from './metadata.parser.interface';
-import { DipParsingResult } from './dip-parsing-result';
-import { DocumentMetadataXml } from './document-metadata.xml';
-import path from 'path';
+import { DiPIndexXml } from './dip-index.xml';
+import { DocumentParsingResult } from './dip-parsing-result';
+import * as path from 'node:path';
 
 @injectable()
 export class DipParserImpl implements DipParser {
@@ -16,22 +16,66 @@ export class DipParserImpl implements DipParser {
     private readonly metadataParser: MetadataParser,
   ) { }
 
-  public async parse(dipIndexPath: string): Promise<DipParsingResult> {
-    const dir = path.dirname(dipIndexPath);
-    const dipIndex = await this.dipIndexParser.parseDipIndex(dipIndexPath);
-    
-    const documentsMetadata: DocumentMetadataXml[] = [];
+  public async parseDipIndex(dipIndexPath: string): Promise<DiPIndexXml> {
+    try {
+      return await this.dipIndexParser.parseDipIndex(dipIndexPath);
+    } catch(e) {
+      throw e;
+    }
+  }
 
+  public async *parseDocumentsStream(dipIndex: DiPIndexXml, dir: string): AsyncIterable<DocumentParsingResult> {
     for (const dc of dipIndex.DiPIndex.PackageContent.DiPDocuments.DocumentClass) {
       for (const aip of dc.AiP) {
         for (const doc of aip.Document) {
-          const metadataFile = path.join(dir, aip.AiPRoot, doc.DocumentPath, doc.Files.Metadata['#text']);
+          const documentPath = path.join(dir, aip.AiPRoot, doc.DocumentPath);
+
+          const metadataFile = path.join(documentPath, doc.Files.Metadata['#text']);
           const metadata = await this.metadataParser.parseMetadata(metadataFile);
-          documentsMetadata.push(metadata);
+          
+          yield {
+            uuid: doc['@_uuid'],
+            conservationProcessUuid: aip['@_uuid'],
+            documentPath: documentPath,
+            primaryFilePath: doc.Files.Primary['#text'],
+            attachmentsFilesPath: (doc.Files.Attachments ?? []).map(a => {
+              return [a['@_uuid'], a['#text']];
+            }),
+            documentMetadata: metadata
+          };
         }
       }
     }
-
-    return { dipIndex, documentsMetadata };
   }
+
+  // public async parse(dipIndexPath: string): Promise<DipParsingResult> {
+  //   const dir = path.dirname(dipIndexPath);
+  //   const dipIndex = await this.dipIndexParser.parseDipIndex(dipIndexPath);
+    
+  //   const documentsParsingResult: DocumentParsingResult[] = [];
+
+  //   for (const dc of dipIndex.DiPIndex.PackageContent.DiPDocuments.DocumentClass) {
+  //     for (const aip of dc.AiP) {
+  //       for (const doc of aip.Document) {
+  //         const documentPath = path.join(dir, aip.AiPRoot, doc.DocumentPath);
+
+  //         const metadataFile = path.join(documentPath, doc.Files.Metadata['#text']);
+  //         const metadata = await this.metadataParser.parseMetadata(metadataFile);
+          
+  //         documentsParsingResult.push({
+  //           uuid: doc['@_uuid'],
+  //           conservationProcessUuid: aip['@_uuid'],
+  //           documentPath: documentPath,
+  //           primaryFilePath: doc.Files.Primary['#text'],
+  //           attachmentsFilesPath: (doc.Files.Attachments ?? []).map(a => {
+  //             return [a['@_uuid'], a['#text']];
+  //           }),
+  //           documentMetadata: metadata
+  //         });
+  //       }
+  //     }
+  //   }
+
+  //   return { dipIndex, documents: documentsParsingResult };
+  // }
 }

@@ -6,6 +6,9 @@ export const TOKENS = {
   DipIndexParser: Symbol('DipIndexParser'),
   MetadataParser: Symbol('MetadataParser'),
   DipRepository: Symbol('DipRepository'),
+  DocumentClassRepository: Symbol('DocumentClassRepository'),
+  ConservationProcessRepository: Symbol('ConservationProcessRepository'),
+  DocumentRepository: Symbol('DocumentRepository'),
   DatabaseProvider: Symbol('DatabaseProvider'),
   AppConfig: Symbol('AppConfig'),
 } as const;

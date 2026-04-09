@@ -4,7 +4,15 @@ import { AutoImportDipUseCase } from './auto-import-dip.use-case';
 import { FileService } from '../infrastructure/fs/file.service.interface';
 import { DipParser } from '../infrastructure/parsing/dip.parser.interface';
 import { DipRepository } from '../repositories/dip.repository.interface';
+import { DocumentClassRepository } from '../repositories/document-class.repository.interface';
+import { ConservationProcessRepository } from '../repositories/conservation-process.repository.interface';
+import { DocumentRepository } from '../repositories/document.repository.interface';
 import type { AppConfig } from '../infrastructure/app.config';
+import { DipMapper } from '../mappers/dip.mapper';
+import { DocumentClassMapper } from '../mappers/document-class.mapper';
+import { ConservationProcessMapper } from '../mappers/conservation-process.mapper';
+import { DocumentMapper } from '../mappers/document.mapper';
+
 @injectable()
 export class AutoImportDipService implements AutoImportDipUseCase {
   constructor(
@@ -14,21 +22,54 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     private readonly dipParser: DipParser,
     @inject(TOKENS.DipRepository)
     private readonly dipRepository: DipRepository,
+    @inject(TOKENS.DocumentClassRepository)
+    private readonly documentClassRepository: DocumentClassRepository,
+    @inject(TOKENS.ConservationProcessRepository)
+    private readonly conservationProcessRepository: ConservationProcessRepository,
+    @inject(TOKENS.DocumentRepository)
+    private readonly documentRepository: DocumentRepository,
     @inject(TOKENS.AppConfig)
     private readonly config: AppConfig
   ) { } 
 
   public async execute(): Promise<void> {
-    const dipIndexPath = await this.fileService.findDipIndex('D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'/*this.config.appDir*/);
+    // leggero: 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403';
+    // 4gb: 'D:\\filip\\Downloads\\dip.2026115.d7a27175-16b3-4a7d-877d-26f2b1baadda';
+    const dir = this.config.appDir;
+    const dipIndexPath = await this.fileService.findDipIndex(dir);
     
     if (!dipIndexPath) {
       throw new Error('DiPIndex mancante');
     }
     
-    const parsed = await this.dipParser.parse(dipIndexPath);
-    console.log(parsed);
+    const dipIndex = await this.dipParser.parseDipIndex(dipIndexPath);
+
+    const dipMapper = new DipMapper();
+    const dip = dipMapper.toDomain(dipIndex.DiPIndex.PackageInfo);
+
+    if (!(await this.dipRepository.findByUuid(dip.getProcessUuid()))) {
+      this.dipRepository.save(dip);
+    } else {
+      throw new Error('DiP già importato in precedenza');
+    }
+
+    const documentClassMapper = new DocumentClassMapper();
+    const conservationProcessMapper = new ConservationProcessMapper();
     
-    // TODO: mappare da risultato parsing -> dominio
-    // TODO: usare repository per controllare se il DiP è stato importato e eventualmente salvare le informazioni    
+    for (const dc of dipIndex.DiPIndex.PackageContent.DiPDocuments.DocumentClass) {
+      const documentClass = documentClassMapper.toDomain(dc, dip.getProcessUuid());
+      this.documentClassRepository.save(documentClass);
+      
+      for (const cp of dc.AiP) {
+        const conservationProcess = conservationProcessMapper.toDomain(cp, documentClass.getUuid());
+        this.conservationProcessRepository.save(conservationProcess);
+      }
+    }
+
+    const documentMapper = new DocumentMapper();
+    for await (const doc of this.dipParser.parseDocumentsStream(dipIndex, dir)) {
+      const document = documentMapper.toDomain(doc);
+      this.documentRepository.save(document);
+    }
   }
 }
