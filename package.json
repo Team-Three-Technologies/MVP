@@ -7,6 +7,7 @@
   "scripts": {
     "clean:dist": "rimraf dist renderer/dist",
     "clean:cache": "rimraf renderer/.angular",
+    "clean:cov": "rimraf coverage renderer/coverage",
     "clean:modules:main": "rimraf node_modules",
     "clean:modules:renderer": "rimraf renderer/node_modules",
     "clean:modules:all": "rimraf node_modules renderer/node_modules",
@@ -39,11 +40,11 @@
       "dist/**/*"
     ],
     "mac": {
-      "target": "dmg",
+      "target": "zip",
       "icon": "assets/icon.icns"
     },
     "win": {
-      "target": "dir",
+      "target": "portable",
       "icon": "assets/icon.ico"
     },
     "linux": {

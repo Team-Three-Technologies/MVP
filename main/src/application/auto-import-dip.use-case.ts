@@ -1,3 +1,3 @@
 export interface AutoImportDipUseCase {
-  execute(): Promise<void>;
+  execute(): Promise<string>;
 }

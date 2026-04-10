@@ -8,7 +8,7 @@ import { SQLiteDipRepository } from '../../repositories/dip.repository.sqlite';
 import { SQLiteDocumentClassRepository } from '../../repositories/document-class.repository.sqlite';
 import { SQLiteConservationProcessRepository } from '../../repositories/conservation-process.repository.sqlite';
 import { SQLiteDocumentRepository } from '../../repositories/document.repository.sqlite';
-import { FileServiceImpl } from '../../infrastructure/fs/file.service.impl';
+import { FileFinderImpl } from '../../infrastructure/fs/file.finder.impl';
 import { SHA256HashServiceImpl } from '../../infrastructure/hash/hash.service.sha256.impl';
 import { DipParserImpl } from '../../infrastructure/parsing/dip.parser.impl';
 import { DipIndexParserImpl } from '../../infrastructure/parsing/dip-index.parser.impl';
@@ -16,12 +16,22 @@ import { MetadataParserImpl } from '../../infrastructure/parsing/metadata.parser
 import { AutoImportDipService } from '../../application/auto-import-dip.service';
 import { DipHandler } from '../../presentation/dip.handler';
 
+function getLaunchDir(): string {
+  const dirFromEnv = process.env.PORTABLE_EXECUTABLE_DIR;
+  if (dirFromEnv) return dirFromEnv;
+
+  const fileFromEnv = process.env.PORTABLE_EXECUTABLE_FILE;
+  if (fileFromEnv) return path.dirname(fileFromEnv);
+
+  return path.dirname(process.execPath);
+}
+
 export function registerDependencies(): void {
   container.register(TOKENS.AppConfig, {
     useValue: {
       migrationsPath: path.join(app.getAppPath(), 'dist/main/main/src/infrastructure/database/migrations'),
       documentsPath: path.join(app.getPath('userData'), 'documents'),
-      appDir: path.dirname(process.execPath),
+      appDir: getLaunchDir()
     } as AppConfig,
   });
 
@@ -29,7 +39,7 @@ export function registerDependencies(): void {
   // db
   container.register(TOKENS.DatabaseProvider, { useClass: DatabaseProvider }, { lifecycle: Lifecycle.Singleton });
   // fs
-  container.register(TOKENS.FileService, { useClass: FileServiceImpl }, { lifecycle: Lifecycle.Singleton });
+  container.register(TOKENS.FileFinder, { useClass: FileFinderImpl }, { lifecycle: Lifecycle.Singleton });
   // hash
   container.register(TOKENS.HashService, { useClass: SHA256HashServiceImpl }, { lifecycle: Lifecycle.Singleton });
   // parsing

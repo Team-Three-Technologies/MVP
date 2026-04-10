@@ -9,7 +9,7 @@ describe('AutoImportDipService', () => {
   });
 
   it('Lancia errore se non trova il DiPIndex', async () => {
-    container.register(TOKENS.FileService, {
+    container.register(TOKENS.FileFinder, {
       useValue: {
         findDipIndex: vi.fn().mockResolvedValue(null),
       }

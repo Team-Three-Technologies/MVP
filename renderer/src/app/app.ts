@@ -15,15 +15,15 @@ export class App implements OnInit {
     private readonly cdr: ChangeDetectorRef
   ) { }
 
-  async test(): Promise<void> {
+  async test(): Promise<string> {
     const res = await this.api.dip.autoImport();
     if (res.error) throw new Error(res.error);
+    return res.data.dipUuid;
   }
 
   async ngOnInit() {
     try {
-      await this.test();
-      this.message = 'worka';
+      this.message = await this.test();
     } catch (e) {
       this.message = (e as Error).message;
     } finally {

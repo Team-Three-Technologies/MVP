@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '../infrastructure/di/tokens';
 import { AutoImportDipUseCase } from './auto-import-dip.use-case';
-import { FileService } from '../infrastructure/fs/file.service.interface';
+import { FileFinder } from '../infrastructure/fs/file.finder.interface';
 import { DipParser } from '../infrastructure/parsing/dip.parser.interface';
 import { DipRepository } from '../repositories/dip.repository.interface';
 import { DocumentClassRepository } from '../repositories/document-class.repository.interface';
@@ -16,8 +16,8 @@ import { DocumentMapper } from '../mappers/document.mapper';
 @injectable()
 export class AutoImportDipService implements AutoImportDipUseCase {
   constructor(
-    @inject(TOKENS.FileService)
-    private readonly fileService: FileService,
+    @inject(TOKENS.FileFinder)
+    private readonly fileFinder: FileFinder,
     @inject(TOKENS.DipParser)
     private readonly dipParser: DipParser,
     @inject(TOKENS.DipRepository)
@@ -32,11 +32,11 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     private readonly config: AppConfig
   ) { } 
 
-  public async execute(): Promise<void> {
+  public async execute(): Promise<string> {
     // leggero: 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403';
     // 4gb: 'D:\\filip\\Downloads\\dip.2026115.d7a27175-16b3-4a7d-877d-26f2b1baadda';
-    const dir = this.config.appDir;
-    const dipIndexPath = await this.fileService.findDipIndex(dir);
+    const dir = 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'; // this.config.appDir;
+    const dipIndexPath = await this.fileFinder.findDipIndex(dir);
     
     // se non trova il dip index
     if (!dipIndexPath) {
@@ -72,5 +72,7 @@ export class AutoImportDipService implements AutoImportDipUseCase {
       const document = documentMapper.toDomain(doc);
       this.documentRepository.save(document);
     }
+
+    return dip.getProcessUuid();
   }
 }

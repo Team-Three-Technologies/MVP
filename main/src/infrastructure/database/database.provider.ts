@@ -13,6 +13,7 @@ export class DatabaseProvider {
     @inject(TOKENS.AppConfig)
     private readonly config: AppConfig,
   ) {
+    this.ensureDir(this.config.documentsPath);
     this.db = new Database(path.join(this.config.documentsPath, 'app.db'));
     this.db.pragma('journal_mode = WAL');
     this.db.pragma('foreign_keys = ON');
