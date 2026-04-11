@@ -1,3 +1,4 @@
+import {SubjectVisitor} from './subject.visitor.abstract';
 export abstract class Subject {
   constructor(
     private id: number
@@ -10,4 +11,5 @@ export abstract class Subject {
   public setId(id: number): void {
     this.id = id;
   }
+  public abstract accept(vis:SubjectVisitor):void;
 }

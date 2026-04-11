@@ -26,11 +26,29 @@ CREATE TABLE IF NOT EXISTS processi_conservazione (
   FOREIGN KEY (uuid_classe_documentale) REFERENCES classi_documentali(uuid)
 );
 
+CREATE TABLE IF NOT EXISTS files (
+  uuid TEXT PRIMARY KEY,
+  percorso TEXT NOT NULL,
+  dimensione TEXT NOT NULL
+);
+
+
 CREATE TABLE IF NOT EXISTS documenti (
   uuid TEXT PRIMARY KEY,
   percorso TEXT NOT NULL,
   uuid_processo_conservazione TEXT,
+  file_principale TEXT NOT NULL,
+  FOREIGN KEY(file_principale) REFERENCES files(uuid),
   FOREIGN KEY (uuid_processo_conservazione) REFERENCES processi_conservazione(uuid)
+);
+
+CREATE TABLE allegati (
+    uuid_doc TEXT NOT NULL,
+    uuid_file TEXT NOT NULL,
+
+    FOREIGN KEY(uuid_doc) REFERENCES documenti(uuid),
+    FOREIGN KEY(uuid_file) REFERENCES files(uuid),
+    PRIMARY KEY(uuid_doc, uuid_file)
 );
 
 CREATE TABLE IF NOT EXISTS metadata (
@@ -41,19 +59,6 @@ CREATE TABLE IF NOT EXISTS metadata (
   PRIMARY KEY (uuid_documento, nome),
   FOREIGN KEY (uuid_documento) REFERENCES documenti(uuid)
 );
-
-CREATE TABLE IF NOT EXISTS files (
-  uuid TEXT PRIMARY KEY,
-  percorso TEXT NOT NULL,
-  dimensione TEXT NOT NULL,
-  ruolo TEXT NOT NULL CHECK (ruolo IN ('PRIMARY', 'ATTACHMENT')),
-  uuid_documento TEXT,
-  FOREIGN KEY (uuid_documento) REFERENCES documenti(uuid)
-);
-
-CREATE UNIQUE INDEX ux_files_primary_per_document
-ON files(uuid_documento)
-WHERE ruolo = 'PRIMARY';
 
 CREATE TABLE IF NOT EXISTS soggetti (
   id INTEGER PRIMARY KEY,

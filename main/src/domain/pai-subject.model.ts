@@ -1,4 +1,5 @@
 import { Subject } from './subject.model';
+import {SubjectVisitor} from './subject.visitor.abstract';
 
 export class PAISubject extends Subject {
   constructor(
@@ -11,15 +12,15 @@ export class PAISubject extends Subject {
     super(id);
   }
 
-  private getIpaCode(): string {
+  public getIpaCode(): string {
     return this.ipaCode;
   }
 
-  private getIpaAooCode(): string {
+  public getIpaAooCode(): string {
     return this.ipaAooCode;
   }
 
-  private getIpaUorCode(): string {
+  public getIpaUorCode(): string {
     return this.ipaUorCode;
   }
 
@@ -27,19 +28,22 @@ export class PAISubject extends Subject {
     return this.digitalAddresses;
   }
 
-  private setIpaCode(ipaCode: string): void {
+  public setIpaCode(ipaCode: string): void {
     this.ipaCode = ipaCode;
   }
 
-  private setIpaAooCode(ipaAooCode: string): void {
+  public setIpaAooCode(ipaAooCode: string): void {
     this.ipaAooCode = ipaAooCode;
   }
 
-  private setIpaUorCode(ipaUorCode: string): void {
+  public setIpaUorCode(ipaUorCode: string): void {
     this.ipaUorCode = ipaUorCode;
   }
 
   public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
+  }
+  public accept(vis: SubjectVisitor): void {
+      vis.visitPaiSubject(this);
   }
 }
