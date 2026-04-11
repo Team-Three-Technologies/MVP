@@ -8,7 +8,7 @@ import { ASSubject } from '../domain/as-subject.model';
 import {SubjectTypeEnum} from '../domain/subject-type.enum';
 import { TOKENS } from '../infrastructure/di/tokens';
 import { DatabaseProvider } from '../infrastructure/database/database.provider';
-
+import { inject, injectable } from 'tsyringe';
 
 export class SubjectRepositoryVisitor extends SubjectVisitor{
     constructor(
@@ -19,16 +19,19 @@ export class SubjectRepositoryVisitor extends SubjectVisitor{
         super();
     }
 
-    public visitAsSubject(subject: ASSubject): void {
+    private insertBaseSubject(id:number, tipo:string): void{
         this.dbProvider.instance
             .prepare(`INSERT INTO soggetti(id,tipo)
                      VALUES (@id, @tipo);
             `)
             .run({
-                id: subject.getId(),
-                tipo: SubjectTypeEnum.AS
+                id: id,
+                tipo: tipo
             });
+    }
 
+    public visitAsSubject(subject: ASSubject): void {
+        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.AS);
         this.dbProvider.instance
             .prepare(`INSERT INTO soggetto_as
                      (id, cognome, nome, cf, den_organizzazione, den_ufficio, indirizzo_dig_riferimento)
@@ -46,15 +49,7 @@ export class SubjectRepositoryVisitor extends SubjectVisitor{
     }
 
     public visitPaeSubject(subject: PAESubject): void {
-        this.dbProvider.instance
-            .prepare(`INSERT INTO soggetti(id,tipo)
-                     VALUES (@id, @tipo);
-            `)
-            .run({
-                id: subject.getId(),
-                tipo: SubjectTypeEnum.PAE
-            });
-
+        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.PAE);
         this.dbProvider.instance
             .prepare(`INSERT INTO soggetto_pae
                      (id, den_amministrazione, den_ufficio, indirizzo_dig_riferimento)
@@ -70,15 +65,7 @@ export class SubjectRepositoryVisitor extends SubjectVisitor{
     }
 
     public visitPaiSubject(subject: PAISubject): void {
-         this.dbProvider.instance
-            .prepare(`INSERT INTO soggetti(id,tipo)
-                     VALUES (@id, @tipo);
-            `)
-            .run({
-                id: subject.getId(),
-                tipo: SubjectTypeEnum.PAI
-            });
-
+        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.PAI);
         this.dbProvider.instance
             .prepare(`INSERT INTO soggetto_pai
                      (id, codice_ipa, codice_ipa_aoo, codice_ipa_uor, indirizzo_dig_riferimento)
@@ -95,15 +82,7 @@ export class SubjectRepositoryVisitor extends SubjectVisitor{
     }
 
     public visitPfSubject(subject: PFSubject): void {
-         this.dbProvider.instance
-            .prepare(`INSERT INTO soggetti(id,tipo)
-                     VALUES (@id, @tipo);
-            `)
-            .run({
-                id: subject.getId(),
-                tipo: SubjectTypeEnum.PF
-            });
-
+        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.PF);
         this.dbProvider.instance
             .prepare(`INSERT INTO soggetto_pf
                      (id, cognome, nome, cf, indirizzo_dig_riferimento)
@@ -119,15 +98,7 @@ export class SubjectRepositoryVisitor extends SubjectVisitor{
     }
 
     public visitPgSubject(subject: PGSubject): void {
-          this.dbProvider.instance
-            .prepare(`INSERT INTO soggetti(id,tipo)
-                     VALUES (@id, @tipo);
-            `)
-            .run({
-                id: subject.getId(),
-                tipo: SubjectTypeEnum.PG
-            });
-
+        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.PG);
         this.dbProvider.instance
             .prepare(`INSERT INTO soggetto_pg
                      (id, den_organizzazione, p_iva, den_ufficio, indirizzo_dig_riferimento)
@@ -143,15 +114,7 @@ export class SubjectRepositoryVisitor extends SubjectVisitor{
     }
 
     public visitSWSubject(subject: SWSubject): void {
-           this.dbProvider.instance
-            .prepare(`INSERT INTO soggetti(id,tipo)
-                     VALUES (@id, @tipo);
-            `)
-            .run({
-                id: subject.getId(),
-                tipo: SubjectTypeEnum.SW
-            });
-
+        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.SW);
         this.dbProvider.instance
             .prepare(`INSERT INTO soggetto_sw
                      (id, den_sistema)
@@ -161,7 +124,6 @@ export class SubjectRepositoryVisitor extends SubjectVisitor{
                 id: subject.getId(),
                 den_sis: subject.getSystemDen()
             });
-       
     }
 
 }

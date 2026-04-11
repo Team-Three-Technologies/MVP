@@ -29,9 +29,7 @@ CREATE TABLE IF NOT EXISTS processi_conservazione (
 CREATE TABLE IF NOT EXISTS files (
   uuid TEXT PRIMARY KEY,
   percorso TEXT NOT NULL,
-  dimensione TEXT NOT NULL,
-  uuid_documento TEXT,
-  FOREIGN KEY (uuid_documento) REFERENCES documenti(uuid)
+  dimensione TEXT NOT NULL
 );
 
 

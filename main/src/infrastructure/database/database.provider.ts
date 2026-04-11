@@ -13,6 +13,7 @@ export class DatabaseProvider {
     @inject(TOKENS.AppConfig)
     private readonly config: AppConfig,
   ) {
+      this.ensureDir(this.config.documentsPath);
     this.db = new Database(path.join(this.config.documentsPath, 'app.db'));
     this.db.pragma('journal_mode = WAL');
     this.db.pragma('foreign_keys = ON');
@@ -38,18 +39,18 @@ export class DatabaseProvider {
       CREATE TABLE IF NOT EXISTS migrations (
         name TEXT PRIMARY KEY,
         run_at TEXT NOT NULL
-      )
+      );
     `);
 
     for (const file of files) {
       const already = this.db
-        .prepare('SELECT name FROM migrations WHERE name = ?')
+        .prepare('SELECT name FROM migrations WHERE name = ?;')
         .get(file);
 
       if (!already) {
         const sql = fs.readFileSync(path.join(this.config.migrationsPath, file), 'utf-8');
         this.db.exec(sql);
-        this.db.prepare('INSERT INTO migrations (name, run_at) VALUES (?, ?)').run(file, new Date().toISOString());
+        this.db.prepare('INSERT INTO migrations (name, run_at) VALUES (?, ?);').run(file, new Date().toISOString());
       }
     }
   }

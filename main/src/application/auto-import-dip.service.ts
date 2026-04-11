@@ -45,8 +45,7 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     
     const dipIndex = await this.dipParser.parseDipIndex(dipIndexPath);
 
-    const dipMapper = new DipMapper();
-    const dip = dipMapper.toDomain(dipIndex.DiPIndex.PackageInfo);
+    const dipMapper = new DipMapper(); const dip = dipMapper.toDomain(dipIndex.DiPIndex.PackageInfo);
 
     if (!(await this.dipRepository.findByUuid(dip.getProcessUuid()))) {
       this.dipRepository.save(dip);
