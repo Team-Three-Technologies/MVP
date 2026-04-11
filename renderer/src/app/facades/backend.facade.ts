@@ -9,13 +9,17 @@ import { FilterModel } from '../models/filter';
 })
 export class BackendFacade {
   private readonly electronIpc = inject(ElectronIpc);
-
-  selectedDocumentState = signal<DocumentModel | null>(null);
-  errorMessage = signal<string | null>(null);
+  private _selectedDocumentState = signal<DocumentModel | null>(null);
+  public selectedDocumentState = this._selectedDocumentState.asReadonly();
+  public errorMessage = signal<string | null>(null);
   private _documentList = signal<DocumentModel[]>([]);
   public documentList = this._documentList.asReadonly();
   private _isLoading = signal<boolean>(false);
   public isLoading = this._isLoading.asReadonly();
+  private _documentFileUrl = signal<string | null>(null);
+  public documentFileUrl = this._documentFileUrl.asReadonly();
+  private _isLoadingPreview = signal<boolean>(false);
+  public isLoadingPreview = this._isLoadingPreview.asReadonly();
 
   public async loadDocuments(): Promise<void> {
     this._isLoading.set(true);
@@ -31,10 +35,10 @@ export class BackendFacade {
 
   public async selectDocument(id: string): Promise<void> {
     this._isLoading.set(true);
-    this.selectedDocumentState.set(null);
+    this._selectedDocumentState.set(null);
     const document = this.documentList().find((doc: DocumentModel) => doc.uuid_documento === id);
     if (document) {
-      this.selectedDocumentState.set(document);
+      this._selectedDocumentState.set(document);
     }
     this._isLoading.set(false);
   }
@@ -54,7 +58,7 @@ export class BackendFacade {
     }
   }
   public async clearSelection(): Promise<void> {
-    this.selectedDocumentState.set(null);
+    this._selectedDocumentState.set(null);
   }
 
   public async autoImport(): Promise<void> {
@@ -68,6 +72,27 @@ export class BackendFacade {
       this.errorMessage.set('Failed to auto import documents. Please try again.');
     } finally {
       this._isLoading.set(false);
+    }
+  }
+
+  public async loadDocumentFile(doc: DocumentModel): Promise<void> {
+    if (this.documentFileUrl()) URL.revokeObjectURL(this.documentFileUrl()!);
+    const file = doc.allegati[0];
+    if (!file) {
+      this.errorMessage.set('No file found for this document.');
+      this._isLoadingPreview.set(false);
+      this._documentFileUrl.set(null);
+      return;
+    }
+    this._isLoadingPreview.set(true);
+    try {
+      const bytes = await this.electronIpc.loadDocumentFile(file.percorso);
+      this._documentFileUrl.set(URL.createObjectURL(new Blob([bytes as any], { type: 'application/pdf' })));
+    } catch (error) {
+      console.error('Error loading document file:', error);
+      this.errorMessage.set('Failed to load document file. Please try again.');
+    } finally {
+      this._isLoadingPreview.set(false);
     }
   }
 }

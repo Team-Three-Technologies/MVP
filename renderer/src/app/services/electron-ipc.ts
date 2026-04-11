@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DocumentModel } from '../models/document';
 import { FilterModel } from '../models/filter';
-import './electron-api.d'; 
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +33,16 @@ export class ElectronIpc {
       return filteredDocuments as DocumentModel[];
     } catch (error) {
       console.error('Error searching documents:', error);
+      throw error;
+    }
+  }
+
+  public async loadDocumentFile(filePath: string): Promise<Uint8Array> {
+    try {
+      const file = await this.api.dip.loadDocumentFile(filePath);
+      return new Uint8Array(file);
+    } catch (error) {
+      console.error('Error loading document file:', error);
       throw error;
     }
   }

@@ -20,7 +20,9 @@
     </section>
     @if (selectedDocument()) {
       <app-document-preview 
-        [document]="selectedDocument()">
+        [document]="selectedDocument()"
+        [documentFileUrl]="documentFileUrl()"
+        [isLoadingPreview]="isLoadingPreview()">
       </app-document-preview>
     } @else {
       <div class="empty-state">

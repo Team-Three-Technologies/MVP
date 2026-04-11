@@ -10,4 +10,5 @@ export function registerAllHandlers(): void {
   // TODO: connect these to actual DipHandler methods when implemented
   ipcMain.handle(IPC_CHANNELS.DIP_LOAD_DOCUMENTS, (_: IpcMainInvokeEvent) => []);
   ipcMain.handle(IPC_CHANNELS.DIP_SEARCH_DOCUMENTS, (_: IpcMainInvokeEvent, filters: unknown) => []);
+  ipcMain.handle(IPC_CHANNELS.DIP_LOAD_DOCUMENT_FILE, (_: IpcMainInvokeEvent, filePath: string) => dipHandler.loadDocumentFile(filePath));
 }

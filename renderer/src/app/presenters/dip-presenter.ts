@@ -1,43 +1,49 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
 import { DocumentModel } from '../models/document';
 import { BackendFacade } from '../facades/backend.facade';
 import { FilterModel } from '../models/filter';
 
 @Injectable()
-export class DipPresenter implements OnDestroy {
-  private documentsSubject = new BehaviorSubject<DocumentModel[]>([]);
-  private isLoadingSubject = new BehaviorSubject<boolean>(false);
-  private errorMessageSubject = new BehaviorSubject<string | null>(null);
-
-  documents$ = this.documentsSubject.asObservable();
-  isLoading$ = this.isLoadingSubject.asObservable();
-  errorMessage$ = this.errorMessageSubject.asObservable();
-
-  protected destroy$ = new Subject<void>();
-
-  constructor(private facade: BackendFacade) {}
+export class DipPresenter {
+  private readonly facade = inject(BackendFacade);
+  public documentList = this.facade.documentList;
+  public selectedDocumentState = this.facade.selectedDocumentState;
+  public isLoading = this.facade.isLoading;
+  public documentFileUrl = this.facade.documentFileUrl;
+  public isLoadingPreview = this.facade.isLoadingPreview;
+  public errorMessage = this.facade.errorMessage;
 
   async searchDocuments(filters: FilterModel[]): Promise<void> {
-    this.isLoadingSubject.next(true);
-    this.errorMessageSubject.next(null);
-
     try {
-      await this.facade.searchDocuments(filters);
-      this.documentsSubject.next(this.facade.documentList());
-    } catch (err) {
-      this.errorMessageSubject.next((err as Error).message ?? 'Error during search');
-    } finally {
-      this.isLoadingSubject.next(false);
+    await this.facade.searchDocuments(filters);
+    } catch (error) {
+      console.error('Error in presenter while searching documents:', error);
+      this.errorMessage.set('An error occurred while searching documents. Please try again.');
     }
   }
 
   async selectDocument(id: string): Promise<void> {
-    await this.facade.selectDocument(id);
+    try {
+      await this.facade.selectDocument(id);
+      const doc = this.facade.selectedDocumentState();
+      if (doc) {
+        await this.facade.loadDocumentFile(doc);
+      }
+    } catch (error) {
+      console.error('Error in presenter while selecting document:', error);
+    }
+
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  async loadDocuments(): Promise<void> {
+    await this.facade.loadDocuments();
+  }
+
+  async loadDocumentFile(doc: DocumentModel): Promise<void> {
+    await this.facade.loadDocumentFile(doc);
+  }
+
+  async clearSelection(): Promise<void> {
+    await this.facade.clearSelection();
   }
 }

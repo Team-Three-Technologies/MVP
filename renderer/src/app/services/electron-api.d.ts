@@ -8,6 +8,7 @@ declare global {
             autoImport(): Promise<void>;
             loadDocuments(): Promise<DocumentModel[]>;
             searchDocuments(filters: FilterModel[]): Promise<DocumentModel[]>;
+            loadDocumentFile(filePath: string): Promise<number[]>;
         };
         on(channel: string, callback: (data: unknown) => void): () => void;
         };
