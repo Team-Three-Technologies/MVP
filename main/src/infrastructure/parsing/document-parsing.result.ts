@@ -1,10 +1,5 @@
 import { DocumentMetadataXml } from './document-metadata.xml';
 
-// export interface DipParsingResult {
-//   dipIndex: DiPIndexXml;
-//   documents: DocumentParsingResult[];
-// }
-
 export interface DocumentParsingResult {
   uuid: string;
   conservationProcessUuid: string;

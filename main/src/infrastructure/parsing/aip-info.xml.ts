@@ -25,7 +25,7 @@ export interface AiPInfoXml {
           DefaultValue?: DefaultValueXml | DefaultValueXml[];
         };
         MoreData?: MoreDataXml | MoreDataXml[];
-        '@_uuid'?: string;
+        '@_ark-aip:uuid': string;
       };
       Customization?: {
         Properties: MoreDataXml | MoreDataXml[];
@@ -34,37 +34,37 @@ export interface AiPInfoXml {
       SubmissionSession: SubmissionSessionXml | SubmissionSessionXml[];
       PreservationSession: PreservationSessionXml;
       MoreData?: MoreDataXml | MoreDataXml[];
-      '@_uuid'?: string;
+      '@_ark-aip:uuid': string;
     };
-    '@_language'?: string;
-    '@_schemaUri'?: string;
-    '@_schemaVersion'?: string;
-    '@_validFrom'?: string;
+    '@_ark-aip:language'?: string;
+    '@_ark-aip:schemaUri'?: string;
+    '@_ark-aip:schemaVersion'?: string;
+    '@_ark-aip:validFrom'?: string;
   };
 }
 
 export interface MoreDataXml {
   '#text'?: string;
-  '@_name': string;
+  '@_ark-aip:name': string;
 }
 
 export interface MimeTypeXml {
   '#text'?: string;
-  '@_MIMETypeExtension'?: string;
-  '@_IRUUID'?: string;
+  '@_ark-aip:MIMETypeExtension'?: string;
+  '@_ark-aip:IRUUID'?: string;
 }
 
 export interface DefaultValueXml {
   '#text'?: string;
-  '@_metadataName': string;
-  '@_metadataXPath': string;
+  '@_ark-aip:metadataName': string;
+  '@_ark-aip:metadataXPath': string;
 }
 
 export interface SubmissionSessionXml {
   Start: AiPInfoXml['AiPInfo']['Process']['Start'];
   End: AiPInfoXml['AiPInfo']['Process']['End'];
   MoreData?: MoreDataXml | MoreDataXml[];
-  '@_uuid'?: string;
+  '@_ark-aip:uuid': string;
 }
 
 export interface PreservationSessionXml {
@@ -78,17 +78,17 @@ export interface PreservationSessionXml {
     DocumentsFilesCount: number | string;
     DocumentsOverallSize: {
       '#text'?: string;
-      '@_unit'?: 'bytes' | 'kilobytes' | 'megabytes' | 'gigabytes' | 'terabytes' | string;
+      '@_ark-aip:unit'?: 'bytes' | 'kilobytes' | 'megabytes' | 'gigabytes' | 'terabytes' | string;
     };
     MimeTypeStats?: Array<{
       '#text'?: string;
-      '@_MIMETypeExtension'?: string;
+      '@_ark-aip:MIMETypeExtension'?: string;
     }> | {
       '#text'?: string;
-      '@_MIMETypeExtension'?: string;
+      '@_ark-aip:MIMETypeExtension'?: string;
     };
     MoreData?: MoreDataXml | MoreDataXml[];
   };
   MoreData?: MoreDataXml | MoreDataXml[];
-  '@_uuid'?: string;
+  '@_ark-aip:uuid': string;
 }

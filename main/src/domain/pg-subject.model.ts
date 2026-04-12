@@ -4,8 +4,8 @@ export class PGSubject extends Subject {
   constructor(
     id: number,
     private organizationDen: string,
-    private vatCode: string,
-    private officeDen: string,
+    private vatCode: string | undefined,
+    private officeDen: string | undefined,
     private digitalAddresses: string[]
   ) {
     super(id);
@@ -15,11 +15,11 @@ export class PGSubject extends Subject {
     return this.organizationDen;
   }
 
-  public getVatCode(): string {
+  public getVatCode(): string | undefined {
     return this.vatCode;
   }
 
-  public getOfficeDen(): string {
+  public getOfficeDen(): string | undefined {
     return this.officeDen;
   }
 

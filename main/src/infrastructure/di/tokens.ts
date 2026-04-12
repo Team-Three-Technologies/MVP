@@ -4,6 +4,7 @@ export const TOKENS = {
   HashService: Symbol('HashService'),
   DipParser: Symbol('DipParser'),
   DipIndexParser: Symbol('DipIndexParser'),
+  AipInfoParser: Symbol('AipInfoParser'),
   MetadataParser: Symbol('MetadataParser'),
   DipRepository: Symbol('DipRepository'),
   DocumentClassRepository: Symbol('DocumentClassRepository'),

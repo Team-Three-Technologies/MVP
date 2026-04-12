@@ -5,7 +5,7 @@ export class PFSubject extends Subject {
     id: number,
     private name: string,
     private surname: string,
-    private cf: string,
+    private cf: string | undefined,
     private digitalAddresses: string[]
   ) {
     super(id);
@@ -19,7 +19,7 @@ export class PFSubject extends Subject {
     return this.surname;
   }
 
-  public getCf(): string {
+  public getCf(): string | undefined {
     return this.cf;
   }
 

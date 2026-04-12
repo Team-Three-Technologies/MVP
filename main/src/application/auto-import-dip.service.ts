@@ -12,6 +12,7 @@ import { DipMapper } from '../mappers/dip.mapper';
 import { DocumentClassMapper } from '../mappers/document-class.mapper';
 import { ConservationProcessMapper } from '../mappers/conservation-process.mapper';
 import { DocumentMapper } from '../mappers/document.mapper';
+import * as path from 'node:path';
 
 @injectable()
 export class AutoImportDipService implements AutoImportDipUseCase {
@@ -30,19 +31,19 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     private readonly documentRepository: DocumentRepository,
     @inject(TOKENS.AppConfig)
     private readonly config: AppConfig
-  ) { } 
+  ) { }
 
   public async execute(): Promise<string> {
     // leggero: 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403';
     // 4gb: 'D:\\filip\\Downloads\\dip.2026115.d7a27175-16b3-4a7d-877d-26f2b1baadda';
     const dir = 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'; // this.config.appDir;
     const dipIndexPath = await this.fileFinder.findDipIndex(dir);
-    
+
     // se non trova il dip index
     if (!dipIndexPath) {
       throw new Error('DiPIndex mancante');
     }
-    
+
     const dipIndex = await this.dipParser.parseDipIndex(dipIndexPath);
 
     const dipMapper = new DipMapper();
@@ -56,13 +57,20 @@ export class AutoImportDipService implements AutoImportDipUseCase {
 
     const documentClassMapper = new DocumentClassMapper();
     const conservationProcessMapper = new ConservationProcessMapper();
-    
+
     for (const dc of dipIndex.DiPIndex.PackageContent.DiPDocuments.DocumentClass) {
       const documentClass = documentClassMapper.toDomain(dc, dip.getProcessUuid());
       this.documentClassRepository.save(documentClass);
-      
+
       for (const cp of dc.AiP) {
-        const conservationProcess = conservationProcessMapper.toDomain(cp, documentClass.getUuid());
+        const aipInfoPath = await this.fileFinder.findAipInfo(path.join(dir, cp.AiPRoot));
+        
+        if (!aipInfoPath) {
+          throw new Error('AipInfo mancante');
+        }
+        
+        const aipInfo = await this.dipParser.parseAipInfo(aipInfoPath);
+        const conservationProcess = conservationProcessMapper.toDomain(aipInfo);
         this.conservationProcessRepository.save(conservationProcess);
       }
     }

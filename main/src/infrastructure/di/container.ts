@@ -12,6 +12,7 @@ import { FileFinderImpl } from '../../infrastructure/fs/file.finder.impl';
 import { SHA256HashServiceImpl } from '../../infrastructure/hash/hash.service.sha256.impl';
 import { DipParserImpl } from '../../infrastructure/parsing/dip.parser.impl';
 import { DipIndexParserImpl } from '../../infrastructure/parsing/dip-index.parser.impl';
+import { AipInfoParserImpl } from '../../infrastructure/parsing/aip-info.parser.impl';
 import { MetadataParserImpl } from '../../infrastructure/parsing/metadata.parser.impl';
 import { AutoImportDipService } from '../../application/auto-import-dip.service';
 import { DipHandler } from '../../presentation/dip.handler';
@@ -45,6 +46,7 @@ export function registerDependencies(): void {
   // parsing
   container.register(TOKENS.DipParser, { useClass: DipParserImpl }, { lifecycle: Lifecycle.Singleton });
   container.register(TOKENS.DipIndexParser, { useClass: DipIndexParserImpl }, { lifecycle: Lifecycle.Singleton });
+  container.register(TOKENS.AipInfoParser, { useClass: AipInfoParserImpl }, { lifecycle: Lifecycle.Singleton });
   container.register(TOKENS.MetadataParser, { useClass: MetadataParserImpl }, { lifecycle: Lifecycle.Singleton });
 
   // repositories

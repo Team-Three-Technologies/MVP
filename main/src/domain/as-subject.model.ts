@@ -3,9 +3,9 @@ import { Subject } from './subject.model';
 export class ASSubject extends Subject {
   constructor(
     id: number,
-    private name: string,
-    private surname: string,
-    private cf: string,
+    private name: string | undefined,
+    private surname: string | undefined,
+    private cf: string | undefined,
     private organizationDen: string,
     private officeDen: string,
     private digitalAddresses: string[]
@@ -13,15 +13,15 @@ export class ASSubject extends Subject {
     super(id);
   }
 
-  public getName(): string {
+  public getName(): string | undefined {
     return this.name;
   }
 
-  public getSurname(): string {
+  public getSurname(): string | undefined {
     return this.surname;
   }
 
-  public getCf(): string {
+  public getCf(): string | undefined {
     return this.cf;
   }
 

@@ -4,7 +4,7 @@ export class PAESubject extends Subject {
   constructor(
     id: number,
     private administrationDen: string,
-    private officeDen: string,
+    private officeDen: string | undefined,
     private digitalAddresses: string[]
   ) {
     super(id);
@@ -14,7 +14,7 @@ export class PAESubject extends Subject {
     return this.administrationDen;
   }
 
-  public getOfficeDen(): string {
+  public getOfficeDen(): string | undefined {
     return this.officeDen;
   }
 
