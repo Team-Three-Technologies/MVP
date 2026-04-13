@@ -13,9 +13,9 @@ export class DipIndexParserImpl implements DipIndexParser {
       ignoreAttributes: false,
       attributeNamePrefix: '@_',
       textNodeName: '#text',
-      trimValues: true,
-      parseTagValue: true,
-      parseAttributeValue: true,
+      trimValues: false,
+      parseTagValue: false,
+      parseAttributeValue: false,
       isArray: (name) => [
         'ComplianceStatement',
         'DocumentClass',

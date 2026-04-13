@@ -37,7 +37,7 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
         VALUES (@id, @cognome, @nome, @cf, @den_org, @den_uff, @indirizzi);
       `)
       .run({
-        id: subject.getId(),
+        id: id,
         cognome: subject.getSurname(),
         nome: subject.getName(),
         cf: subject.getCf(),
@@ -57,7 +57,7 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
         VALUES (@id, @den_amm, @den_uff, @indirizzi);
       `)
       .run({
-        id: subject.getId(),
+        id: id,
         den_amm: subject.getAdministrationDen(),
         den_uff: subject.getOfficeDen(),
         indirizzi: subject.getDigitalAddresses().join(' ')
@@ -74,7 +74,7 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
         VALUES (@id, @den, @ipa, @den_aoo, @aoo, @den_uor, @uor, @indirizzi);
       `)
       .run({
-        id: subject.getId(),
+        id: id,
         den: subject.getAdministrationDen(),
         ipa: subject.getIpaCode(),
         den_aoo: subject.getAooAdministrationDen(),
@@ -95,7 +95,7 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
         VALUES (@id, @cognome, @nome, @cf, @indirizzi);
       `)
       .run({
-        id: subject.getId(),
+        id: id,
         cognome: subject.getSurname(),
         nome: subject.getName(),
         cf: subject.getCf(),
@@ -113,7 +113,7 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
         VALUES (@id, @den_org, @p_iva, @den_uff, @indirizzi);
       `)
       .run({
-        id: subject.getId(),
+        id: id,
         den_org: subject.getOrganizationDen(),
         p_iva: subject.getVatCode(),
         den_uff: subject.getOfficeDen(),
@@ -131,7 +131,7 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
         VALUES (@id, @den_sis);
       `)
       .run({
-        id: subject.getId(),
+        id: id,
         den_sis: subject.getSystemDen()
       });
 

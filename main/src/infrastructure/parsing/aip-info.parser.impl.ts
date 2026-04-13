@@ -13,9 +13,9 @@ export class AipInfoParserImpl implements AipInfoParser {
       ignoreAttributes: false,
       attributeNamePrefix: '@_',
       textNodeName: '#text',
-      trimValues: true,
-      parseTagValue: true,
-      parseAttributeValue: true,
+      trimValues: false,
+      parseTagValue: false,
+      parseAttributeValue: false,
       isArray: (name) => [
         'SubmissionSession',
         'MoreData',

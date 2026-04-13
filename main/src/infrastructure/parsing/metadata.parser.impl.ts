@@ -12,6 +12,10 @@ export class MetadataParserImpl implements MetadataParser {
     this.parser = new XMLParser({
       ignoreAttributes: false,
       attributeNamePrefix: '@_',
+      textNodeName: '#text',
+      trimValues: false,
+      parseTagValue: false,
+      parseAttributeValue: false,
       isArray: (name) => [
         'Ruolo',
         'ParoleChiave',

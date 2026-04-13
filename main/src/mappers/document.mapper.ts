@@ -12,13 +12,115 @@ import { PAESubject } from '../domain/pae-subject.model';
 import { PAISubject } from '../domain/pai-subject.model';
 import { SWSubject } from '../domain/sw-subject.model';
 import { Person } from '../domain/person.model';
+import { RuoloXml, TipoSoggetto11Xml, TipoSoggetto12Xml, TipoSoggetto13Xml, TipoSoggetto21Xml, TipoSoggetto22Xml, TipoSoggetto31Xml, TipoSoggetto32Xml, TipoSoggetto33Xml, TipoSoggetto34Xml, TipoSoggetto4Xml } from '../infrastructure/parsing/document-metadata.xml';
 
 type SubjectRoleEntry = {
   roleType: RolesTypeEnum;
   subject: Subject;
 }
 
+type RolePayload =
+  | TipoSoggetto11Xml
+  | TipoSoggetto12Xml
+  | TipoSoggetto13Xml
+  | TipoSoggetto21Xml
+  | TipoSoggetto22Xml
+  | TipoSoggetto31Xml
+  | TipoSoggetto32Xml
+  | TipoSoggetto33Xml
+  | TipoSoggetto34Xml
+  | TipoSoggetto4Xml;
+
 export class DocumentMapper {
+  private toSubjectFromPayload(payload: RolePayload): Subject | undefined {
+    if ('AS' in payload && payload.AS) {
+      return new ASSubject(
+        null,
+        new Person(payload.AS.Nome, payload.AS.Cognome, payload.AS.CodiceFiscale),
+        payload.AS.DenominazioneOrganizzazione,
+        payload.AS.DenominazioneUfficio,
+        payload.AS.IndirizziDigitaliDiRiferimento ?? []
+      );
+    }
+
+    if ('SW' in payload && payload.SW) {
+      return new SWSubject(null, payload.SW.DenominazioneSistema);
+    }
+
+    if ('PF' in payload && payload.PF) {
+      return new PFSubject(
+        null,
+        new Person(payload.PF.Nome, payload.PF.Cognome, payload.PF.CodiceFiscale),
+        payload.PF.IndirizziDigitaliDiRiferimento ?? []
+      );
+    }
+
+    if ('PG' in payload && payload.PG) {
+      return new PGSubject(
+        null,
+        payload.PG.DenominazioneOrganizzazione,
+        payload.PG.CodiceFiscale_PartitaIva,
+        payload.PG.DenominazioneUfficio,
+        payload.PG.IndirizziDigitaliDiRiferimento ?? []
+      );
+    }
+
+    if ('PAI' in payload && payload.PAI) {
+      return new PAISubject(
+        null,
+        payload.PAI.IPAAmm.Denominazione,
+        payload.PAI.IPAAmm.CodiceIPA,
+        payload.PAI.IPAAOO?.Denominazione,
+        payload.PAI.IPAAOO?.CodiceIPA,
+        payload.PAI.IPAUOR?.Denominazione,
+        payload.PAI.IPAUOR?.CodiceIPA,
+        payload.PAI.IndirizziDigitaliDiRiferimento ?? []
+      );
+    }
+
+    if ('PAE' in payload && payload.PAE) {
+      return new PAESubject(
+        null,
+        payload.PAE.DenominazioneAmministrazione,
+        payload.PAE.DenominazioneUfficio,
+        payload.PAE.IndirizziDigitaliDiRiferimento ?? []
+      );
+    }
+
+    return undefined;
+  }
+
+  private pickRolePayload(role: RuoloXml): { roleType: RolesTypeEnum; payload: RolePayload } | undefined {
+    if (role.Altro) return { roleType: RolesTypeEnum.ALT, payload: role.Altro };
+    if (role.Assegnatario) return { roleType: RolesTypeEnum.ASS, payload: role.Assegnatario };
+    if (role.Autore) return { roleType: RolesTypeEnum.AUT, payload: role.Autore };
+    if (role.Destinatario) return { roleType: RolesTypeEnum.DES, payload: role.Destinatario };
+    if (role.Mittente) return { roleType: RolesTypeEnum.MIT, payload: role.Mittente };
+    if (role.Operatore) return { roleType: RolesTypeEnum.OPE, payload: role.Operatore };
+    if (role.Produttore) return { roleType: RolesTypeEnum.PRO, payload: role.Produttore };
+    if (role.ResponsabileGestioneDocumentale) return { roleType: RolesTypeEnum.RGD, payload: role.ResponsabileGestioneDocumentale };
+    if (role.ResponsabileServizioProtocollo) return { roleType: RolesTypeEnum.RSP, payload: role.ResponsabileServizioProtocollo };
+    if (role.SoggettoCheEffettuaLaRegistrazione) return { roleType: RolesTypeEnum.SER, payload: role.SoggettoCheEffettuaLaRegistrazione };
+    return undefined;
+  }
+
+  private mapRuoli(ruoli: RuoloXml[]): SubjectRoleEntry[] {
+    return ruoli
+      .map((role) => {
+        const picked = this.pickRolePayload(role);
+        if (!picked) return undefined;
+
+        const subject = this.toSubjectFromPayload(picked.payload);
+        if (!subject) return undefined;
+
+        return {
+          roleType: picked.roleType,
+          subject
+        } as SubjectRoleEntry;
+      })
+      .filter((e): e is SubjectRoleEntry => e !== undefined);
+  }
+
   public toDomain(parsedDocument: DocumentParsingResult): Document {
     const primary = parsedDocument.documentMetadata.Document.ArchimemoData.FileInformation?.find(f => f['@_isPrimary']);
     const uuid: string = parsedDocument.documentMetadata.Document.DocumentoInformatico.IdDoc.Identificativo;
@@ -80,7 +182,7 @@ export class DocumentMapper {
       ...(parsedDocument.documentMetadata.Document.DocumentoInformatico.IdIdentificativoDocumentoPrimario?.ImprontaCrittograficaDelDocumento.Algoritmo
         ? [new Metadata('IdIdentificativoDocumentoPrimario.ImprontaCrittograficaDelDocumento.Algoritmo', parsedDocument.documentMetadata.Document.DocumentoInformatico.IdIdentificativoDocumentoPrimario?.ImprontaCrittograficaDelDocumento.Algoritmo, MetadataTypeEnum.STRING)] : []),
       ...(parsedDocument.documentMetadata.Document.DocumentoInformatico.TempoDiConservazione
-        ? [new Metadata('TempoDiConservazione', parsedDocument.documentMetadata.Document.DocumentoInformatico.TempoDiConservazione?.toString(), MetadataTypeEnum.NUMBER)] : []),
+        ? [new Metadata('TempoDiConservazione', String(parsedDocument.documentMetadata.Document.DocumentoInformatico?.TempoDiConservazione), MetadataTypeEnum.NUMBER)] : []),
       ...(parsedDocument.documentMetadata.Document.DocumentoInformatico.Note
         ? [new Metadata('Note', parsedDocument.documentMetadata.Document.DocumentoInformatico.Note, MetadataTypeEnum.STRING)] : [])
     ]);
@@ -148,66 +250,7 @@ export class DocumentMapper {
         new Metadata(`TracciatureModificheDocumento.IdDocVersionePrecedente.ImprontaCrittograficaDelDocumento.Algoritmo.${i}`, mod.IdDocVersionePrecedente.ImprontaCrittograficaDelDocumento.Algoritmo ?? '', MetadataTypeEnum.STRING),
       ]));
 
-    const entries = parsedDocument.documentMetadata.Document.DocumentoInformatico.Soggetti.Ruolo.map(role => {
-      if (role.Altro) {
-        if (role.Altro.PF) {
-          return { roleType: RolesTypeEnum.ALT, subject: new PFSubject(null, new Person(role.Altro.PF.Nome, role.Altro.PF.Cognome, role.Altro.PF.CodiceFiscale), role.Altro.PF.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Altro.PG) {
-          return { roleType: RolesTypeEnum.ALT, subject: new PGSubject(null, role.Altro.PG.DenominazioneOrganizzazione, role.Altro.PG.CodiceFiscale_PartitaIva, role.Altro.PG.DenominazioneUfficio, role.Altro.PG.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Altro.PAI) {
-          return { roleType: RolesTypeEnum.ALT, subject: new PAISubject(null, role.Altro.PAI.IPAAmm.Denominazione, role.Altro.PAI.IPAAmm.CodiceIPA, role.Altro.PAI.IPAAOO?.Denominazione, role.Altro.PAI.IPAAOO?.CodiceIPA, role.Altro.PAI.IPAUOR?.Denominazione, role.Altro.PAI.IPAUOR?.CodiceIPA, role.Altro.PAI.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Altro.PAE) {
-          return { roleType: RolesTypeEnum.ALT, subject: new PAESubject(null, role.Altro.PAE.DenominazioneAmministrazione, role.Altro.PAE.DenominazioneUfficio, role.Altro.PAE.IndirizziDigitaliDiRiferimento ?? []) };
-        }
-      } else if (role.Assegnatario) {
-        return { roleType: RolesTypeEnum.ASS, subject: new ASSubject(null, new Person(role.Assegnatario.AS.Nome, role.Assegnatario.AS.Cognome, role.Assegnatario.AS.CodiceFiscale), role.Assegnatario.AS.DenominazioneOrganizzazione, role.Assegnatario.AS.DenominazioneUfficio, role.Assegnatario.AS.IndirizziDigitaliDiRiferimento ?? []) };
-      } else if (role.Autore) {
-        if (role.Autore.PF) {
-          return { roleType: RolesTypeEnum.AUT, subject: new PFSubject(null, new Person(role.Autore.PF.Nome, role.Autore.PF.Cognome, role.Autore.PF.CodiceFiscale), role.Autore.PF.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Autore.PG) {
-          return { roleType: RolesTypeEnum.AUT, subject: new PGSubject(null, role.Autore.PG.DenominazioneOrganizzazione, role.Autore.PG.CodiceFiscale_PartitaIva, role.Autore.PG.DenominazioneUfficio, role.Autore.PG.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Autore.PAI) {
-          return { roleType: RolesTypeEnum.AUT, subject: new PAISubject(null, role.Autore.PAI.IPAAmm.Denominazione, role.Autore.PAI.IPAAmm.CodiceIPA, role.Autore.PAI.IPAAOO?.Denominazione, role.Autore.PAI.IPAAOO?.CodiceIPA, role.Autore.PAI.IPAUOR?.Denominazione, role.Autore.PAI.IPAUOR?.CodiceIPA, role.Autore.PAI.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Autore.PAE) {
-          return { roleType: RolesTypeEnum.AUT, subject: new PAESubject(null, role.Autore.PAE.DenominazioneAmministrazione, role.Autore.PAE.DenominazioneUfficio, role.Autore.PAE.IndirizziDigitaliDiRiferimento ?? []) };
-        }
-      } else if (role.Destinatario) {
-        if (role.Destinatario.PF) {
-          return { roleType: RolesTypeEnum.DES, subject: new PFSubject(null, new Person(role.Destinatario.PF.Nome, role.Destinatario.PF.Cognome, role.Destinatario.PF.CodiceFiscale), role.Destinatario.PF.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Destinatario.PG) {
-          return { roleType: RolesTypeEnum.DES, subject: new PGSubject(null, role.Destinatario.PG.DenominazioneOrganizzazione, role.Destinatario.PG.CodiceFiscale_PartitaIva, role.Destinatario.PG.DenominazioneUfficio, role.Destinatario.PG.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Destinatario.PAI) {
-          return { roleType: RolesTypeEnum.DES, subject: new PAISubject(null, role.Destinatario.PAI.IPAAmm.Denominazione, role.Destinatario.PAI.IPAAmm.CodiceIPA, role.Destinatario.PAI.IPAAOO?.Denominazione, role.Destinatario.PAI.IPAAOO?.CodiceIPA, role.Destinatario.PAI.IPAUOR?.Denominazione, role.Destinatario.PAI.IPAUOR?.CodiceIPA, role.Destinatario.PAI.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Destinatario.PAE) {
-          return { roleType: RolesTypeEnum.DES, subject: new PAESubject(null, role.Destinatario.PAE.DenominazioneAmministrazione, role.Destinatario.PAE.DenominazioneUfficio, role.Destinatario.PAE.IndirizziDigitaliDiRiferimento ?? []) };
-        }
-      } else if (role.Mittente) {
-        if (role.Mittente.PF) {
-          return { roleType: RolesTypeEnum.MIT, subject: new PFSubject(null, new Person(role.Mittente.PF.Nome, role.Mittente.PF.Cognome, role.Mittente.PF.CodiceFiscale), role.Mittente.PF.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Mittente.PG) {
-          return { roleType: RolesTypeEnum.MIT, subject: new PGSubject(null, role.Mittente.PG.DenominazioneOrganizzazione, role.Mittente.PG.CodiceFiscale_PartitaIva, role.Mittente.PG.DenominazioneUfficio, role.Mittente.PG.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Mittente.PAI) {
-          return { roleType: RolesTypeEnum.MIT, subject: new PAISubject(null, role.Mittente.PAI.IPAAmm.Denominazione, role.Mittente.PAI.IPAAmm.CodiceIPA, role.Mittente.PAI.IPAAOO?.Denominazione, role.Mittente.PAI.IPAAOO?.CodiceIPA, role.Mittente.PAI.IPAUOR?.Denominazione, role.Mittente.PAI.IPAUOR?.CodiceIPA, role.Mittente.PAI.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.Mittente.PAE) {
-          return { roleType: RolesTypeEnum.MIT, subject: new PAESubject(null, role.Mittente.PAE.DenominazioneAmministrazione, role.Mittente.PAE.DenominazioneUfficio, role.Mittente.PAE.IndirizziDigitaliDiRiferimento ?? []) };
-        }
-      } else if (role.Operatore) {
-        return { roleType: RolesTypeEnum.OPE, subject: new PFSubject(null, new Person(role.Operatore.PF.Nome, role.Operatore.PF.Cognome, role.Operatore.PF.CodiceFiscale), role.Operatore.PF.IndirizziDigitaliDiRiferimento ?? []) };
-      } else if (role.Produttore) {
-        return { roleType: RolesTypeEnum.PRO, subject: new SWSubject(null, role.Produttore.SW.DenominazioneSistema) };
-      } else if (role.ResponsabileGestioneDocumentale) {
-        return { roleType: RolesTypeEnum.RGD, subject: new PFSubject(null, new Person(role.ResponsabileGestioneDocumentale.PF.Nome, role.ResponsabileGestioneDocumentale.PF.Cognome, role.ResponsabileGestioneDocumentale.PF.CodiceFiscale), role.ResponsabileGestioneDocumentale.PF.IndirizziDigitaliDiRiferimento ?? []) };
-      } else if (role.ResponsabileServizioProtocollo) {
-        return { roleType: RolesTypeEnum.RSP, subject: new PFSubject(null, new Person(role.ResponsabileServizioProtocollo.PF.Nome, role.ResponsabileServizioProtocollo.PF.Cognome, role.ResponsabileServizioProtocollo.PF.CodiceFiscale), role.ResponsabileServizioProtocollo.PF.IndirizziDigitaliDiRiferimento ?? []) };
-      } else if (role.SoggettoCheEffettuaLaRegistrazione) {
-        if (role.SoggettoCheEffettuaLaRegistrazione.PF) {
-          return { roleType: RolesTypeEnum.SER, subject: new PFSubject(null, new Person(role.SoggettoCheEffettuaLaRegistrazione.PF.Nome, role.SoggettoCheEffettuaLaRegistrazione.PF.Cognome, role.SoggettoCheEffettuaLaRegistrazione.PF.CodiceFiscale), role.SoggettoCheEffettuaLaRegistrazione.PF.IndirizziDigitaliDiRiferimento ?? []) };
-        } else if (role.SoggettoCheEffettuaLaRegistrazione.PG) {
-          return { roleType: RolesTypeEnum.SER, subject: new PGSubject(null, role.SoggettoCheEffettuaLaRegistrazione.PG.DenominazioneOrganizzazione, role.SoggettoCheEffettuaLaRegistrazione.PG.CodiceFiscale_PartitaIva, role.SoggettoCheEffettuaLaRegistrazione.PG.DenominazioneUfficio, role.SoggettoCheEffettuaLaRegistrazione.PG.IndirizziDigitaliDiRiferimento ?? []) };
-        }
-      }
-    })
-      .filter(e => e !== undefined);
+    const entries = this.mapRuoli(parsedDocument.documentMetadata.Document.DocumentoInformatico.Soggetti.Ruolo);
 
     const subjects = new Map<Subject, RolesTypeEnum>(
       entries.map(e => [e.subject, e.roleType] as [Subject, RolesTypeEnum])
