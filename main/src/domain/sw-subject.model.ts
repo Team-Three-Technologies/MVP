@@ -1,9 +1,9 @@
 import { Subject } from './subject.model';
-import {SubjectVisitor} from './subject.visitor.abstract';
+import { SubjectVisitor } from './subject.visitor.abstract';
 
 export class SWSubject extends Subject {
   constructor(
-    id: number,
+    id: number | null,
     private systemDen: string
   ) {
     super(id);
@@ -16,7 +16,8 @@ export class SWSubject extends Subject {
   public setSystemDen(systemDen: string): void {
     this.systemDen = systemDen;
   }
-  public accept(vis: SubjectVisitor): void {
-      vis.visitSWSubject(this);
+
+  public accept<T>(visitor: SubjectVisitor<T>): T {
+    return visitor.visitSwSubject(this);
   }
 }

@@ -1,11 +1,11 @@
 import { Subject } from './subject.model';
-import {SubjectVisitor} from './subject.visitor.abstract';
-import {Person} from './person.model';
+import { SubjectVisitor } from './subject.visitor.abstract';
+import { Person } from './person.model';
 
 export class ASSubject extends Subject {
   constructor(
-    id: number,
-    private person : Person,
+    id: number | null,
+    private person: Person,
     private organizationDen: string,
     private officeDen: string,
     private digitalAddresses: string[]
@@ -13,15 +13,15 @@ export class ASSubject extends Subject {
     super(id);
   }
 
-  public getName(): string {
+  public getName(): string | undefined {
     return this.person.getName();
   }
 
-  public getSurname(): string {
+  public getSurname(): string | undefined {
     return this.person.getSurname();
   }
 
-  public getCf(): string {
+  public getCf(): string | undefined {
     return this.person.getCF();
   }
 
@@ -60,7 +60,8 @@ export class ASSubject extends Subject {
   public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
   }
-  public accept(vis: SubjectVisitor): void {
-      vis.visitAsSubject(this);
+
+  public accept<T>(visitor: SubjectVisitor<T>): T {
+    return visitor.visitAsSubject(this);
   }
 }

@@ -1,11 +1,9 @@
 export interface DocumentMetadataXml {
-  Document: DocumentXml;
-}
-
-export interface DocumentXml {
-  DocumentoInformatico: DocumentoInformaticoXml;
-  CustomMetadata?: CustomMetadataXml;
-  ArchimemoData: ArchimemoDataXml;
+  Document: {
+    DocumentoInformatico: DocumentoInformaticoXml;
+    CustomMetadata?: CustomMetadataXml;
+    ArchimemoData: ArchimemoDataXml;
+  };
 }
 
 export interface DocumentoInformaticoXml {

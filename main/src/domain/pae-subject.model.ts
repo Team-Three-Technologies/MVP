@@ -1,11 +1,11 @@
 import { Subject } from './subject.model';
-import {SubjectVisitor} from './subject.visitor.abstract';
+import { SubjectVisitor } from './subject.visitor.abstract';
 
 export class PAESubject extends Subject {
   constructor(
-    id: number,
+    id: number | null,
     private administrationDen: string,
-    private officeDen: string,
+    private officeDen: string | undefined,
     private digitalAddresses: string[]
   ) {
     super(id);
@@ -15,7 +15,7 @@ export class PAESubject extends Subject {
     return this.administrationDen;
   }
 
-  public getOfficeDen(): string {
+  public getOfficeDen(): string | undefined {
     return this.officeDen;
   }
 
@@ -35,7 +35,7 @@ export class PAESubject extends Subject {
     this.digitalAddresses = digitalAddresses;
   }
 
-  public accept(vis: SubjectVisitor): void {
-      vis.visitPaeSubject(this);
+  public accept<T>(visitor: SubjectVisitor<T>): T {
+    return visitor.visitPaeSubject(this);
   }
 }

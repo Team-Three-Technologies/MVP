@@ -4,7 +4,7 @@ import { TOKENS } from '../infrastructure/di/tokens';
 import { DatabaseProvider } from '../infrastructure/database/database.provider';
 import { Document } from '../domain/document.model';
 import { DocumentRow } from './document.row';
-import {SubjectRepositoryVisitor} from './subject.repository.visitor'
+import { SubjectRepositoryVisitor } from './subject.repository.visitor'
 
 @injectable()
 export class SQLiteDocumentRepository implements DocumentRepository {
@@ -31,7 +31,7 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     this.dbProvider.instance
       .prepare(`
         INSERT INTO documenti (uuid, percorso,file_principale, uuid_processo_conservazione)
-        VALUES (@uuid, @path,@file_principale, @conservationProcessUuid);
+        VALUES (@uuid, @path, @file_principale, @conservationProcessUuid);
       `)
       .run({
         uuid: document.getUuid(),
@@ -41,18 +41,22 @@ export class SQLiteDocumentRepository implements DocumentRepository {
       });
 
     const attatchmentInsertStmt = this.dbProvider.instance
-    .prepare(`INSERT INTO allegati (uuid_doc, uuid_file) VALUES(@uuid_doc,@uuid_file);`);
+      .prepare(`
+        INSERT INTO allegati (uuid_doc, uuid_file)
+        VALUES (@uuid_doc, @uuid_file);
+      `);
 
     for (const att of document.getAttachments()) {
-        fileInsertStmt.run({
-            uuid: att.getUuid(),
-            path: att.getPath(),
-            size: att.getSize(),
-        })
-        attatchmentInsertStmt.run({
-            uuid_doc:document.getUuid(),
-            uuid_file: att.getUuid()
-        });
+      fileInsertStmt.run({
+        uuid: att.getUuid(),
+        path: att.getPath(),
+        size: att.getSize(),
+      });
+
+      attatchmentInsertStmt.run({
+        uuid_doc: document.getUuid(),
+        uuid_file: att.getUuid()
+      });
     }
 
     const docUuid = document.getUuid();
@@ -71,20 +75,19 @@ export class SQLiteDocumentRepository implements DocumentRepository {
       });
     }
 
-    // TODO: salvare subjects
-    let vis = new SubjectRepositoryVisitor(this.dbProvider);
-    console.log(`${document.getSubjects().size}`);
-    for (const [sub, role] of document.getSubjects())
-    {
-        sub.accept(vis);
-        console.log(`visitor accettato: ${sub.getId()}, ${role}`);
-        this.dbProvider.instance
-        .prepare(`INSERT INTO ruoli(uuid_documento, id_soggetto, ruolo)
-                 VALUES(@uuid_documento, @id_soggetto, @ruolo);`)
+    const visitor = new SubjectRepositoryVisitor(this.dbProvider);
+    for (const [sub, role] of document.getSubjects()) {
+      const id = sub.accept(visitor);
+      sub.setId(id);
+      this.dbProvider.instance
+        .prepare(`
+          INSERT INTO ruoli (uuid_documento, id_soggetto, ruolo)
+          VALUES (@uuid_documento, @id_soggetto, @ruolo);
+        `)
         .run({
-            uuid_documento: document.getUuid(),
-            id_soggetto: sub.getId(),
-            ruolo: role
+          uuid_documento: document.getUuid(),
+          id_soggetto: sub.getId(),
+          ruolo: role
         });
     }
 

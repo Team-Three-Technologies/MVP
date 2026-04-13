@@ -1,25 +1,25 @@
 import { Subject } from './subject.model';
-import {SubjectVisitor} from './subject.visitor.abstract';
-import {Person} from './person.model';
+import { SubjectVisitor } from './subject.visitor.abstract';
+import { Person } from './person.model';
 
 export class PFSubject extends Subject {
   constructor(
-    id: number,
+    id: number | null,
     private person: Person,
     private digitalAddresses: string[]
   ) {
     super(id);
   }
 
-  public getName(): string {
+  public getName(): string | undefined {
     return this.person.getName();
   }
 
-  public getSurname(): string {
+  public getSurname(): string | undefined {
     return this.person.getSurname();
   }
 
-  public getCf(): string {
+  public getCf(): string | undefined {
     return this.person.getCF();
   }
 
@@ -42,7 +42,8 @@ export class PFSubject extends Subject {
   public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
   }
-  public accept(vis: SubjectVisitor): void {
-      vis.visitPfSubject(this);
+
+  public accept<T>(visitor: SubjectVisitor<T>): T {
+    return visitor.visitPfSubject(this);
   }
 }

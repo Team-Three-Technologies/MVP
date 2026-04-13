@@ -1,11 +1,9 @@
 export interface DiPIndexXml {
-  DiPIndex: DiPIndexTypeXml;
-}
-
-export interface DiPIndexTypeXml {
-  ComplianceStatement: ComplianceStatementXml[];
-  PackageInfo: PackageInfoXml;
-  PackageContent: PackageContentXml;
+  DiPIndex: {
+    ComplianceStatement: ComplianceStatementXml[];
+    PackageInfo: PackageInfoXml;
+    PackageContent: PackageContentXml;
+  };
 }
 
 export interface ComplianceStatementXml {

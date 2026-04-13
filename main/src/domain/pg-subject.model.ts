@@ -1,12 +1,12 @@
 import { Subject } from './subject.model';
-import {SubjectVisitor} from './subject.visitor.abstract';
+import { SubjectVisitor } from './subject.visitor.abstract';
 
 export class PGSubject extends Subject {
   constructor(
-    id: number,
+    id: number | null,
     private organizationDen: string,
-    private vatCode: string,
-    private officeDen: string,
+    private vatCode: string | undefined,
+    private officeDen: string | undefined,
     private digitalAddresses: string[]
   ) {
     super(id);
@@ -16,11 +16,11 @@ export class PGSubject extends Subject {
     return this.organizationDen;
   }
 
-  public getVatCode(): string {
+  public getVatCode(): string | undefined {
     return this.vatCode;
   }
 
-  public getOfficeDen(): string {
+  public getOfficeDen(): string | undefined {
     return this.officeDen;
   }
 
@@ -43,7 +43,8 @@ export class PGSubject extends Subject {
   public setDigitalAddresses(digitalAddresses: string[]): void {
     this.digitalAddresses = digitalAddresses;
   }
-  public accept(vis: SubjectVisitor): void {
-    vis.visitPgSubject(this);      
+
+  public accept<T>(visitor: SubjectVisitor<T>): T {
+    return visitor.visitPgSubject(this);
   }
 }

@@ -1,129 +1,140 @@
+import { inject } from 'tsyringe';
+import { TOKENS } from '../infrastructure/di/tokens';
+import { DatabaseProvider } from '../infrastructure/database/database.provider';
 import { SubjectVisitor } from '../domain/subject.visitor.abstract';
+import { SubjectTypeEnum } from './subject-type.enum';
+import { ASSubject } from '../domain/as-subject.model';
 import { PAESubject } from '../domain/pae-subject.model';
 import { PAISubject } from '../domain/pai-subject.model';
 import { PFSubject } from '../domain/pf-subject.model';
 import { PGSubject } from '../domain/pg-subject.model';
 import { SWSubject } from '../domain/sw-subject.model';
-import { ASSubject } from '../domain/as-subject.model';
-import {SubjectTypeEnum} from '../domain/subject-type.enum';
-import { TOKENS } from '../infrastructure/di/tokens';
-import { DatabaseProvider } from '../infrastructure/database/database.provider';
-import { inject, injectable } from 'tsyringe';
 
-export class SubjectRepositoryVisitor extends SubjectVisitor{
-    constructor(
-        @inject(TOKENS.DatabaseProvider)
-        private readonly dbProvider: DatabaseProvider
-    ) 
-    { 
-        super();
-    }
+export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
+  constructor(
+    @inject(TOKENS.DatabaseProvider)
+    private readonly dbProvider: DatabaseProvider
+  ) { }
 
-    private insertBaseSubject(id:number, tipo:string): void{
-        this.dbProvider.instance
-            .prepare(`INSERT INTO soggetti(id,tipo)
-                     VALUES (@id, @tipo);
-            `)
-            .run({
-                id: id,
-                tipo: tipo
-            });
-    }
+  private insertBaseSubject(tipo: string): number {
+    const row = this.dbProvider.instance
+      .prepare(`
+        INSERT INTO soggetti (tipo)
+        VALUES (@tipo);
+      `)
+      .run({
+        tipo: tipo
+      });
 
-    public visitAsSubject(subject: ASSubject): void {
-        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.AS);
-        this.dbProvider.instance
-            .prepare(`INSERT INTO soggetto_as
-                     (id, cognome, nome, cf, den_organizzazione, den_ufficio, indirizzo_dig_riferimento)
-                     VALUES (@id,@cognome, @nome, @cf, @den_org, @den_uff, @indirizzo);
-            `)
-            .run({
-                id: subject.getId(),
-                cognome: subject.getSurname(),
-                nome: subject.getName(),
-                cf: subject.getCf(),
-                den_org: subject.getOrganizationDen(),
-                den_uff: subject.getOfficeDen(),
-                indirizzo: subject.getDigitalAddresses()
-            });
-    }
+    return Number(row.lastInsertRowid);
+  }
 
-    public visitPaeSubject(subject: PAESubject): void {
-        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.PAE);
-        this.dbProvider.instance
-            .prepare(`INSERT INTO soggetto_pae
-                     (id, den_amministrazione, den_ufficio, indirizzo_dig_riferimento)
-                     VALUES (@id, @den_amm, @den_uff, @indirizzo);
-            `)
-            .run({
-                id: subject.getId(),
-                den_amm: subject.getAdministrationDen(),
-                den_uff: subject.getOfficeDen(),
-                indirizzo: subject.getDigitalAddresses()
-            });
+  public visitAsSubject(subject: ASSubject): number {
+    const id = this.insertBaseSubject(SubjectTypeEnum.AS);
+    this.dbProvider.instance
+      .prepare(`
+        INSERT INTO soggetti_as (id, cognome, nome, cf, den_organizzazione, den_ufficio, indirizzi_dig_riferimento)
+        VALUES (@id, @cognome, @nome, @cf, @den_org, @den_uff, @indirizzi);
+      `)
+      .run({
+        id: subject.getId(),
+        cognome: subject.getSurname(),
+        nome: subject.getName(),
+        cf: subject.getCf(),
+        den_org: subject.getOrganizationDen(),
+        den_uff: subject.getOfficeDen(),
+        indirizzi: subject.getDigitalAddresses().join(' ')
+      });
 
-    }
+    return id;
+  }
 
-    public visitPaiSubject(subject: PAISubject): void {
-        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.PAI);
-        this.dbProvider.instance
-            .prepare(`INSERT INTO soggetto_pai
-                     (id, codice_ipa, codice_ipa_aoo, codice_ipa_uor, indirizzo_dig_riferimento)
-                     VALUES (@id, @ipa, @aoo, @uor, @indirizzo);
-            `)
-            .run({
-                id: subject.getId(), 
-                ipa: subject.getIpaCode(),
-                aoo: subject.getIpaAooCode(),
-                uor: subject.getIpaUorCode(),
-                indirizzo: subject.getDigitalAddresses()
-            });
-   
-    }
+  public visitPaeSubject(subject: PAESubject): number {
+    const id = this.insertBaseSubject(SubjectTypeEnum.PAE);
+    this.dbProvider.instance
+      .prepare(`
+        INSERT INTO soggetti_pae (id, den_amministrazione, den_ufficio, indirizzi_dig_riferimento)
+        VALUES (@id, @den_amm, @den_uff, @indirizzi);
+      `)
+      .run({
+        id: subject.getId(),
+        den_amm: subject.getAdministrationDen(),
+        den_uff: subject.getOfficeDen(),
+        indirizzi: subject.getDigitalAddresses().join(' ')
+      });
 
-    public visitPfSubject(subject: PFSubject): void {
-        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.PF);
-        this.dbProvider.instance
-            .prepare(`INSERT INTO soggetto_pf
-                     (id, cognome, nome, cf, indirizzo_dig_riferimento)
-                     VALUES (@id, @cognome, @nome, @cf, @indirizzo);
-            `)
-            .run({
-                id: subject.getId(),
-                cognome: subject.getSurname(),
-                nome: subject.getName(),
-                cf:subject.getCf(),
-                indirizzo: subject.getDigitalAddresses()
-            });
-    }
+    return id;
+  }
 
-    public visitPgSubject(subject: PGSubject): void {
-        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.PG);
-        this.dbProvider.instance
-            .prepare(`INSERT INTO soggetto_pg
-                     (id, den_organizzazione, p_iva, den_ufficio, indirizzo_dig_riferimento)
-                     VALUES (@id, @den_org, @p_iva, @den_uff, @indirizzo);
-            `)
-            .run({
-                id: subject.getId(),
-                den_org: subject.getOrganizationDen(),
-                p_iva: subject.getVatCode(),
-                den_uff: subject.getOfficeDen(),
-                indirizzo: subject.getDigitalAddresses()
-            });
-    }
+  public visitPaiSubject(subject: PAISubject): number {
+    const id = this.insertBaseSubject(SubjectTypeEnum.PAI);
+    this.dbProvider.instance
+      .prepare(`
+        INSERT INTO soggetti_pai (id, den_amministrazione, codice_ipa, den_amministrazione_aoo, codice_ipa_aoo, den_amministrazione_uor, codice_ipa_uor, indirizzi_dig_riferimento)
+        VALUES (@id, @den, @ipa, @den_aoo, @aoo, @den_uor, @uor, @indirizzi);
+      `)
+      .run({
+        id: subject.getId(),
+        den: subject.getAdministrationDen(),
+        ipa: subject.getIpaCode(),
+        den_aoo: subject.getAooAdministrationDen(),
+        aoo: subject.getIpaAooCode(),
+        den_uor: subject.getUorAdministrationDen(),
+        uor: subject.getIpaUorCode(),
+        indirizzi: subject.getDigitalAddresses().join(' ')
+      });
 
-    public visitSWSubject(subject: SWSubject): void {
-        this.insertBaseSubject(subject.getId(),SubjectTypeEnum.SW);
-        this.dbProvider.instance
-            .prepare(`INSERT INTO soggetto_sw
-                     (id, den_sistema)
-                     VALUES (@id, @den_sis);
-            `)
-            .run({
-                id: subject.getId(),
-                den_sis: subject.getSystemDen()
-            });
-    }
+    return id;
+  }
 
+  public visitPfSubject(subject: PFSubject): number {
+    const id = this.insertBaseSubject(SubjectTypeEnum.PF);
+    this.dbProvider.instance
+      .prepare(`
+        INSERT INTO soggetti_pf (id, cognome, nome, cf, indirizzi_dig_riferimento)
+        VALUES (@id, @cognome, @nome, @cf, @indirizzi);
+      `)
+      .run({
+        id: subject.getId(),
+        cognome: subject.getSurname(),
+        nome: subject.getName(),
+        cf: subject.getCf(),
+        indirizzi: subject.getDigitalAddresses().join(' ')
+      });
+
+    return id;
+  }
+
+  public visitPgSubject(subject: PGSubject): number {
+    const id = this.insertBaseSubject(SubjectTypeEnum.PG);
+    this.dbProvider.instance
+      .prepare(`
+        INSERT INTO soggetti_pg (id, den_organizzazione, p_iva, den_ufficio, indirizzi_dig_riferimento)
+        VALUES (@id, @den_org, @p_iva, @den_uff, @indirizzi);
+      `)
+      .run({
+        id: subject.getId(),
+        den_org: subject.getOrganizationDen(),
+        p_iva: subject.getVatCode(),
+        den_uff: subject.getOfficeDen(),
+        indirizzi: subject.getDigitalAddresses().join(' ')
+      });
+
+    return id;
+  }
+
+  public visitSwSubject(subject: SWSubject): number {
+    const id = this.insertBaseSubject(SubjectTypeEnum.SW);
+    this.dbProvider.instance
+      .prepare(`
+        INSERT INTO soggetti_sw (id, den_sistema)
+        VALUES (@id, @den_sis);
+      `)
+      .run({
+        id: subject.getId(),
+        den_sis: subject.getSystemDen()
+      });
+
+    return id;
+  }
 }

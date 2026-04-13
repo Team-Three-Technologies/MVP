@@ -1,15 +1,17 @@
-import {SubjectVisitor} from './subject.visitor.abstract';
+import { SubjectVisitor } from './subject.visitor.abstract';
+
 export abstract class Subject {
   constructor(
-    private id: number
+    private id: number | null
   ) { }
 
-  public getId(): number {
+  public getId(): number | null {
     return this.id;
   }
 
   public setId(id: number): void {
     this.id = id;
   }
-  public abstract accept(vis:SubjectVisitor):void;
+
+  public abstract accept<T>(visitor: SubjectVisitor<T>): T;
 }
