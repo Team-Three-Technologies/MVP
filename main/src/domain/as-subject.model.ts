@@ -22,7 +22,7 @@ export class ASSubject extends Subject {
   }
 
   public getCf(): string | undefined {
-    return this.person.getCF();
+    return this.person.getCf();
   }
 
   public getOrganizationDen(): string {
@@ -46,7 +46,7 @@ export class ASSubject extends Subject {
   }
 
   public setCf(cf: string): void {
-    this.person.setCF(cf);
+    this.person.setCf(cf);
   }
 
   public setOrganizationDen(organizationDen: string): void {

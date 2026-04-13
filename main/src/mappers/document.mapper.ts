@@ -193,9 +193,9 @@ export class DocumentMapper {
       const r = tipoRegistro.Nessuno;
       metadata.push(...[
         new Metadata('DatiDiRegistrazione.TipoRegistro', r.TipoRegistro, MetadataTypeEnum.STRING),
-        new Metadata('DatiDiRegistrazione.TipoRegistro.Nessuno.DataDocumento', r.DataDocumento, MetadataTypeEnum.STRING),
+        new Metadata('DatiDiRegistrazione.TipoRegistro.Nessuno.DataDocumento', r.DataDocumento, MetadataTypeEnum.DATE),
         ...(r.OraDocumento
-          ? [new Metadata('DatiDiRegistrazione.TipoRegistro.Nessuno.OraDocumento', r.OraDocumento, MetadataTypeEnum.STRING)]
+          ? [new Metadata('DatiDiRegistrazione.TipoRegistro.Nessuno.OraDocumento', r.OraDocumento, MetadataTypeEnum.TIME)]
           : []),
         new Metadata('DatiDiRegistrazione.TipoRegistro.Nessuno.NumeroDocumento', r.NumeroDocumento, MetadataTypeEnum.STRING),
       ]);
@@ -203,9 +203,9 @@ export class DocumentMapper {
       const r = tipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza;
       metadata.push(...[
         new Metadata('DatiDiRegistrazione.TipoRegistro', r.TipoRegistro, MetadataTypeEnum.STRING),
-        new Metadata('DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.DataProtocollazioneDocumento', r.DataProtocollazioneDocumento, MetadataTypeEnum.STRING),
+        new Metadata('DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.DataProtocollazioneDocumento', r.DataProtocollazioneDocumento, MetadataTypeEnum.DATE),
         ...(r.OraProtocollazioneDocumento
-          ? [new Metadata('DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.OraProtocollazioneDocumento', r.OraProtocollazioneDocumento, MetadataTypeEnum.STRING)]
+          ? [new Metadata('DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.OraProtocollazioneDocumento', r.OraProtocollazioneDocumento, MetadataTypeEnum.TIME)]
           : []),
         new Metadata('DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.NumeroProtocolloDocumento', r.NumeroProtocolloDocumento, MetadataTypeEnum.STRING),
         new Metadata('DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.CodiceRegistro', r.CodiceRegistro, MetadataTypeEnum.STRING),
@@ -214,9 +214,9 @@ export class DocumentMapper {
       const r = tipoRegistro.Repertorio_Registro!;
       metadata.push(...[
         new Metadata('DatiDiRegistrazione.TipoRegistro', r.TipoRegistro, MetadataTypeEnum.STRING),
-        new Metadata('DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.DataRegistrazioneDocumento', r.DataRegistrazioneDocumento, MetadataTypeEnum.STRING),
+        new Metadata('DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.DataRegistrazioneDocumento', r.DataRegistrazioneDocumento, MetadataTypeEnum.DATE),
         ...(r.OraRegistrazioneDocumento
-          ? [new Metadata('DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.OraRegistrazioneDocumento', r.OraRegistrazioneDocumento, MetadataTypeEnum.STRING)]
+          ? [new Metadata('DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.OraRegistrazioneDocumento', r.OraRegistrazioneDocumento, MetadataTypeEnum.TIME)]
           : []),
         new Metadata('DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.NumeroRegistrazioneDocumento', r.NumeroRegistrazioneDocumento, MetadataTypeEnum.STRING),
         new Metadata('DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.CodiceRegistro', r.CodiceRegistro, MetadataTypeEnum.STRING),
@@ -243,8 +243,8 @@ export class DocumentMapper {
     metadata.push(...(parsedDocument.documentMetadata.Document.DocumentoInformatico.TracciatureModificheDocumento ?? [])
       .flatMap((mod, i) => [
         new Metadata(`TracciatureModificheDocumento.TipoModifica.${i}`, mod.TipoModifica, MetadataTypeEnum.STRING),
-        new Metadata(`TracciatureModificheDocumento.DataModifica.${i}`, mod.DataModifica, MetadataTypeEnum.STRING),
-        new Metadata(`TracciatureModificheDocumento.OraModifica.${i}`, mod.OraModifica ?? '', MetadataTypeEnum.STRING),
+        new Metadata(`TracciatureModificheDocumento.DataModifica.${i}`, mod.DataModifica, MetadataTypeEnum.DATE),
+        new Metadata(`TracciatureModificheDocumento.OraModifica.${i}`, mod.OraModifica ?? '', MetadataTypeEnum.TIME),
         new Metadata(`TracciatureModificheDocumento.IdDocVersionePrecedente.Identificativo.${i}`, mod.IdDocVersionePrecedente.Identificativo, MetadataTypeEnum.STRING),
         new Metadata(`TracciatureModificheDocumento.IdDocVersionePrecedente.ImprontaCrittograficaDelDocumento.Impronta.${i}`, mod.IdDocVersionePrecedente.ImprontaCrittograficaDelDocumento.Impronta, MetadataTypeEnum.BASE64),
         new Metadata(`TracciatureModificheDocumento.IdDocVersionePrecedente.ImprontaCrittograficaDelDocumento.Algoritmo.${i}`, mod.IdDocVersionePrecedente.ImprontaCrittograficaDelDocumento.Algoritmo ?? '', MetadataTypeEnum.STRING),

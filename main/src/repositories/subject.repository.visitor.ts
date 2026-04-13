@@ -1,7 +1,7 @@
 import { inject } from 'tsyringe';
+import { SubjectVisitor } from '../domain/subject.visitor.abstract';
 import { TOKENS } from '../infrastructure/di/tokens';
 import { DatabaseProvider } from '../infrastructure/database/database.provider';
-import { SubjectVisitor } from '../domain/subject.visitor.abstract';
 import { SubjectTypeEnum } from './subject-type.enum';
 import { ASSubject } from '../domain/as-subject.model';
 import { PAESubject } from '../domain/pae-subject.model';
@@ -16,14 +16,14 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
     private readonly dbProvider: DatabaseProvider
   ) { }
 
-  private insertBaseSubject(tipo: string): number {
+  private insertBaseSubject(type: string): number {
     const row = this.dbProvider.instance
       .prepare(`
         INSERT INTO soggetti (tipo)
         VALUES (@tipo);
       `)
       .run({
-        tipo: tipo
+        tipo: type
       });
 
     return Number(row.lastInsertRowid);

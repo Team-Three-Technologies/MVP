@@ -13,7 +13,7 @@ export class Person {
     return this.surname;
   }
 
-  public getCF(): string | undefined {
+  public getCf(): string | undefined {
     return this.cf;
   }
 
@@ -25,7 +25,7 @@ export class Person {
     this.surname = surname;
   }
 
-  public setCF(cf: string): void {
+  public setCf(cf: string): void {
     this.cf = cf;
   }
 }

@@ -15,7 +15,7 @@ export class PAISubject extends Subject {
     super(id);
   }
 
-  public getAdministrationDen(): string | undefined {
+  public getAdministrationDen(): string {
     return this.administrationDen;
   }
 

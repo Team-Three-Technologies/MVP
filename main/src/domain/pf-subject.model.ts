@@ -20,7 +20,7 @@ export class PFSubject extends Subject {
   }
 
   public getCf(): string | undefined {
-    return this.person.getCF();
+    return this.person.getCf();
   }
 
   public getDigitalAddresses(): string[] {
@@ -36,7 +36,7 @@ export class PFSubject extends Subject {
   }
 
   public setCf(cf: string): void {
-    this.person.setCF(cf);
+    this.person.setCf(cf);
   }
 
   public setDigitalAddresses(digitalAddresses: string[]): void {
