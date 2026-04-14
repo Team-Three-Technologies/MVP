@@ -15,7 +15,9 @@ import { DipIndexParserImpl } from '../../infrastructure/parsing/dip-index.parse
 import { AipInfoParserImpl } from '../../infrastructure/parsing/aip-info.parser.impl';
 import { MetadataParserImpl } from '../../infrastructure/parsing/metadata.parser.impl';
 import { AutoImportDipService } from '../../application/auto-import-dip.service';
+import { GetDocumentDetailsService } from '../../application/get-document-details.service';
 import { DipHandler } from '../../presentation/dip.handler';
+import { DocumentHandler } from '../../presentation/document.handler';
 
 function getLaunchDir(): string {
   const dirFromEnv = process.env.PORTABLE_EXECUTABLE_DIR;
@@ -57,7 +59,9 @@ export function registerDependencies(): void {
 
   // use cases
   container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService }, { lifecycle: Lifecycle.Singleton });
+  container.register(TOKENS.GetDocumentDetailsUseCase, { useClass: GetDocumentDetailsService }, { lifecycle: Lifecycle.Singleton });
 
   // handlers
   container.registerSingleton(DipHandler);
+  container.registerSingleton(DocumentHandler);
 }

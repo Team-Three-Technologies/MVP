@@ -3,8 +3,15 @@ import { DocumentRepository } from './document.repository.interface';
 import { TOKENS } from '../infrastructure/di/tokens';
 import { DatabaseProvider } from '../infrastructure/database/database.provider';
 import { Document } from '../domain/document.model';
+import { File } from '../domain/file.model';
+import { Metadata } from '../domain/metadata.model';
 import { DocumentRow } from './document.row';
+import { FileRow } from './file.row';
+import { MetadataRow } from './metadata.row';
 import { SubjectRepositoryVisitor } from './subject.repository.visitor'
+import { Subject } from '../domain/subject.model';
+import { MetadataTypeEnum } from '../domain/metadata-type.enum';
+import { RolesTypeEnum } from '../domain/roles-type.enum';
 
 @injectable()
 export class SQLiteDocumentRepository implements DocumentRepository {
@@ -30,19 +37,19 @@ export class SQLiteDocumentRepository implements DocumentRepository {
 
     this.dbProvider.instance
       .prepare(`
-        INSERT INTO documenti (uuid, percorso,file_principale, uuid_processo_conservazione)
-        VALUES (@uuid, @path, @file_principale, @conservationProcessUuid);
+        INSERT INTO documenti (uuid, percorso, uuid_processo_conservazione, uuid_file_principale)
+        VALUES (@uuid, @path, @conservationProcessUuid, @mainFileUuid);
       `)
       .run({
         uuid: document.getUuid(),
         path: document.getPath(),
-        file_principale: document.getMain().getUuid(),
-        conservationProcessUuid: document.getConservationProcessUuid()
+        conservationProcessUuid: document.getConservationProcessUuid(),
+        mainFileUuid: document.getMain().getUuid()
       });
 
     const attatchmentInsertStmt = this.dbProvider.instance
       .prepare(`
-        INSERT INTO allegati (uuid_doc, uuid_file)
+        INSERT INTO allegati (uuid_documento, uuid_file)
         VALUES (@uuid_doc, @uuid_file);
       `);
 
@@ -94,14 +101,61 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     return document;
   }
 
+  public async findByUuid(documentUuid: string): Promise<Document> {
+    const documentRow = this.dbProvider.instance
+      .prepare(`
+        SELECT * FROM documenti
+        WHERE uuid = ?;
+      `)
+      .get(documentUuid) as DocumentRow;
+
+    const mainFileRow = this.dbProvider.instance
+      .prepare(`
+        SELECT * FROM files
+        WHERE uuid = ?;
+      `)
+      .get(documentRow.uuid_file_principale) as FileRow;
+
+    const attachmentsRows = this.dbProvider.instance
+      .prepare(`
+        SELECT * FROM files f
+        JOIN allegati a ON f.uuid = a.uuid_file
+        WHERE a.uuid_documento = ?;
+      `)
+      .all(documentUuid) as FileRow[];
+
+    const metadataRows = this.dbProvider.instance
+      .prepare(`
+        SELECT * FROM metadata
+        WHERE uuid_documento = ?  
+      `).all(documentUuid) as MetadataRow[];
+
+    const rolesRows = this.dbProvider.instance
+      .prepare(`
+        SELECT * FROM soggetti s
+        JOIN ruoli r ON s.id = r.id_soggetto
+        WHERE uuid_documento = ?;
+      `)
+      .all(documentUuid);
+
+    return new Document(
+      documentRow.uuid,
+      documentRow.percorso,
+      new File(mainFileRow.uuid, mainFileRow.percorso, mainFileRow.dimensione),
+      attachmentsRows.map(a => new File(a.uuid, a.percorso, a.dimensione)),
+      metadataRows.map(met => new Metadata(met.nome, met.valore, met.tipo as MetadataTypeEnum)),
+      new Map<Subject, RolesTypeEnum>(),
+      documentRow.uuid_processo_conservazione
+    );
+  }
+
   public async findAllByDipUuid(dipUuid: string): Promise<Document[]> {
     const rows = this.dbProvider.instance
       .prepare(`
         SELECT * FROM documenti d
         JOIN processi_conservazione pc ON d.uuid_processo_conservazione = pc.uuid
         JOIN classi_documentali cd ON pc.uuid_classe_documentale = cd.uuid
-        JOIN archivi_dip ad ON cd.uuid_dip = ad.uuid_processo
-        WHERE ad.uuid_processo = ?; 
+        WHERE cd.uuid_dip = ?; 
       `)
       .all(dipUuid) as DocumentRow[]
 
@@ -116,8 +170,7 @@ export class SQLiteDocumentRepository implements DocumentRepository {
       .prepare(`
         SELECT * FROM documenti d
         JOIN processi_conservazione pc ON d.uuid_processo_conservazione = pc.uuid
-        JOIN classi_documentali cd ON pc.uuid_classe_documentale = cd.uuid
-        WHERE cd.uuid = ?; 
+        WHERE pc.uuid_classe_documentale = ?; 
       `)
       .all(documentClassUuid) as DocumentRow[]
 
@@ -128,8 +181,7 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     const rows = this.dbProvider.instance
       .prepare(`
         SELECT * FROM documenti d
-        JOIN processi_conservazione pc ON d.uuid_processo_conservazione = pc.uuid
-        WHERE pc.uuid = ?; 
+        WHERE d.uuid_processo_conservazione = ?; 
       `)
       .all(conservationProcessUuid) as DocumentRow[]
 

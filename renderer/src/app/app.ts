@@ -21,9 +21,16 @@ export class App implements OnInit {
     return res.data.dipUuid;
   }
 
+  async test2(): Promise<string> {
+    const res = await this.api.document.details({ documentUuid: '' });
+    if (res.error) throw new Error(res.error);
+    return res.data;
+  }
+
   async ngOnInit() {
     try {
       this.message = await this.test();
+      this.message = await this.test2();
     } catch (e) {
       this.message = (e as Error).message;
     } finally {
