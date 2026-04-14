@@ -7,8 +7,18 @@
   </div>
 
   <div class="card-body">
-    @if (documentFileUrl) {
-      <ngx-doc-viewer [url]="documentFileUrl" viewer="pdf"></ngx-doc-viewer>
+    @if (safeDocumentUrl) {
+      @if (itemFormato === 'pdf') {
+        <iframe [src]="safeDocumentUrl" class="pdf-viewer-frame">
+          <p>Il tuo browser non supporta la visualizzazione nativa dei PDF o gli iframe.</p>
+        </iframe>
+      } @else if (itemFormato === 'png' || itemFormato === 'jpg' || itemFormato === 'jpeg' || itemFormato === 'webp' || itemFormato === 'gif') {
+        <div class="image-viewer-container">
+          <img [src]="safeDocumentUrl" class="image-viewer-content">
+        </div>
+      } @else {
+        <ngx-doc-viewer [url]="documentFileUrl!" viewer="url" class="fallback-viewer"></ngx-doc-viewer>
+      }
     } @else if (isLoadingPreview) {
       <div class="loading-state">
         <p>Caricamento anteprima in corso...</p>
@@ -22,5 +32,6 @@
         <p>Seleziona un documento dalla lista per visualizzarne l'anteprima.</p>
       </div>
     }
+
   </div>
 </div>

@@ -12,4 +12,5 @@ import { DocumentModel, Allegato } from '../../models/document';
 export class DocumentDetails {
   @Input() document: DocumentModel | null = null;
   @Input() allegato: Allegato | null = null;
+  @Input() isLoading: boolean = false;
 }

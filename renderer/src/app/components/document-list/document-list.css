@@ -2,6 +2,7 @@
   font-family: sans-serif;
   padding: 16px;
   background-color: white;
+  width: 100%;
 }
 
 .titolo-lista {
@@ -17,7 +18,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 
@@ -31,6 +32,9 @@
   color: #000;
   cursor: pointer;
   text-align: left;
+  display: inline-block;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 
@@ -48,11 +52,6 @@
   gap: 4px;
 }
 
-.item-allegato .btn-link {
-  color: #555;
-  font-weight: normal;
-}
-
 .messaggio-stato {
   font-size: 14px;
   color: #666;
@@ -61,4 +60,64 @@
 
 .errore {
   color: #cc0000;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.attachment-dash {
+  color: #666;
+  margin-right: 4px;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #888;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #1a73e8;
+}
+
+.eye-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 768px) {
+  .document-list-panel {
+    padding: 10px;
+  }
+
+  .titolo-lista {
+    margin-bottom: 12px;
+  }
+
+  .btn-link {
+    font-size: 13px;
+  }
+
+  .lista-allegati {
+    padding-left: 8px;
+  }
 }

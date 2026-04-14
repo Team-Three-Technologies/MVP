@@ -17,6 +17,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
 }
 
 
@@ -25,16 +26,21 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 12px;
-  outline: none;
   background-color: white;
-  height: 36px;
+  min-height: 36px;
   color: #333;
-  width: 110px; 
-  max-width: 100%;
+  width: 100%;
+  flex: 1 1 140px;
+  min-width: 0;
 }
 
 .input-base:focus {
   border-color: blue;
+}
+
+.input-testo {
+  flex: 2 1 180px;
+  width: 100%;
 }
 
 .btn-icona {
@@ -54,6 +60,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
 }
 
 .btn-aggiungi {
@@ -65,6 +72,9 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  width: 100%;
+  max-width: 280px;
+  align-self: center;
 }
 
 .btn-aggiungi:hover {
@@ -82,11 +92,29 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  width: 100%;
+  max-width: 280px;
+  align-self: center;
 }
 
 .btn-cerca:hover {
   background-color: #f0f4f8;
   color: blue;
   border-color: blue;
+}
 
+@media (max-width: 640px) {
+  .riga-filtro {
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .input-base,
+  .input-testo {
+    flex: 1 1 100%;
+  }
+
+  .btn-icona {
+    margin-left: auto;
+  }
 }

@@ -17,7 +17,7 @@ export class DocumentList {
 
   @Output() documentSelected = new EventEmitter<string>();
   @Output() attachmentSelected = new EventEmitter<{doc: DocumentModel, allegato: Allegato}>();
-
+  @Output() itemPreview = new EventEmitter<DocumentModel | Allegato>();
   onRowClick(id: string): void {
     this.documentSelected.emit(id);
   }
@@ -25,5 +25,10 @@ export class DocumentList {
   onAttachmentClick(doc: DocumentModel, allegato: Allegato, event: Event) {
     event.stopPropagation();
     this.attachmentSelected.emit({ doc, allegato });
+  }
+
+  onViewClick(item: DocumentModel | Allegato, event: Event) {
+    event.stopPropagation();
+    this.itemPreview.emit(item);
   }
 }

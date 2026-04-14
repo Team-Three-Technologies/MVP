@@ -5,6 +5,7 @@
   overflow: hidden;
   font-family: sans-serif;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .card-header {
@@ -26,6 +27,8 @@
 .info-row {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
   padding: 8px 0;
   border-bottom: 1px dashed #eee;
 }
@@ -41,7 +44,10 @@
 
 .info-value {
   color: #222;
+  min-width: 0;
+  flex: 1;
   text-align: right;
+  overflow-wrap: anywhere;
 }
 
 .info-row.highlight {
@@ -55,4 +61,16 @@
   color: red;
   font-style: italic;
   padding: 30px 16px;
+}
+
+@media (max-width: 768px) {
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-value {
+    width: 100%;
+    text-align: left;
+  }
 }

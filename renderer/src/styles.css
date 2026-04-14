@@ -1,20 +1,36 @@
-/* Reset globale */
-*, *::before, *::after {
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
 
-/* Il componente root Angular deve occupare tutta la viewport */
 app-root,
 app-dip-dashboard-container {
   display: block;
   height: 100%;
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  app-root,
+  app-dip-dashboard-container {
+    height: auto;
+    min-height: 100%;
+  }
 }

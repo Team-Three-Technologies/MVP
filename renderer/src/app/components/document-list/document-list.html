@@ -1,37 +1,52 @@
 <div class="document-list-panel">
 
   @if (isLoading) {
-    <p class="messaggio-stato">Caricamento in corso...</p>
+  <p class="messaggio-stato">Caricamento in corso...</p>
   } @else if (errorMessage) {
-    <p class="messaggio-stato errore">{{ errorMessage }}</p>
+  <p class="messaggio-stato errore">{{ errorMessage }}</p>
   } @else {
 
-    <h3 class="titolo-lista">Documenti</h3>
+  <h3 class="titolo-lista">Documenti</h3>
 
-    <ul class="lista-principale" role="list">
-      @for (doc of documents; track doc.uuid_documento) {
-        <li class="item-doc">
-          
-          <button class="btn-link" type="button" (click)="onRowClick(doc.uuid_documento)">
-            {{ doc.nome_documento }}
+  <ul class="lista-principale" role="list">
+    @for (doc of documents; track doc.uuid_documento) {
+    <li class="item-doc">
+      <div class="item-row">
+        <button class="btn-link" type="button" (click)="onRowClick(doc.uuid_documento)">
+          {{ doc.nome_documento }}
+        </button>
+
+        <button class="btn-icon btn-visualizza" type="button" (click)="onViewClick(doc, $event)" aria-label="Visualizza documento" title="Visualizza">
+          <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </button>
+      </div>
+
+      @if (doc.allegati.length > 0) {
+      <ul class="lista-allegati" role="list">
+        @for (allegato of doc.allegati; track allegato.id_allegato) {
+        <li class="item-allegato item-row">
+          <span class="attachment-dash">-</span>
+          <button class="btn-link btn-allegato" type="button" (click)="onAttachmentClick(doc, allegato, $event)">
+            {{ allegato.percorso.split('/').pop() || allegato.percorso }}
           </button>
-
-          @if (doc.allegati.length > 0) {
-            <ul class="lista-allegati" role="list">
-              @for (allegato of doc.allegati; track allegato.id_allegato) {
-                <li class="item-allegato">
-                  - <button class="btn-link btn-allegato" type="button" (click)="onAttachmentClick(doc, allegato, $event)">
-                      {{ allegato.percorso.split('/').pop() || allegato.percorso }}
-                    </button>
-                </li>              }
-            </ul>
-          }
-
-        </li>
+          <button class="btn-icon btn-visualizza-allegato" type="button" (click)="onViewClick(allegato, $event)" aria-label="Visualizza allegato" title="Visualizza allegato">
+            <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </li> }
+      </ul>
       }
-      @empty {
-        <li class="messaggio-stato">Nessun documento trovato.</li>
-      }
-    </ul>
+
+    </li>
+    }
+    @empty {
+    <li class="messaggio-stato">Nessun documento trovato.</li>
+    }
+  </ul>
   }
 </div>
