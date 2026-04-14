@@ -7,7 +7,6 @@ import { DipRepository } from '../repositories/dip.repository.interface';
 import { DocumentClassRepository } from '../repositories/document-class.repository.interface';
 import { ConservationProcessRepository } from '../repositories/conservation-process.repository.interface';
 import { DocumentRepository } from '../repositories/document.repository.interface';
-import type { AppConfig } from '../infrastructure/app.config';
 import { DipMapper } from '../mappers/dip.mapper';
 import { DocumentClassMapper } from '../mappers/document-class.mapper';
 import { ConservationProcessMapper } from '../mappers/conservation-process.mapper';
@@ -28,15 +27,13 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     @inject(TOKENS.ConservationProcessRepository)
     private readonly conservationProcessRepository: ConservationProcessRepository,
     @inject(TOKENS.DocumentRepository)
-    private readonly documentRepository: DocumentRepository,
-    @inject(TOKENS.AppConfig)
-    private readonly config: AppConfig
+    private readonly documentRepository: DocumentRepository
   ) { }
 
   public async execute(): Promise<string> {
     // leggero: 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403';
     // 4gb: 'D:\\filip\\Downloads\\dip.2026115.d7a27175-16b3-4a7d-877d-26f2b1baadda';
-    const dir = 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'; // this.config.appDir;
+    const dir = 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'; // this.fileFinder.getStartDir();
     const dipIndexPath = await this.fileFinder.findDipIndex(dir);
 
     // se non trova il dip index
