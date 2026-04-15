@@ -17,6 +17,7 @@ import { DocumentModel, Allegato } from '../../models/document';
 })
 export class DipDashboardContainer implements OnInit, OnDestroy {
   private presenter = inject(DipPresenter);
+  public dipInfo = this.presenter.dipInfo;
   public documentList = this.presenter.documentList;
   public selectedDocument = this.presenter.selectedDocumentState;
   public selectedAllegato = this.presenter.selectedAllegatoState;
@@ -30,12 +31,16 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
     await this.presenter.selectDocument(id);
   }
 
-  public async onAttachmentSelected(event: {doc: DocumentModel, allegato: Allegato}): Promise<void> {
+  public async onAttachmentSelected(event: {
+    doc: DocumentModel;
+    allegato: Allegato;
+  }): Promise<void> {
     await this.presenter.selectAllegato(event.allegato);
   }
 
   public async ngOnInit(): Promise<void> {
     await this.presenter.loadDocuments();
+    await this.presenter.loadDipInfo();
   }
   public async onSearch(filters: FilterModel[]): Promise<void> {
     await this.presenter.searchDocuments(filters);

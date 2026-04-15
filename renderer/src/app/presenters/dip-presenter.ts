@@ -2,10 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { DocumentModel, Allegato } from '../models/document';
 import { BackendFacade } from '../facades/backend.facade';
 import { FilterModel } from '../models/filter';
+import { DipInfoModel } from '../models/dip-info';
 
 @Injectable()
 export class DipPresenter {
   private readonly facade = inject(BackendFacade);
+  public dipInfo = this.facade.dipInfo;
   public documentList = this.facade.documentList;
   public selectedDocumentState = this.facade.selectedDocumentState;
   public selectedAllegatoState = this.facade.selectedAllegatoState;
@@ -65,5 +67,9 @@ export class DipPresenter {
 
   async closePreview(): Promise<void> {
     await this.facade.clearPreview();
+  }
+
+  async loadDipInfo(): Promise<void> {
+    await this.facade.loadDipInfo();
   }
 }

@@ -17,7 +17,9 @@
           <img [src]="safeDocumentUrl" class="image-viewer-content">
         </div>
       } @else {
-        <ngx-doc-viewer [url]="documentFileUrl!" viewer="url" class="fallback-viewer"></ngx-doc-viewer>
+        <div class="empty-state">
+          <p>Formato non supportato per l'anteprima locale.</p>
+        </div>
       }
     } @else if (isLoadingPreview) {
       <div class="loading-state">

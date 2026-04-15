@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
       return ipcRenderer.invoke(IPC_CHANNELS.DIP_SEARCH_DOCUMENTS, parsedFilters);
     },
     loadDocumentFile: (filePath: string) => ipcRenderer.invoke(IPC_CHANNELS.DIP_LOAD_DOCUMENT_FILE, filePath),
+    loadDipInfo: () => ipcRenderer.invoke(IPC_CHANNELS.DIP_LOAD_DIP_INFO),
   },
   on: (channel: string, callback: (data: unknown) => void) => {
     ipcRenderer.on(channel, (_, data) => callback(data));

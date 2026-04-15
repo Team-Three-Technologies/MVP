@@ -7,13 +7,14 @@
     </section>
 
     <section class="dip-info-section">
-      <app-dip-details></app-dip-details>
+      <app-dip-details [dipInfo]="dipInfo()"></app-dip-details>
     </section>
   </aside>
   <main class="main-content">
     <section class="list-section">
       <app-document-list [documents]="documentList()" [isLoading]="isLoading()"
-        (documentSelected)="onDocumentSelected($event)" (attachmentSelected)="onAttachmentSelected($event)" (itemPreview)="onItemPreview($event)">
+        (documentSelected)="onDocumentSelected($event)" (attachmentSelected)="onAttachmentSelected($event)"
+        (itemPreview)="onItemPreview($event)">
       </app-document-list>
     </section>
     @if(selectedDocument() || selectedAllegato()) {
@@ -36,8 +37,8 @@
       <span class="preview-title">Anteprima di {{ previewSelectedDocument()?.nome_documento || 'Documento' }}</span>
     </div>
     <div class="preview-content">
-      <app-document-preview [document]="previewSelectedDocument()" [itemFormato]="previewItemFormato()" [documentFileUrl]="documentFileUrl()"
-        [isLoadingPreview]="isLoadingPreview()">
+      <app-document-preview [document]="previewSelectedDocument()" [itemFormato]="previewItemFormato()"
+        [documentFileUrl]="documentFileUrl()" [isLoadingPreview]="isLoadingPreview()">
       </app-document-preview>
     </div>
   </div>

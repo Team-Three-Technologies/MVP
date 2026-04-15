@@ -3,8 +3,7 @@ import { DocumentModel, Allegato } from '../models/document';
 import { signal } from '@angular/core';
 import { ElectronIpc } from '../services/electron-ipc';
 import { FilterModel } from '../models/filter';
-
-
+import { DipInfoModel } from '../models/dip-info';
 @Injectable({
   providedIn: 'root',
 })
@@ -27,6 +26,8 @@ export class BackendFacade {
   public previewItemFormato = this._previewItemFormato.asReadonly();
   private _selectedAllegatoState = signal<Allegato | null>(null);
   public selectedAllegatoState = this._selectedAllegatoState.asReadonly();
+  private _dipInfo = signal<DipInfoModel | null>(null);
+  public dipInfo = this._dipInfo.asReadonly();
 
   public async loadDocuments(): Promise<void> {
     this._isLoading.set(true);
@@ -40,7 +41,17 @@ export class BackendFacade {
     }
   }
 
-  public async selectDocument(id: string): Promise<void> {
+  public async loadDipInfo(): Promise<void> {
+    try {
+      const dipInfo = await this.electronIpc.loadDipInfo();
+      this._dipInfo.set(dipInfo);
+    } catch (error) {
+      console.error('Error loading dip info:', error);
+      this.errorMessage.set('Failed to load dip info. Please try again.');
+    }
+  }
+
+  public selectDocument(id: string): void {
     this._isLoading.set(true);
     this._selectedDocumentState.set(null);
     this._selectedAllegatoState.set(null);
@@ -51,7 +62,7 @@ export class BackendFacade {
     this._isLoading.set(false);
   }
 
-  public async selectAllegato(allegato: Allegato): Promise<void> {
+  public selectAllegato(allegato: Allegato): void {
     this._isLoading.set(true);
     this._selectedDocumentState.set(null);
     this._selectedAllegatoState.set(allegato);
@@ -59,16 +70,16 @@ export class BackendFacade {
   }
 
   public async previewSelect(item: DocumentModel | Allegato): Promise<void> {
-    this._isLoadingPreview.set(true);
     if ('uuid_documento' in item) {
       this._previewSelectedDocumentState.set(item as DocumentModel);
       this._previewItemFormato.set(item.formato?.toLowerCase() || 'pdf');
     } else if ('id_allegato' in item) {
-      const doc = this.documentList().find(d => d.allegati.some(a => a.id_allegato === item.id_allegato));
+      const doc = this.documentList().find((d) =>
+        d.allegati.some((a) => a.id_allegato === item.id_allegato),
+      );
       this._previewSelectedDocumentState.set(doc || null);
       this._previewItemFormato.set(item.formato?.toLowerCase() || 'pdf');
     }
-    this._isLoadingPreview.set(false);
     await this.loadDocumentFile(item);
   }
 
@@ -87,7 +98,7 @@ export class BackendFacade {
       this._isLoading.set(false);
     }
   }
-  public async clearSelection(): Promise<void> {
+  public clearSelection(): void {
     this._selectedDocumentState.set(null);
     this._selectedAllegatoState.set(null);
     this.clearPreview();
@@ -105,6 +116,7 @@ export class BackendFacade {
     try {
       await this.electronIpc.autoImport();
       await this.loadDocuments();
+      await this.loadDipInfo();
     } catch (error) {
       console.error('Error auto importing:', error);
       this.errorMessage.set('Failed to auto import documents. Please try again.');
@@ -115,17 +127,10 @@ export class BackendFacade {
 
   public async loadDocumentFile(item: DocumentModel | Allegato): Promise<void> {
     if (this.documentFileUrl()) URL.revokeObjectURL(this.documentFileUrl()!);
-    
-    let filePercorso: string | undefined;
-    if ('percorso' in item) {
-       filePercorso = item.percorso;
-    } else if ('allegati' in item && item.allegati.length > 0) {
-       filePercorso = item.allegati[0].percorso;
-    }
+    const filePercorso = item.percorso;
 
     if (!filePercorso) {
       this.errorMessage.set('No file found for this document.');
-      this._isLoadingPreview.set(false);
       this._documentFileUrl.set(null);
       return;
     }
@@ -139,7 +144,8 @@ export class BackendFacade {
     this._isLoadingPreview.set(true);
     try {
       const bytes = await this.electronIpc.loadDocumentFile(filePercorso);
-      this._documentFileUrl.set(URL.createObjectURL(new Blob([bytes as any], { type: mimeType })));
+      const blobBytes = Uint8Array.from(bytes);
+      this._documentFileUrl.set(URL.createObjectURL(new Blob([blobBytes], { type: mimeType })));
     } catch (error) {
       console.error('Error loading document file:', error);
       this.errorMessage.set('Failed to load document file. Please try again.');

@@ -8,7 +8,7 @@ import { FilterModel } from '../../models/filter';
   standalone: true,
   imports: [CommonModule, FormsModule], 
   templateUrl: './filters.html',
-  styleUrls: ['./filters.css'] 
+  styleUrl: './filters.css'
 })
 export class Filters {
 

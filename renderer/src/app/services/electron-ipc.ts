@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DocumentModel } from '../models/document';
 import { FilterModel } from '../models/filter';
+import { DipInfoModel } from '../models/dip-info';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,16 @@ export class ElectronIpc {
       await this.api.dip.autoImport();
     } catch (error) {
       console.error('Error during auto import:', error);
+      throw error;
+    }
+  }
+
+  public async loadDipInfo(): Promise<DipInfoModel> {
+    try {
+      const dipInfo = await this.api.dip.loadDipInfo();
+      return dipInfo as DipInfoModel;
+    } catch (error) {
+      console.error('Error loading DIP info:', error);
       throw error;
     }
   }
@@ -46,5 +57,4 @@ export class ElectronIpc {
       throw error;
     }
   }
-
 }

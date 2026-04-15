@@ -7,9 +7,10 @@ export interface Allegato {
 export interface DocumentModel {
   uuid_documento: string;
   nome_documento: string;
-  formato: string;        
-  data_registrazione: string; 
-  ora_registrazione: string; 
+  formato: string;
+  percorso: string;           
+  data_registrazione: string;
+  ora_registrazione: string;
   oggetto: string;
   versione: string;
   files_count: number;

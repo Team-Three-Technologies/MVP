@@ -23,4 +23,9 @@ export class DipHandler {
     const file = await fs.readFile(filePath);
     return Array.from(file);
   }
+
+  public async loadDipInfo(): Promise<IpcResponse<void>> {
+  return fail('Not yet implemented');
+}
+
 }

@@ -7,7 +7,7 @@ import { DocumentModel, Allegato } from '../../models/document';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './document-details.html',
-  styleUrls: ['./document-details.css']
+  styleUrl: './document-details.css'
 })
 export class DocumentDetails {
   @Input() document: DocumentModel | null = null;

@@ -8,7 +8,7 @@ import {NgxDocViewerModule} from 'ngx-doc-viewer';
   standalone: true,
   imports: [NgxDocViewerModule],
   templateUrl: './document-preview.html',
-  styleUrls: ['./document-preview.css']
+  styleUrl: './document-preview.css'
 })
 export class DocumentPreview implements OnChanges {
   @Input() document: DocumentModel | null = null;
