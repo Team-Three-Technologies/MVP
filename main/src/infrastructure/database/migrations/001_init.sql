@@ -37,17 +37,17 @@ CREATE TABLE IF NOT EXISTS documenti (
     uuid TEXT PRIMARY KEY,
     percorso TEXT NOT NULL,
     uuid_processo_conservazione TEXT,
-    file_principale TEXT NOT NULL,
-    FOREIGN KEY(file_principale) REFERENCES files(uuid),
+    uuid_file_principale TEXT NOT NULL,
+    FOREIGN KEY(uuid_file_principale) REFERENCES files(uuid),
     FOREIGN KEY (uuid_processo_conservazione) REFERENCES processi_conservazione(uuid)
 );
 
 CREATE TABLE allegati (
-    uuid_doc TEXT NOT NULL,
+    uuid_documento TEXT NOT NULL,
     uuid_file TEXT NOT NULL,
-    FOREIGN KEY(uuid_doc) REFERENCES documenti(uuid),
+    FOREIGN KEY(uuid_documento) REFERENCES documenti(uuid),
     FOREIGN KEY(uuid_file) REFERENCES files(uuid),
-    PRIMARY KEY(uuid_doc, uuid_file)
+    PRIMARY KEY(uuid_documento, uuid_file)
 );
 
 CREATE TABLE IF NOT EXISTS metadata (

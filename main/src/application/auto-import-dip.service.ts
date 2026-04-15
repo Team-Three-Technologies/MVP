@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '../infrastructure/di/tokens';
 import { AutoImportDipUseCase } from './auto-import-dip.use-case';
+import { AutoImportDipResponseDTO } from '../../../shared/response/auto-import-dip.response.dto';
 import { FileFinder } from '../infrastructure/fs/file.finder.interface';
 import { DipParser } from '../infrastructure/parsing/dip.parser.interface';
 import { DipRepository } from '../repositories/dip.repository.interface';
@@ -30,7 +31,7 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     private readonly documentRepository: DocumentRepository
   ) { }
 
-  public async execute(): Promise<string> {
+  public async execute(): Promise<AutoImportDipResponseDTO> {
     // leggero: 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403';
     // 4gb: 'D:\\filip\\Downloads\\dip.2026115.d7a27175-16b3-4a7d-877d-26f2b1baadda';
     const dir = 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'; // this.fileFinder.getStartDir();
@@ -59,11 +60,11 @@ export class AutoImportDipService implements AutoImportDipUseCase {
 
       for (const cp of dc.AiP) {
         const aipInfoPath = await this.fileFinder.findAipInfo(path.join(dir, cp.AiPRoot));
-        
+
         if (!aipInfoPath) {
           throw new Error('AipInfo mancante');
         }
-        
+
         const aipInfo = await this.dipParser.parseAipInfo(aipInfoPath);
         const conservationProcess = conservationProcessMapper.toDomain(aipInfo);
         this.conservationProcessRepository.save(conservationProcess);
@@ -76,6 +77,6 @@ export class AutoImportDipService implements AutoImportDipUseCase {
       this.documentRepository.save(document);
     }
 
-    return dip.getProcessUuid();
+    return { dipUuid: dip.getProcessUuid() };
   }
 }
