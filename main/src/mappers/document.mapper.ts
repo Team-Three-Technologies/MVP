@@ -104,8 +104,8 @@ export class DocumentMapper {
     return undefined;
   }
 
-  private mapRuoli(ruoli: RuoloXml[]): SubjectRoleEntry[] {
-    return ruoli
+  private mapRoles(roles: RuoloXml[]): SubjectRoleEntry[] {
+    return roles
       .map((role) => {
         const picked = this.pickRolePayload(role);
         if (!picked) return undefined;
@@ -250,7 +250,12 @@ export class DocumentMapper {
         new Metadata(`TracciatureModificheDocumento.IdDocVersionePrecedente.ImprontaCrittograficaDelDocumento.Algoritmo.${i}`, mod.IdDocVersionePrecedente.ImprontaCrittograficaDelDocumento.Algoritmo ?? '', MetadataTypeEnum.STRING),
       ]));
 
-    const entries = this.mapRuoli(parsedDocument.documentMetadata.Document.DocumentoInformatico.Soggetti.Ruolo);
+    metadata.push(...[
+      new Metadata('ArchimemoData.DocumentInformation.FilesCount', String(parsedDocument.documentMetadata.Document.ArchimemoData.DocumentInformation.FilesCount), MetadataTypeEnum.NUMBER),
+      new Metadata('ArchimemoData.DocumentInformation.TotalSize', `${String(parsedDocument.documentMetadata.Document.ArchimemoData.DocumentInformation.TotalSize['#text'])} ${String(parsedDocument.documentMetadata.Document.ArchimemoData.DocumentInformation.TotalSize['@_unit'])}`.trim(), MetadataTypeEnum.STRING)
+    ]);
+
+    const entries = this.mapRoles(parsedDocument.documentMetadata.Document.DocumentoInformatico.Soggetti.Ruolo);
 
     const subjects = new Map<Subject, RolesTypeEnum>(
       entries.map(e => [e.subject, e.roleType] as [Subject, RolesTypeEnum])

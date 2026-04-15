@@ -3,7 +3,7 @@ import { ipcMain } from 'electron';
 import { DipHandler } from './dip.handler';
 import { DocumentHandler } from './document.handler';
 import { IPC_CHANNELS } from '../../ipc-channels';
-import { DocumentRequestDTO } from '../../../shared/document.request.dto';
+import { DocumentRequestDTO } from '../../../shared/request/document.request.dto';
 
 export function registerAllHandlers(): void {
   const dipHandler = container.resolve(DipHandler);

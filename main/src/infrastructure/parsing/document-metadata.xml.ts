@@ -205,12 +205,6 @@ export interface CustomMetadataXml {
   '@_cmSchemaUri'?: string;
   '@_cmSchemaVersion'?: string;
   '@_cmValidFrom'?: string;
-  [key: string]: unknown;
-}
-
-export interface CustomMetadataEntry {
-  key: string;
-  value: string;
 }
 
 export interface ArchimemoDataXml {

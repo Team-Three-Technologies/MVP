@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { DocumentRequestDTO } from '../shared/document.request.dto';
+import { DocumentRequestDTO } from '../shared/request/document.request.dto';
 
 const IPC_CHANNELS = {
   DIP_AUTO_IMPORT: 'dip:auto-import',

@@ -22,7 +22,7 @@ export class App implements OnInit {
   }
 
   async test2(): Promise<string> {
-    const res = await this.api.document.details({ documentUuid: '' });
+    const res = await this.api.document.details({ documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab' });
     if (res.error) throw new Error(res.error);
     return res.data;
   }

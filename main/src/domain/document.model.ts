@@ -69,4 +69,8 @@ export class Document {
   public setConservationProcessUuid(conservationProcessUuid: string): void {
     this.conservationProcessUuid = conservationProcessUuid;
   }
+
+  public getMetadataValue(name: string): string | null {
+    return this.metadata.find(metadata => metadata.getName() === name)?.getValue() ?? null;
+  }
 }

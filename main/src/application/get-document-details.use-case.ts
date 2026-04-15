@@ -1,5 +1,5 @@
-import { Document } from '../domain/document.model';
+import { DocumentDetailsResponseDTO } from '../../../shared/response/document-details.response.dto';
 
 export interface GetDocumentDetailsUseCase {
-  execute(documentUuid: string): Promise<Document>;
+  execute(documentUuid: string): Promise<DocumentDetailsResponseDTO>;
 }

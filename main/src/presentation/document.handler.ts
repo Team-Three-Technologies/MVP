@@ -3,7 +3,8 @@ import { TOKENS } from '../infrastructure/di/tokens';
 import { IpcResponse } from '../../../shared/ipc-response';
 import { ok, fail } from './ipc-response.utils';
 import { GetDocumentDetailsUseCase } from '../application/get-document-details.use-case';
-import { DocumentRequestDTO } from '../../../shared/document.request.dto';
+import { DocumentDetailsResponseDTO } from '../../../shared/response/document-details.response.dto';
+import { DocumentRequestDTO } from '../../../shared/request/document.request.dto';
 
 @injectable()
 export class DocumentHandler {
@@ -12,10 +13,10 @@ export class DocumentHandler {
     private readonly getDocumentDetailsUseCase: GetDocumentDetailsUseCase
   ) { }
 
-  public async getDocumentDetails(documentRequestDto: DocumentRequestDTO): Promise<IpcResponse<void>> {
+  public async getDocumentDetails(documentRequestDto: DocumentRequestDTO): Promise<IpcResponse<DocumentDetailsResponseDTO>> {
     try {
-      const document = await this.getDocumentDetailsUseCase.execute(documentRequestDto.documentUuid);
-      return ok(undefined);
+      const response = await this.getDocumentDetailsUseCase.execute(documentRequestDto.documentUuid);
+      return ok(response);
     } catch (e) {
       return fail((e as Error).message);
     }
