@@ -29,7 +29,9 @@
     "test:cov": "npm run test:main:cov && npm run test:renderer:cov",
     "package": "npm run build && electron-builder",
     "postinstall": "electron-builder install-app-deps",
-    "format": "prettier --write \"main/src/**/*.ts\" \"main/test/**/*.ts\" \"shared/**/*.ts\""
+    "format:main": "prettier --write \"main/src/**/*.ts\" \"main/test/**/*.ts\" \"shared/**/*.ts\"",
+    "format:renderer": "cd renderer && npm run format",
+    "format": "npm run format:main && npm run format:renderer"
   },
   "build": {
     "appId": "it.unipd.t3.dipreader-mvp",

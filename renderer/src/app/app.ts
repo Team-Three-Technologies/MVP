@@ -5,15 +5,13 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App implements OnInit {
   private api = (window as any).electronAPI;
   message: string = 'prova';
 
-  constructor(
-    private readonly cdr: ChangeDetectorRef
-  ) { }
+  constructor(private readonly cdr: ChangeDetectorRef) {}
 
   async test(): Promise<string> {
     const res = await this.api.dip.autoImport();
@@ -28,7 +26,9 @@ export class App implements OnInit {
   }
 
   async test3(): Promise<string> {
-    const res = await this.api.document.details({ documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab' });
+    const res = await this.api.document.details({
+      documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab',
+    });
     if (res.error) throw new Error(res.error);
     return res.data;
   }
