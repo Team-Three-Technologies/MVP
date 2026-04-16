@@ -34,7 +34,7 @@
         </svg>
         Torna Indietro
       </button>
-      <span class="preview-title">Anteprima di {{ previewSelectedDocument()?.nome_documento || 'Documento' }}</span>
+      <span class="preview-title">Anteprima di {{ previewSelectedDocument()?.name || 'Documento' }}</span>
     </div>
     <div class="preview-content">
       <app-document-preview [document]="previewSelectedDocument()" [itemFormato]="previewItemFormato()"

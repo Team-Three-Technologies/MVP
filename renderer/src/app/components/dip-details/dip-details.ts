@@ -7,7 +7,7 @@ import { DipInfoModel } from '../../models/dip-info';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dip-details.html',
-  styleUrl: './dip-details.css'
+  styleUrl: './dip-details.css',
 })
 export class DipDetails {
   @Input() dipInfo: DipInfoModel | null = null;

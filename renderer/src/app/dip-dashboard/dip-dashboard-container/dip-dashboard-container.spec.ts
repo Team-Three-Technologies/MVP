@@ -8,9 +8,8 @@ describe('DipDashboardContainer', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DipDashboardContainer]
-    })
-    .compileComponents();
+      imports: [DipDashboardContainer],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DipDashboardContainer);
     component = fixture.componentInstance;

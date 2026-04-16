@@ -1,17 +1,17 @@
 import { Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { DocumentModel } from '../../models/document';
-import {NgxDocViewerModule} from 'ngx-doc-viewer';
+import { DocumentDetailsResponseDTO } from '@shared/response/document-details.response.dto';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @Component({
   selector: 'app-document-preview',
   standalone: true,
   imports: [NgxDocViewerModule],
   templateUrl: './document-preview.html',
-  styleUrl: './document-preview.css'
+  styleUrl: './document-preview.css',
 })
 export class DocumentPreview implements OnChanges {
-  @Input() document: DocumentModel | null = null;
+  @Input() document: DocumentDetailsResponseDTO | null = null;
   @Input() itemFormato: string | null = null;
   @Input() documentFileUrl: string | null = null;
   @Input() isLoadingPreview: boolean = false;

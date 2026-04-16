@@ -6,7 +6,10 @@ import { DipDetails } from '../../components/dip-details/dip-details';
 import { DocumentDetails } from '../../components/document-details/document-details';
 import { FilterModel } from '../../models/filter';
 import { DipPresenter } from '../../presenters/dip-presenter';
-import { DocumentModel, Allegato } from '../../models/document';
+import {
+  AttachmentResponseDTO,
+  DocumentDetailsResponseDTO,
+} from '@shared/response/document-details.response.dto';
 
 @Component({
   selector: 'app-dip-dashboard-container',
@@ -32,8 +35,8 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
   }
 
   public async onAttachmentSelected(event: {
-    doc: DocumentModel;
-    allegato: Allegato;
+    doc: DocumentDetailsResponseDTO;
+    allegato: AttachmentResponseDTO;
   }): Promise<void> {
     await this.presenter.selectAllegato(event.allegato);
   }
@@ -50,7 +53,9 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
     await this.presenter.clearSelection();
   }
 
-  public async onItemPreview(item: DocumentModel | Allegato): Promise<void> {
+  public async onItemPreview(
+    item: DocumentDetailsResponseDTO | AttachmentResponseDTO,
+  ): Promise<void> {
     await this.presenter.previewDocument(item);
   }
 
