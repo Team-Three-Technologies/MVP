@@ -19,7 +19,8 @@ export class DipHandler {
 
   public async autoImport(): Promise<IpcResponse<AutoImportDipResponseDTO>> {
     try {
-      return ok(await this.autoImportDipUseCase.execute()); // cerca un dip index nella cartella in cui è stata avviata l'applicazione -> parsing dei dati -> caricati nel db -> visualizza contenuto cartella
+      const response = await this.autoImportDipUseCase.execute(); 
+      return ok(response); // cerca un dip index nella cartella in cui è stata avviata l'applicazione -> parsing dei dati -> caricati nel db -> visualizza contenuto cartella
     } catch (e) {
       return fail((e as Error).message);
     }
@@ -30,7 +31,6 @@ export class DipHandler {
   ): Promise<IpcResponse<DipContentResponseDTO>> {
     try {
       const response = await this.getDipContentUseCase.execute(dipRequestDto.dipUuid);
-      console.log(response);
       return ok(response);
     } catch (e) {
       return fail((e as Error).message);
