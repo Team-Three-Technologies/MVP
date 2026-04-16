@@ -1,0 +1,34 @@
+<div class="dip-details-card">
+  <div class="card-header">
+    <h3>Informazioni del pacchetto (DIP)</h3>
+  </div>
+
+  @if (dipInfo) {
+  <div class="card-body">
+    <div class="info-row">
+      <span class="info-label">UUID DIP:</span>
+      <span class="info-value">{{ dipInfo.uuid || 'N/D' }}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Data Creazione:</span>
+      <span class="info-value">{{ dipInfo.creation_date ? (dipInfo.creation_date | date:'dd/MM/yyyy HH:mm') : 'N/D'
+        }}</span>
+    </div>
+
+    <div class="info-row highlight">
+      <span class="info-label">Numero Documenti:</span>
+      <span>{{ dipInfo.document_number ?? 'N/D' }}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Numero AIP:</span>
+      <span class="info-value">{{ dipInfo.aip_number ?? 'N/D' }}</span>
+    </div>
+  </div>
+  } @else {
+  <div class="card-body empty-state">
+    <p>Nessun pacchetto caricato. Carica un pacchetto e visualizza i dettagli qui.</p>
+  </div>
+  }
+</div>

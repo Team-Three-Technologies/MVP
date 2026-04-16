@@ -1,0 +1,123 @@
+.document-list-panel {
+  font-family: sans-serif;
+  padding: 16px;
+  background-color: white;
+  width: 100%;
+}
+
+.titolo-lista {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #000;
+}
+
+.lista-principale {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+.btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+  text-align: left;
+  display: inline-block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+
+.btn-link:hover {
+  text-decoration: underline;
+  color: blue;
+}
+
+.lista-allegati {
+  list-style-type: none;
+  padding: 0 0 0 12px;
+  margin: 4px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.messaggio-stato {
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+}
+
+.errore {
+  color: #cc0000;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.attachment-dash {
+  color: #666;
+  margin-right: 4px;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #888;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #1a73e8;
+}
+
+.eye-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 768px) {
+  .document-list-panel {
+    padding: 10px;
+  }
+
+  .titolo-lista {
+    margin-bottom: 12px;
+  }
+
+  .btn-link {
+    font-size: 13px;
+  }
+
+  .lista-allegati {
+    padding-left: 8px;
+  }
+}

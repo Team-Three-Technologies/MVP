@@ -1,0 +1,108 @@
+.preview-card {
+  border-radius: 8px;
+  background-color: #ffffff;
+  overflow: hidden;
+  font-family: sans-serif;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  background-color: #f5f5f5;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+ngx-doc-viewer {
+  display: block;
+}
+
+.pdf-viewer-frame {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: none;
+  border-radius: 4px;
+}
+
+.image-viewer-container {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  background-color: #525659;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.image-viewer-content {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.fallback-viewer {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: block;
+}
+
+
+.card-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.doc-name {
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.card-body {
+  background-color: #f9f9f9;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.empty-state,
+.loading-state {
+  color: #666;
+  text-align: center;
+  font-size: 14px;
+  height: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .card-header h3 {
+    font-size: 15px;
+  }
+
+  .doc-name {
+    width: 100%;
+    font-size: 13px;
+  }
+}

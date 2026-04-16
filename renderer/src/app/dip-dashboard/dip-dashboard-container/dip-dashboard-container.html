@@ -1,0 +1,46 @@
+<div class="dashboard-layout">
+  @if (!previewSelectedDocument()) {
+  <aside class="sidebar">
+    <section class="filters-section">
+      <app-filters (searchRequested)="onSearch($event)">
+      </app-filters>
+    </section>
+
+    <section class="dip-info-section">
+      <app-dip-details [dipInfo]="dipInfo()"></app-dip-details>
+    </section>
+  </aside>
+  <main class="main-content">
+    <section class="list-section">
+      <app-document-list [documents]="documentList()" [isLoading]="isLoading()"
+        (documentSelected)="onDocumentSelected($event)" (attachmentSelected)="onAttachmentSelected($event)"
+        (itemPreview)="onItemPreview($event)">
+      </app-document-list>
+    </section>
+    @if(selectedDocument() || selectedAllegato()) {
+    <section class="details-section">
+      <app-document-details [document]="selectedDocument()" [allegato]="selectedAllegato()">
+      </app-document-details>
+    </section>
+    }
+  </main>
+  } @else {
+  <div class="fullscreen-preview-container">
+    <div class="preview-toolbar">
+      <button (click)="closePreview()" class="back-btn">
+        <svg class="back-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Torna Indietro
+      </button>
+      <span class="preview-title">Anteprima di {{ previewSelectedDocument()?.nome_documento || 'Documento' }}</span>
+    </div>
+    <div class="preview-content">
+      <app-document-preview [document]="previewSelectedDocument()" [itemFormato]="previewItemFormato()"
+        [documentFileUrl]="documentFileUrl()" [isLoadingPreview]="isLoadingPreview()">
+      </app-document-preview>
+    </div>
+  </div>
+  }
+</div>

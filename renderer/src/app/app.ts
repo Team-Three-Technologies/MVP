@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { DipDashboardContainer } from './dip-dashboard/dip-dashboard-container/dip-dashboard-container';
+import { BackendFacade } from './facades/backend.facade';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [DipDashboardContainer],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

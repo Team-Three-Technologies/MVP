@@ -1,0 +1,24 @@
+<div class="sezione-filtri">
+  
+  <div class="lista-filtri">
+    @for (filtro of filtriAttivi; track $index) {
+      <div class="riga-filtro">
+        <select [(ngModel)]="filtro.type" class="input-base">
+          @for (opzione of opzioniFiltro; track opzione) {
+            <option [value]="opzione">{{ opzione }}</option>
+          }
+        </select>
+        
+        <input type="text" [(ngModel)]="filtro.value" placeholder="Valore..." class="input-base input-testo">
+        
+        <button class="btn-icona" (click)="removeFilters($index)" title="Rimuovi filtro">&#x2715;</button>
+      </div>
+    }
+  </div>
+
+  <div class="azioni-filtri">
+    <button class="btn-aggiungi" (click)="addFilters()">+ Aggiungi Filtro</button>
+    <button class="btn-cerca" (click)="startSearch()">Cerca</button>
+  </div>
+
+</div>
