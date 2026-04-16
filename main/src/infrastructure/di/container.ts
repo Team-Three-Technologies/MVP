@@ -15,6 +15,7 @@ import { DipIndexParserImpl } from '../../infrastructure/parsing/dip-index.parse
 import { AipInfoParserImpl } from '../../infrastructure/parsing/aip-info.parser.impl';
 import { MetadataParserImpl } from '../../infrastructure/parsing/metadata.parser.impl';
 import { AutoImportDipService } from '../../application/auto-import-dip.service';
+import { GetDipContentService } from '../../application/get-dip-content.service';
 import { GetDocumentDetailsService } from '../../application/get-document-details.service';
 import { DipHandler } from '../../presentation/dip.handler';
 import { DocumentHandler } from '../../presentation/document.handler';
@@ -32,34 +33,86 @@ function getLaunchDir(): string {
 export function registerDependencies(): void {
   container.register(TOKENS.AppConfig, {
     useValue: {
-      migrationsPath: path.join(app.getAppPath(), 'dist/main/main/src/infrastructure/database/migrations'),
+      migrationsPath: path.join(
+        app.getAppPath(),
+        'dist/main/main/src/infrastructure/database/migrations',
+      ),
       documentsPath: path.join(app.getPath('userData'), 'documents'),
-      appDir: getLaunchDir()
+      appDir: getLaunchDir(),
     } as AppConfig,
   });
 
   // infrastructure
   // db
-  container.register(TOKENS.DatabaseProvider, { useClass: DatabaseProvider }, { lifecycle: Lifecycle.Singleton });
+  container.register(
+    TOKENS.DatabaseProvider,
+    { useClass: DatabaseProvider },
+    { lifecycle: Lifecycle.Singleton },
+  );
   // fs
-  container.register(TOKENS.FileFinder, { useClass: FileFinderImpl }, { lifecycle: Lifecycle.Singleton });
+  container.register(
+    TOKENS.FileFinder,
+    { useClass: FileFinderImpl },
+    { lifecycle: Lifecycle.Singleton },
+  );
   // hash
-  container.register(TOKENS.HashService, { useClass: SHA256HashServiceImpl }, { lifecycle: Lifecycle.Singleton });
+  container.register(
+    TOKENS.HashService,
+    { useClass: SHA256HashServiceImpl },
+    { lifecycle: Lifecycle.Singleton },
+  );
   // parsing
-  container.register(TOKENS.DipParser, { useClass: DipParserImpl }, { lifecycle: Lifecycle.Singleton });
-  container.register(TOKENS.DipIndexParser, { useClass: DipIndexParserImpl }, { lifecycle: Lifecycle.Singleton });
-  container.register(TOKENS.AipInfoParser, { useClass: AipInfoParserImpl }, { lifecycle: Lifecycle.Singleton });
-  container.register(TOKENS.MetadataParser, { useClass: MetadataParserImpl }, { lifecycle: Lifecycle.Singleton });
+  container.register(
+    TOKENS.DipParser,
+    { useClass: DipParserImpl },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.DipIndexParser,
+    { useClass: DipIndexParserImpl },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.AipInfoParser,
+    { useClass: AipInfoParserImpl },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.MetadataParser,
+    { useClass: MetadataParserImpl },
+    { lifecycle: Lifecycle.Singleton },
+  );
 
   // repositories
-  container.register(TOKENS.DipRepository, { useClass: SQLiteDipRepository });
-  container.register(TOKENS.DocumentClassRepository, { useClass: SQLiteDocumentClassRepository });
-  container.register(TOKENS.ConservationProcessRepository, { useClass: SQLiteConservationProcessRepository });
-  container.register(TOKENS.DocumentRepository, { useClass: SQLiteDocumentRepository });
+  container.register(TOKENS.DipRepository, {
+    useClass: SQLiteDipRepository,
+  });
+  container.register(TOKENS.DocumentClassRepository, {
+    useClass: SQLiteDocumentClassRepository,
+  });
+  container.register(TOKENS.ConservationProcessRepository, {
+    useClass: SQLiteConservationProcessRepository,
+  });
+  container.register(TOKENS.DocumentRepository, {
+    useClass: SQLiteDocumentRepository,
+  });
 
   // use cases
-  container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService }, { lifecycle: Lifecycle.Singleton });
-  container.register(TOKENS.GetDocumentDetailsUseCase, { useClass: GetDocumentDetailsService }, { lifecycle: Lifecycle.Singleton });
+  container.register(
+    TOKENS.AutoImportDipUseCase,
+    { useClass: AutoImportDipService },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.GetDocumentDetailsUseCase,
+    { useClass: GetDocumentDetailsService },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.GetDipContentUseCase,
+    { useClass: GetDipContentService },
+    { lifecycle: Lifecycle.Singleton },
+  );
 
   // handlers
   container.registerSingleton(DipHandler);

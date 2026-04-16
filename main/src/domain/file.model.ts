@@ -2,8 +2,8 @@ export class File {
   constructor(
     private uuid: string,
     private path: string,
-    private size: string
-  ) { }
+    private size: string,
+  ) {}
 
   public getUuid(): string {
     return this.uuid;

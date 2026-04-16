@@ -4,7 +4,7 @@ import { SubjectVisitor } from './subject.visitor.abstract';
 export class SWSubject extends Subject {
   constructor(
     id: number | null,
-    private systemDen: string
+    private systemDen: string,
   ) {
     super(id);
   }

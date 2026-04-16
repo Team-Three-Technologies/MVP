@@ -16,14 +16,15 @@ export class AipInfoParserImpl implements AipInfoParser {
       trimValues: false,
       parseTagValue: false,
       parseAttributeValue: false,
-      isArray: (name) => [
-        'SubmissionSession',
-        'MoreData',
-        'Properties',
-        'MIMEType',
-        'DefaultValue',
-        'MimeTypeStats',
-      ].includes(name),
+      isArray: (name) =>
+        [
+          'SubmissionSession',
+          'MoreData',
+          'Properties',
+          'MIMEType',
+          'DefaultValue',
+          'MimeTypeStats',
+        ].includes(name),
     });
   }
 

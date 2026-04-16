@@ -43,14 +43,14 @@ export class DatabaseProvider {
     `);
 
     for (const file of files) {
-      const already = this.db
-        .prepare('SELECT name FROM migrations WHERE name = ?;')
-        .get(file);
+      const already = this.db.prepare('SELECT name FROM migrations WHERE name = ?;').get(file);
 
       if (!already) {
         const sql = fs.readFileSync(path.join(this.config.migrationsPath, file), 'utf-8');
         this.db.exec(sql);
-        this.db.prepare('INSERT INTO migrations (name, run_at) VALUES (?, ?);').run(file, new Date().toISOString());
+        this.db
+          .prepare('INSERT INTO migrations (name, run_at) VALUES (?, ?);')
+          .run(file, new Date().toISOString());
       }
     }
   }

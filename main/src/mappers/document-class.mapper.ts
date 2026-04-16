@@ -9,7 +9,7 @@ export class DocumentClassMapper {
       documentClassXml['@_version'],
       new Date(documentClassXml['@_validFrom']),
       documentClassXml['@_validTo'] ? new Date(documentClassXml['@_validTo']) : undefined,
-      dipUuid
+      dipUuid,
     );
   }
 }

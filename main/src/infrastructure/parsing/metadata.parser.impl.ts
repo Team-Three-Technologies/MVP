@@ -16,16 +16,17 @@ export class MetadataParserImpl implements MetadataParser {
       trimValues: false,
       parseTagValue: false,
       parseAttributeValue: false,
-      isArray: (name) => [
-        'Ruolo',
-        'ParoleChiave',
-        'TracciatureModificheDocumento',
-        'IndirizziDigitaliDiRiferimento',
-        'IndiceAllegati',
-        'TipoAgg',
-        'FileInformation',
-        'MoreData',
-      ].includes(name),
+      isArray: (name) =>
+        [
+          'Ruolo',
+          'ParoleChiave',
+          'TracciatureModificheDocumento',
+          'IndirizziDigitaliDiRiferimento',
+          'IndiceAllegati',
+          'TipoAgg',
+          'FileInformation',
+          'MoreData',
+        ].includes(name),
     });
   }
 

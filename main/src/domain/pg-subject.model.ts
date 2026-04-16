@@ -7,7 +7,7 @@ export class PGSubject extends Subject {
     private organizationDen: string,
     private vatCode: string | undefined,
     private officeDen: string | undefined,
-    private digitalAddresses: string[]
+    private digitalAddresses: string[],
   ) {
     super(id);
   }

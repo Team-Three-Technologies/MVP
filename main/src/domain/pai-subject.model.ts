@@ -10,7 +10,7 @@ export class PAISubject extends Subject {
     private ipaAooCode: string | undefined,
     private uorAdministrationDen: string | undefined,
     private ipaUorCode: string | undefined,
-    private digitalAddresses: string[]
+    private digitalAddresses: string[],
   ) {
     super(id);
   }

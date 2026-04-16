@@ -18,12 +18,12 @@ export class DipParserImpl implements DipParser {
     private readonly aipInfoParser: AipInfoParser,
     @inject(TOKENS.MetadataParser)
     private readonly metadataParser: MetadataParser,
-  ) { }
+  ) {}
 
   public async parseDipIndex(dipIndexPath: string): Promise<DiPIndexXml> {
     try {
       return await this.dipIndexParser.parseDipIndex(dipIndexPath);
-    } catch(e) {
+    } catch (e) {
       throw e;
     }
   }
@@ -31,12 +31,15 @@ export class DipParserImpl implements DipParser {
   public async parseAipInfo(aipInfoPath: string): Promise<AiPInfoXml> {
     try {
       return await this.aipInfoParser.parseAipInfo(aipInfoPath);
-    } catch(e) {
+    } catch (e) {
       throw e;
     }
-  }  
+  }
 
-  public async *parseDocumentsStream(dipIndex: DiPIndexXml, dir: string): AsyncIterable<DocumentParsingResult> {
+  public async *parseDocumentsStream(
+    dipIndex: DiPIndexXml,
+    dir: string,
+  ): AsyncIterable<DocumentParsingResult> {
     for (const dc of dipIndex.DiPIndex.PackageContent.DiPDocuments.DocumentClass) {
       for (const aip of dc.AiP) {
         for (const doc of aip.Document) {
@@ -44,16 +47,16 @@ export class DipParserImpl implements DipParser {
 
           const metadataFile = path.join(documentPath, doc.Files.Metadata['#text']);
           const metadata = await this.metadataParser.parseMetadata(metadataFile);
-          
+
           yield {
             uuid: doc['@_uuid'],
             conservationProcessUuid: aip['@_uuid'],
             documentPath: documentPath,
             primaryFilePath: doc.Files.Primary['#text'],
-            attachmentsFilesPath: (doc.Files.Attachments ?? []).map(a => {
+            attachmentsFilesPath: (doc.Files.Attachments ?? []).map((a) => {
               return [a['@_uuid'], a['#text']];
             }),
-            documentMetadata: metadata
+            documentMetadata: metadata,
           };
         }
       }

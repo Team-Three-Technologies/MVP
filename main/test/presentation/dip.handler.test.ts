@@ -13,13 +13,15 @@ describe('DipHandler', () => {
     container.register(TOKENS.AutoImportDipUseCase, {
       useValue: {
         execute: vi.fn().mockResolvedValue('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'),
-      }
+      },
     });
 
     const handler = container.resolve(DipHandler);
     const result = await handler.autoImport();
 
-    expect(result.data).toStrictEqual({ dipUuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' } as AutoImportResponseDTO);
+    expect(result.data).toStrictEqual({
+      dipUuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+    } as AutoImportResponseDTO);
     expect(result.error).toBeNull();
   });
 
@@ -27,7 +29,7 @@ describe('DipHandler', () => {
     container.register(TOKENS.AutoImportDipUseCase, {
       useValue: {
         execute: vi.fn().mockThrow(new Error('DiPIndex mancante')),
-      }
+      },
     });
 
     const handler = container.resolve(DipHandler);

@@ -3,6 +3,7 @@ import { ipcMain } from 'electron';
 import { DipHandler } from './dip.handler';
 import { DocumentHandler } from './document.handler';
 import { IPC_CHANNELS } from '../../ipc-channels';
+import { DipRequestDTO } from '../../../shared/request/dip.request.dto';
 import { DocumentRequestDTO } from '../../../shared/request/document.request.dto';
 
 export function registerAllHandlers(): void {
@@ -10,6 +11,11 @@ export function registerAllHandlers(): void {
   const documentHandler = container.resolve(DocumentHandler);
 
   ipcMain.handle(IPC_CHANNELS.DIP_AUTO_IMPORT, () => dipHandler.autoImport());
+  ipcMain.handle(IPC_CHANNELS.DIP_CONTENT, (_, dipRequestDto: DipRequestDTO) =>
+    dipHandler.getDipContent(dipRequestDto),
+  );
 
-  ipcMain.handle(IPC_CHANNELS.DOCUMENT_DETAILS, (_, documentRequestDto: DocumentRequestDTO) => documentHandler.getDocumentDetails(documentRequestDto));
+  ipcMain.handle(IPC_CHANNELS.DOCUMENT_DETAILS, (_, documentRequestDto: DocumentRequestDTO) =>
+    documentHandler.getDocumentDetails(documentRequestDto),
+  );
 }

@@ -3,8 +3,8 @@ export class Dip {
     private processUuid: string,
     private creationDate: Date,
     private documentsCount: number,
-    private aipCount: number
-  ) { }
+    private aipCount: number,
+  ) {}
 
   public getProcessUuid(): string {
     return this.processUuid;

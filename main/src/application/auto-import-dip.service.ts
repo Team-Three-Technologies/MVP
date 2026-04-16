@@ -28,8 +28,8 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     @inject(TOKENS.ConservationProcessRepository)
     private readonly conservationProcessRepository: ConservationProcessRepository,
     @inject(TOKENS.DocumentRepository)
-    private readonly documentRepository: DocumentRepository
-  ) { }
+    private readonly documentRepository: DocumentRepository,
+  ) {}
 
   public async execute(): Promise<AutoImportDipResponseDTO> {
     // leggero: 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403';
@@ -44,7 +44,8 @@ export class AutoImportDipService implements AutoImportDipUseCase {
 
     const dipIndex = await this.dipParser.parseDipIndex(dipIndexPath);
 
-    const dipMapper = new DipMapper(); const dip = dipMapper.toDomain(dipIndex.DiPIndex.PackageInfo);
+    const dipMapper = new DipMapper();
+    const dip = dipMapper.toDomain(dipIndex.DiPIndex.PackageInfo);
 
     if (!(await this.dipRepository.findByUuid(dip.getProcessUuid()))) {
       this.dipRepository.save(dip);

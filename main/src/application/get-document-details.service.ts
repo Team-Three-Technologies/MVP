@@ -8,8 +8,8 @@ import { DocumentRepository } from '../repositories/document.repository.interfac
 export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
   constructor(
     @inject(TOKENS.DocumentRepository)
-    private readonly documentRepository: DocumentRepository
-  ) { }
+    private readonly documentRepository: DocumentRepository,
+  ) {}
 
   public async execute(documentUuid: string): Promise<DocumentDetailsResponseDTO> {
     const document = await this.documentRepository.findByUuid(documentUuid);
@@ -23,19 +23,33 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
     let registrationTime = '';
 
     if (registrationType === 'Nessuno') {
-      registrationDate = document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.Nessuno.DataDocumento') ?? '';
-      registrationTime = document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.Nessuno.OraDocumento') ?? '';
+      registrationDate =
+        document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.Nessuno.DataDocumento') ?? '';
+      registrationTime =
+        document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.Nessuno.OraDocumento') ?? '';
     } else if (registrationType === 'Repertorio\\Registro') {
-      registrationDate = document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.DataRegistrazioneDocumento') ?? '';
-      registrationTime = document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.OraRegistrazioneDocumento') ?? '';
+      registrationDate =
+        document.getMetadataValue(
+          'DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.DataRegistrazioneDocumento',
+        ) ?? '';
+      registrationTime =
+        document.getMetadataValue(
+          'DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.OraRegistrazioneDocumento',
+        ) ?? '';
     } else if (registrationType === 'ProtocolloOrdinario\\ProtocolloEmergenza') {
-      registrationDate = document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.DataProtocollazioneDocumento') ?? '';
-      registrationTime = document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.OraProtocollazioneDocumento') ?? '';
+      registrationDate =
+        document.getMetadataValue(
+          'DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.DataProtocollazioneDocumento',
+        ) ?? '';
+      registrationTime =
+        document.getMetadataValue(
+          'DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.OraProtocollazioneDocumento',
+        ) ?? '';
     }
 
     const dto = {
-      documentUuid: document.getUuid(),
-      documentName: document.getMain().getFilename(),
+      uuid: document.getUuid(),
+      name: document.getMain().getFilename(),
       extension: document.getMain().getExtension(),
       registrationType: registrationType,
       registrationDate: registrationDate,
@@ -45,15 +59,15 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
       filesCount: Number(document.getMetadataValue('ArchimemoData.DocumentInformation.FilesCount')),
       totalSize: document.getMetadataValue('ArchimemoData.DocumentInformation.TotalSize') ?? '',
       attachmentsCount: document.getAttachments().length,
-      attachments: document.getAttachments().map(att => {
+      attachments: document.getAttachments().map((att) => {
         return {
           uuid: att.getUuid(),
           path: att.getPath(),
-          extension: att.getExtension()
+          extension: att.getExtension(),
         };
-      })
+      }),
     };
-    
+
     return dto;
   }
 }

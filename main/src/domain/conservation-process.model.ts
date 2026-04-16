@@ -6,8 +6,8 @@ export class ConservationProcess {
     private sipCount: number,
     private documentsCount: number,
     private filesCount: number,
-    private documentClassUuid: string
-  ) { }
+    private documentClassUuid: string,
+  ) {}
 
   public getUuid(): string {
     return this.uuid;

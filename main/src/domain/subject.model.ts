@@ -1,9 +1,7 @@
 import { SubjectVisitor } from './subject.visitor.abstract';
 
 export abstract class Subject {
-  constructor(
-    private id: number | null
-  ) { }
+  constructor(private id: number | null) {}
 
   public getId(): number | null {
     return this.id;

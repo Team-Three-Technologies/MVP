@@ -8,8 +8,8 @@ import { Metadata } from '../domain/metadata.model';
 import { DocumentRow } from './document.row';
 import { FileRow } from './file.row';
 import { MetadataRow } from './metadata.row';
-import { SubjectHydrationRow } from './subject.row';
-import { SubjectRepositoryVisitor } from './subject.repository.visitor'
+import { SubjectHydrationRow } from './subject-hydration.row';
+import { SubjectRepositoryVisitor } from './subject.repository.visitor';
 import { Subject } from '../domain/subject.model';
 import { MetadataTypeEnum } from '../domain/metadata-type.enum';
 import { RolesTypeEnum } from '../domain/roles-type.enum';
@@ -25,14 +25,13 @@ import { Person } from '../domain/person.model';
 export class SQLiteDocumentRepository implements DocumentRepository {
   constructor(
     @inject(TOKENS.DatabaseProvider)
-    private readonly dbProvider: DatabaseProvider
-  ) { }
+    private readonly dbProvider: DatabaseProvider,
+  ) {}
 
   public async save(document: Document): Promise<Document> {
     const main = document.getMain();
 
-    const fileInsertStmt = this.dbProvider.instance
-      .prepare(`
+    const fileInsertStmt = this.dbProvider.instance.prepare(`
         INSERT INTO files (uuid, percorso, dimensione)
         VALUES (@uuid, @path, @size);
       `);
@@ -44,19 +43,20 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     });
 
     this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO documenti (uuid, percorso, uuid_processo_conservazione, uuid_file_principale)
         VALUES (@uuid, @path, @conservationProcessUuid, @mainFileUuid);
-      `)
+      `,
+      )
       .run({
         uuid: document.getUuid(),
         path: document.getPath(),
         conservationProcessUuid: document.getConservationProcessUuid(),
-        mainFileUuid: document.getMain().getUuid()
+        mainFileUuid: document.getMain().getUuid(),
       });
 
-    const attatchmentInsertStmt = this.dbProvider.instance
-      .prepare(`
+    const attatchmentInsertStmt = this.dbProvider.instance.prepare(`
         INSERT INTO allegati (uuid_documento, uuid_file)
         VALUES (@uuid_doc, @uuid_file);
       `);
@@ -70,13 +70,12 @@ export class SQLiteDocumentRepository implements DocumentRepository {
 
       attatchmentInsertStmt.run({
         uuid_doc: document.getUuid(),
-        uuid_file: att.getUuid()
+        uuid_file: att.getUuid(),
       });
     }
 
     const docUuid = document.getUuid();
-    const metadataInsertStmt = this.dbProvider.instance
-      .prepare(`
+    const metadataInsertStmt = this.dbProvider.instance.prepare(`
         INSERT INTO metadata (nome, valore, tipo, uuid_documento)
         VALUES (@name, @value, @type, @documentUuid);
       `);
@@ -86,7 +85,7 @@ export class SQLiteDocumentRepository implements DocumentRepository {
         name: metadata.getName(),
         value: metadata.getValue(),
         type: metadata.getType(),
-        documentUuid: docUuid
+        documentUuid: docUuid,
       });
     }
 
@@ -95,14 +94,16 @@ export class SQLiteDocumentRepository implements DocumentRepository {
       const id = sub.accept(visitor);
       sub.setId(id);
       this.dbProvider.instance
-        .prepare(`
+        .prepare(
+          `
           INSERT INTO ruoli (uuid_documento, id_soggetto, ruolo)
           VALUES (@uuid_documento, @id_soggetto, @ruolo);
-        `)
+        `,
+        )
         .run({
           uuid_documento: document.getUuid(),
           id_soggetto: sub.getId(),
-          ruolo: role
+          ruolo: role,
         });
     }
 
@@ -115,7 +116,7 @@ export class SQLiteDocumentRepository implements DocumentRepository {
         return new PFSubject(
           r.id,
           new Person(r.pf_nome!, r.pf_cognome!, r.pf_cf ?? undefined),
-          r.pf_indirizzi?.split(' ') ?? []
+          r.pf_indirizzi?.split(' ') ?? [],
         );
       case 'Organizzazione':
         return new PGSubject(
@@ -123,7 +124,7 @@ export class SQLiteDocumentRepository implements DocumentRepository {
           r.pg_den_org!,
           r.pg_piva ?? undefined,
           r.pg_den_uff ?? undefined,
-          r.pg_indirizzi?.split(' ') ?? []
+          r.pg_indirizzi?.split(' ') ?? [],
         );
       case 'Amministrazione Pubblica italiana':
         return new PAISubject(
@@ -134,14 +135,14 @@ export class SQLiteDocumentRepository implements DocumentRepository {
           r.pai_cod_aoo ?? undefined,
           r.pai_den_uor ?? undefined,
           r.pai_cod_uor ?? undefined,
-          r.pai_indirizzi?.split(' ') ?? []
+          r.pai_indirizzi?.split(' ') ?? [],
         );
       case 'Amministrazione Pubblica estera':
         return new PAESubject(
           r.id,
           r.pae_den_amm!,
           r.pae_den_uff ?? undefined,
-          r.pae_indirizzi?.split(' ') ?? []
+          r.pae_indirizzi?.split(' ') ?? [],
         );
       case 'Assegnatario':
         return new ASSubject(
@@ -149,7 +150,7 @@ export class SQLiteDocumentRepository implements DocumentRepository {
           new Person(r.as_nome ?? undefined, r.as_cognome ?? undefined, r.as_cf ?? undefined),
           r.as_den_org!,
           r.as_den_uff!,
-          r.as_indirizzi?.split(' ') ?? []
+          r.as_indirizzi?.split(' ') ?? [],
         );
       case 'Documento prodotto automaticamente':
         return new SWSubject(r.id, r.sw_den_sistema!);
@@ -158,39 +159,53 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     }
   }
 
-  public async findByUuid(documentUuid: string): Promise<Document | null> {
-    const documentRow = this.dbProvider.instance
-      .prepare(`
-        SELECT * FROM documenti
-        WHERE uuid = ?;
-      `)
-      .get(documentUuid) as DocumentRow;
+  public async findMainFileByDocumentUuid(documentUuid: string): Promise<File> {
+    const row = this.dbProvider.instance
+      .prepare(
+        `
+        SELECT f.uuid, f.percorso, f.dimensione FROM files f
+        JOIN documenti d ON f.uuid = d.uuid_file_principale
+        WHERE d.uuid = ?;
+      `,
+      )
+      .get(documentUuid) as FileRow;
 
-    if (!documentRow) return null;
+    return new File(row.uuid, row.percorso, row.dimensione);
+  }
 
-    const mainFileRow = this.dbProvider.instance
-      .prepare(`
-        SELECT * FROM files
-        WHERE uuid = ?;
-      `)
-      .get(documentRow.uuid_file_principale) as FileRow;
-
-    const attachmentsRows = this.dbProvider.instance
-      .prepare(`
-        SELECT * FROM files f
+  public async findAttachmentsByDocumentUuid(documentUuid: string): Promise<File[]> {
+    const rows = this.dbProvider.instance
+      .prepare(
+        `
+        SELECT f.uuid, f.percorso, f.dimensione FROM files f
         JOIN allegati a ON f.uuid = a.uuid_file
         WHERE a.uuid_documento = ?;
-      `)
+      `,
+      )
       .all(documentUuid) as FileRow[];
 
-    const metadataRows = this.dbProvider.instance
-      .prepare(`
+    return rows.map((row) => new File(row.uuid, row.percorso, row.dimensione));
+  }
+
+  public async findMetadataByDocumentUuid(documentUuid: string): Promise<Metadata[]> {
+    const rows = this.dbProvider.instance
+      .prepare(
+        `
         SELECT * FROM metadata
         WHERE uuid_documento = ?  
-      `).all(documentUuid) as MetadataRow[];
+      `,
+      )
+      .all(documentUuid) as MetadataRow[];
 
-    const subjectRows = this.dbProvider.instance
-      .prepare(`
+    return rows.map((row) => new Metadata(row.nome, row.valore, row.tipo as MetadataTypeEnum));
+  }
+
+  public async findSubjectsByDocumentUuid(
+    documentUuid: string,
+  ): Promise<Map<Subject, RolesTypeEnum>> {
+    const rows = this.dbProvider.instance
+      .prepare(
+        `
         SELECT s.id, s.tipo, r.ruolo,
         pf.cognome AS pf_cognome, pf.nome AS pf_nome, pf.cf AS pf_cf, pf.indirizzi_dig_riferimento AS pf_indirizzi,
         pg.den_organizzazione AS pg_den_org, pg.p_iva AS pg_piva, pg.den_ufficio AS pg_den_uff, pg.indirizzi_dig_riferimento AS pg_indirizzi,
@@ -211,61 +226,135 @@ export class SQLiteDocumentRepository implements DocumentRepository {
         LEFT JOIN soggetti_as ass ON ass.id = s.id
         LEFT JOIN soggetti_sw sw ON sw.id  = s.id
         WHERE r.uuid_documento = ?;
-      `)
+      `,
+      )
       .all(documentUuid) as SubjectHydrationRow[];
 
     const subjects = new Map<Subject, RolesTypeEnum>();
-    for (const row of subjectRows) {
+    for (const row of rows) {
       subjects.set(this.fromHydrationRow(row), row.ruolo as RolesTypeEnum);
     }
 
+    return subjects;
+  }
+
+  public async findByUuid(documentUuid: string): Promise<Document | null> {
+    const row = this.dbProvider.instance
+      .prepare(
+        `
+        SELECT * FROM documenti
+        WHERE uuid = ?;
+      `,
+      )
+      .get(documentUuid) as DocumentRow;
+
+    if (!row) return null;
+
+    const mainFile = await this.findMainFileByDocumentUuid(documentUuid);
+    const attachments = await this.findAttachmentsByDocumentUuid(documentUuid);
+    const metadata = await this.findMetadataByDocumentUuid(documentUuid);
+    const subjects = await this.findSubjectsByDocumentUuid(documentUuid);
+
     return new Document(
-      documentRow.uuid,
-      documentRow.percorso,
-      new File(mainFileRow.uuid, mainFileRow.percorso, mainFileRow.dimensione),
-      attachmentsRows.map(a => new File(a.uuid, a.percorso, a.dimensione)),
-      metadataRows.map(met => new Metadata(met.nome, met.valore, met.tipo as MetadataTypeEnum)),
+      row.uuid,
+      row.percorso,
+      mainFile,
+      attachments,
+      metadata,
       subjects,
-      documentRow.uuid_processo_conservazione
+      row.uuid_processo_conservazione,
     );
   }
 
   public async findAllByDipUuid(dipUuid: string): Promise<Document[]> {
     const rows = this.dbProvider.instance
-      .prepare(`
-        SELECT * FROM documenti d
+      .prepare(
+        `
+        SELECT d.uuid, d.percorso, d.uuid_processo_conservazione, d.uuid_file_principale FROM documenti d
         JOIN processi_conservazione pc ON d.uuid_processo_conservazione = pc.uuid
         JOIN classi_documentali cd ON pc.uuid_classe_documentale = cd.uuid
         WHERE cd.uuid_dip = ?; 
-      `)
-      .all(dipUuid) as DocumentRow[]
+      `,
+      )
+      .all(dipUuid) as DocumentRow[];
 
-    // return rows.map((row: DocumentRow) => {
-    //   return new Document(row.uuid, row.percorso, /* costruire main, attachments e subjects */, row.uuid_processo_conservazione);
-    // }); // TODO: costruire oggetti
-    return [];
+    const documents: Document[] = [];
+
+    for (const row of rows) {
+      documents.push(
+        new Document(
+          row.uuid,
+          row.percorso,
+          await this.findMainFileByDocumentUuid(row.uuid),
+          await this.findAttachmentsByDocumentUuid(row.uuid),
+          await this.findMetadataByDocumentUuid(row.uuid),
+          await this.findSubjectsByDocumentUuid(row.uuid),
+          row.uuid_processo_conservazione,
+        ),
+      );
+    }
+
+    return documents;
   }
 
   public async findAllByDocumentClassUuid(documentClassUuid: string): Promise<Document[]> {
     const rows = this.dbProvider.instance
-      .prepare(`
-        SELECT * FROM documenti d
+      .prepare(
+        `
+        SELECT d.uuid, d.percorso, d.uuid_processo_conservazione, d.uuid_file_principale FROM documenti d
         JOIN processi_conservazione pc ON d.uuid_processo_conservazione = pc.uuid
         WHERE pc.uuid_classe_documentale = ?; 
-      `)
-      .all(documentClassUuid) as DocumentRow[]
+      `,
+      )
+      .all(documentClassUuid) as DocumentRow[];
 
-    return []; // TODO: costruire oggetti
+    const documents: Document[] = [];
+
+    for (const row of rows) {
+      documents.push(
+        new Document(
+          row.uuid,
+          row.percorso,
+          await this.findMainFileByDocumentUuid(row.uuid),
+          await this.findAttachmentsByDocumentUuid(row.uuid),
+          await this.findMetadataByDocumentUuid(row.uuid),
+          await this.findSubjectsByDocumentUuid(row.uuid),
+          row.uuid_processo_conservazione,
+        ),
+      );
+    }
+
+    return documents;
   }
 
-  public async findAllByConservationProcessUuid(conservationProcessUuid: string): Promise<Document[]> {
+  public async findAllByConservationProcessUuid(
+    conservationProcessUuid: string,
+  ): Promise<Document[]> {
     const rows = this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         SELECT * FROM documenti d
         WHERE d.uuid_processo_conservazione = ?; 
-      `)
-      .all(conservationProcessUuid) as DocumentRow[]
+      `,
+      )
+      .all(conservationProcessUuid) as DocumentRow[];
 
-    return []; // TODO: costruire oggetti
+    const documents: Document[] = [];
+
+    for (const row of rows) {
+      documents.push(
+        new Document(
+          row.uuid,
+          row.percorso,
+          await this.findMainFileByDocumentUuid(row.uuid),
+          await this.findAttachmentsByDocumentUuid(row.uuid),
+          await this.findMetadataByDocumentUuid(row.uuid),
+          await this.findSubjectsByDocumentUuid(row.uuid),
+          row.uuid_processo_conservazione,
+        ),
+      );
+    }
+
+    return documents;
   }
 }

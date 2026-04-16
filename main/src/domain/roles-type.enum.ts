@@ -8,5 +8,5 @@ export enum RolesTypeEnum {
   RGD = 'Responsabile della Gestione Documentale',
   RSP = 'Responsabile del Servizio di Protocollo',
   SER = 'Soggetto che effettua la registrazione',
-  ALT = 'Altro'
+  ALT = 'Altro',
 }

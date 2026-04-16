@@ -1,15 +1,18 @@
-export interface DocumentEssentialsDTO
-{
-    document_uuid:string | undefined;
-    document_name:string | undefined;
-    document_attachments: {uuid:string, name:string}[] | undefined;
+export interface DocumentEssentialsAttachmentDTO {
+  uuid: string;
+  name: string;
 }
 
-export interface DipDetailsResponseDTO
-{
-    uuid:string | undefined;
-    creation_date:Date | undefined;
-    document_number:number | undefined;
-    aip_number:number | undefined;
-    document_list: DocumentEssentialsDTO[] | undefined;
+export interface DocumentEssentialsDTO {
+  documentUuid: string;
+  documentName: string;
+  documentAttachments: DocumentEssentialsAttachmentDTO[];
+}
+
+export interface DipContentResponseDTO {
+  uuid: string;
+  creationDate: Date;
+  documentNumber: number;
+  aipNumber: number;
+  documentsList: DocumentEssentialsDTO[];
 }

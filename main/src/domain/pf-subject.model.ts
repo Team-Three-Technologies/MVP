@@ -6,7 +6,7 @@ export class PFSubject extends Subject {
   constructor(
     id: number | null,
     private person: Person,
-    private digitalAddresses: string[]
+    private digitalAddresses: string[],
   ) {
     super(id);
   }

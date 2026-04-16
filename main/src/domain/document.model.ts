@@ -11,8 +11,8 @@ export class Document {
     private attachments: File[],
     private metadata: Metadata[],
     private subjects: Map<Subject, RolesTypeEnum>,
-    private conservationProcessUuid: string
-  ) { }
+    private conservationProcessUuid: string,
+  ) {}
 
   public getUuid(): string {
     return this.uuid;
@@ -71,6 +71,6 @@ export class Document {
   }
 
   public getMetadataValue(name: string): string | null {
-    return this.metadata.find(metadata => metadata.getName() === name)?.getValue() ?? null;
+    return this.metadata.find((metadata) => metadata.getName() === name)?.getValue() ?? null;
   }
 }

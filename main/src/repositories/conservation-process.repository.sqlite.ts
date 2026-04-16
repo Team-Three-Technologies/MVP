@@ -9,15 +9,17 @@ import { ConservationProcessRow } from './conservation-process.row';
 export class SQLiteConservationProcessRepository implements ConservationProcessRepository {
   constructor(
     @inject(TOKENS.DatabaseProvider)
-    private readonly dbProvider: DatabaseProvider
-  ) { }
+    private readonly dbProvider: DatabaseProvider,
+  ) {}
 
   public async save(conservationProcess: ConservationProcess): Promise<ConservationProcess> {
     this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO processi_conservazione (uuid, data_creazione, dimensione_totale, numero_sip, numero_documenti, numero_file_documenti, uuid_classe_documentale)
         VALUES (@uuid, @creationDate, @totalSize, @sipCount, @documentsCount, @filesCount, @documentClassUuid);
-      `)
+      `,
+      )
       .run({
         uuid: conservationProcess.getUuid(),
         creationDate: conservationProcess.getCreationDate().toISOString(),
@@ -25,7 +27,7 @@ export class SQLiteConservationProcessRepository implements ConservationProcessR
         sipCount: conservationProcess.getSipCount(),
         documentsCount: conservationProcess.getDocumentsCount(),
         filesCount: conservationProcess.getFilesCount(),
-        documentClassUuid: conservationProcess.getDocumentClassUuid()
+        documentClassUuid: conservationProcess.getDocumentClassUuid(),
       });
 
     return conservationProcess;
@@ -33,12 +35,14 @@ export class SQLiteConservationProcessRepository implements ConservationProcessR
 
   public async findAllByDipUuid(dipUuid: string): Promise<ConservationProcess[]> {
     const rows = this.dbProvider.instance
-      .prepare(`
-        SELECT * FROM processi_conservazione pc
+      .prepare(
+        `
+        SELECT pc.uuid, pc.data_creazione, pc.dimensione_totale, pc.numero_sip, pc.numero_documenti, pc.numero_file_documenti, pc.uuid_classe_documentale FROM processi_conservazione pc
         JOIN classi_documentali cd ON pc.uuid_classe_documentale = cd.uuid
         JOIN archivi_dip ad ON cd.uuid_dip = ad.uuid_processo
         WHERE ad.uuid_processo = ?;
-      `)
+      `,
+      )
       .all(dipUuid) as ConservationProcessRow[];
 
     return rows.map((row: ConservationProcessRow) => {
@@ -49,18 +53,22 @@ export class SQLiteConservationProcessRepository implements ConservationProcessR
         row.numero_sip,
         row.numero_documenti,
         row.numero_file_documenti,
-        row.uuid_classe_documentale
+        row.uuid_classe_documentale,
       );
     });
   }
 
-  public async findAllByDocumentClassUuid(documentClassUuid: string): Promise<ConservationProcess[]> {
+  public async findAllByDocumentClassUuid(
+    documentClassUuid: string,
+  ): Promise<ConservationProcess[]> {
     const rows = this.dbProvider.instance
-      .prepare(`
-        SELECT * FROM processi_conservazione pc
+      .prepare(
+        `
+        SELECT pc.uuid, pc.data_creazione, pc.dimensione_totale, pc.numero_sip, pc.numero_documenti, pc.numero_file_documenti, pc.uuid_classe_documentale FROM processi_conservazione pc
         JOIN classi_documentali cd ON pc.uuid_classe_documentale = cd.uuid
         WHERE cd.uuid = ?;
-      `)
+      `,
+      )
       .all(documentClassUuid) as ConservationProcessRow[];
 
     return rows.map((row: ConservationProcessRow) => {
@@ -71,7 +79,7 @@ export class SQLiteConservationProcessRepository implements ConservationProcessR
         row.numero_sip,
         row.numero_documenti,
         row.numero_file_documenti,
-        row.uuid_classe_documentale
+        row.uuid_classe_documentale,
       );
     });
   }

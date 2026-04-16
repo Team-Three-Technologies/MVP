@@ -2,11 +2,11 @@ export interface AttachmentResponseDTO {
   uuid: string;
   path: string;
   extension: string;
-} 
+}
 
 export interface DocumentDetailsResponseDTO {
-  documentUuid: string;
-  documentName: string;
+  uuid: string;
+  name: string;
   extension: string;
   registrationType: string;
   registrationDate: string;
@@ -16,5 +16,5 @@ export interface DocumentDetailsResponseDTO {
   filesCount: number;
   totalSize: string;
   attachmentsCount: number;
-  attachments: AttachmentResponseDTO[]
+  attachments: AttachmentResponseDTO[];
 }

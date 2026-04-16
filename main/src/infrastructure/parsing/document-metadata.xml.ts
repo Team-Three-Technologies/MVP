@@ -88,16 +88,59 @@ export interface RuoloXml {
   Altro?: TipoSoggetto13Xml;
 }
 
-export interface TipoSoggetto11Xml { TipoRuolo: string; PF?: PFXml; PG?: PGXml; PAI?: PAIXml; PAE?: PAEXml; }
-export interface TipoSoggetto12Xml { TipoRuolo: string; PF?: PFXml; PG?: PGXml; PAI?: PAIXml; PAE?: PAEXml; }
-export interface TipoSoggetto13Xml { TipoRuolo: string; PF?: PFXml; PG?: PGXml; PAI?: PAIXml; PAE?: PAEXml; }
-export interface TipoSoggetto21Xml { TipoRuolo: string; PF?: PFXml; PG?: PGXml; }
-export interface TipoSoggetto22Xml { TipoRuolo: string; AS: ASXml; }
-export interface TipoSoggetto31Xml { TipoRuolo: string; PF?: PFXml; PG?: PGXml; PAI?: PAIXml; PAE?: PAEXml; }
-export interface TipoSoggetto32Xml { TipoRuolo: string; PF: PFXml; }
-export interface TipoSoggetto33Xml { TipoRuolo: string; PF: PFXml; }
-export interface TipoSoggetto34Xml { TipoRuolo: string; PF: PFXml; }
-export interface TipoSoggetto4Xml { TipoRuolo: string; SW: SWXml; }
+export interface TipoSoggetto11Xml {
+  TipoRuolo: string;
+  PF?: PFXml;
+  PG?: PGXml;
+  PAI?: PAIXml;
+  PAE?: PAEXml;
+}
+export interface TipoSoggetto12Xml {
+  TipoRuolo: string;
+  PF?: PFXml;
+  PG?: PGXml;
+  PAI?: PAIXml;
+  PAE?: PAEXml;
+}
+export interface TipoSoggetto13Xml {
+  TipoRuolo: string;
+  PF?: PFXml;
+  PG?: PGXml;
+  PAI?: PAIXml;
+  PAE?: PAEXml;
+}
+export interface TipoSoggetto21Xml {
+  TipoRuolo: string;
+  PF?: PFXml;
+  PG?: PGXml;
+}
+export interface TipoSoggetto22Xml {
+  TipoRuolo: string;
+  AS: ASXml;
+}
+export interface TipoSoggetto31Xml {
+  TipoRuolo: string;
+  PF?: PFXml;
+  PG?: PGXml;
+  PAI?: PAIXml;
+  PAE?: PAEXml;
+}
+export interface TipoSoggetto32Xml {
+  TipoRuolo: string;
+  PF: PFXml;
+}
+export interface TipoSoggetto33Xml {
+  TipoRuolo: string;
+  PF: PFXml;
+}
+export interface TipoSoggetto34Xml {
+  TipoRuolo: string;
+  PF: PFXml;
+}
+export interface TipoSoggetto4Xml {
+  TipoRuolo: string;
+  SW: SWXml;
+}
 
 export interface PFXml {
   Cognome: string;

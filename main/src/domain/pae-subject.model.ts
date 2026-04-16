@@ -6,7 +6,7 @@ export class PAESubject extends Subject {
     id: number | null,
     private administrationDen: string,
     private officeDen: string | undefined,
-    private digitalAddresses: string[]
+    private digitalAddresses: string[],
   ) {
     super(id);
   }

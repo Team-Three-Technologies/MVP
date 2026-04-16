@@ -5,8 +5,8 @@ export class DocumentClass {
     private version: string,
     private validFrom: Date,
     private validTo: Date | undefined,
-    private dipUuid: string
-  ) { }
+    private dipUuid: string,
+  ) {}
 
   public getUuid(): string {
     return this.uuid;

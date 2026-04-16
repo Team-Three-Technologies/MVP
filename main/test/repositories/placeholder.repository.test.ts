@@ -9,5 +9,5 @@ describe('PlaceholderRepository', () => {
 
   it('Restituisce true', () => {
     expect(true).toBeTruthy();
-  })
+  });
 });

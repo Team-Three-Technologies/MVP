@@ -7,7 +7,7 @@ export class DipMapper {
       packageInfo.ProcessUUID,
       new Date(packageInfo.CreationDate),
       Number(packageInfo.DocumentsCount),
-      Number(packageInfo.AiPCount)
+      Number(packageInfo.AiPCount),
     );
   }
 }

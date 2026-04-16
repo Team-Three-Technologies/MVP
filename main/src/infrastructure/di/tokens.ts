@@ -1,5 +1,6 @@
 export const TOKENS = {
   AutoImportDipUseCase: Symbol('AutoImportDipUseCase'),
+  GetDipContentUseCase: Symbol('GetDipContentUseCase'),
   GetDocumentDetailsUseCase: Symbol('GetDocumentDetailsUseCase'),
   FileFinder: Symbol('FileFinder'),
   HashService: Symbol('HashService'),

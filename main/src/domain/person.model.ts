@@ -2,8 +2,8 @@ export class Person {
   constructor(
     private name: string | undefined,
     private surname: string | undefined,
-    private cf: string | undefined
-  ) { }
+    private cf: string | undefined,
+  ) {}
 
   public getName(): string | undefined {
     return this.name;

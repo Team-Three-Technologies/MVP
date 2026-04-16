@@ -12,7 +12,7 @@ describe('AutoImportDipService', () => {
     container.register(TOKENS.FileFinder, {
       useValue: {
         findDipIndex: vi.fn().mockResolvedValue(null),
-      }
+      },
     });
 
     container.register(TOKENS.DipParser, { useValue: {} });
@@ -22,10 +22,12 @@ describe('AutoImportDipService', () => {
     container.register(TOKENS.DocumentRepository, { useValue: {} });
     container.register(TOKENS.AppConfig, { useValue: {} });
 
-    container.register(TOKENS.AutoImportDipUseCase, { useClass: AutoImportDipService });
+    container.register(TOKENS.AutoImportDipUseCase, {
+      useClass: AutoImportDipService,
+    });
 
     const service = container.resolve(TOKENS.AutoImportDipUseCase) as AutoImportDipService;
-  
+
     await expect(service.execute()).rejects.toThrow('DiPIndex mancante');
   });
 });

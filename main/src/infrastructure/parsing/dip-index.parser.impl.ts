@@ -16,20 +16,21 @@ export class DipIndexParserImpl implements DipIndexParser {
       trimValues: false,
       parseTagValue: false,
       parseAttributeValue: false,
-      isArray: (name) => [
-        'ComplianceStatement',
-        'DocumentClass',
-        'AiP',
-        'Document',
-        'Report',
-        'SiP',
-        'Attachments',
-        'RepresentationInformation',
-        'RappresentationInformationUUID',
-        'MoreData',
-        'Content',
-        'Statement',
-      ].includes(name),
+      isArray: (name) =>
+        [
+          'ComplianceStatement',
+          'DocumentClass',
+          'AiP',
+          'Document',
+          'Report',
+          'SiP',
+          'Attachments',
+          'RepresentationInformation',
+          'RappresentationInformationUUID',
+          'MoreData',
+          'Content',
+          'Statement',
+        ].includes(name),
     });
   }
 
@@ -45,9 +46,9 @@ export class DipIndexParserImpl implements DipIndexParser {
     if (!raw.DiPIndex) {
       throw new Error(`Elemento DiPIndex mancante`);
     }
-    
+
     this.assertRequiredStructure(raw);
-    
+
     return raw;
   }
 
@@ -67,8 +68,15 @@ export class DipIndexParserImpl implements DipIndexParser {
     }
 
     for (const documentClass of diPIndex.PackageContent.DiPDocuments.DocumentClass) {
-      if (!documentClass['@_uuid'] || !documentClass['@_name'] || !documentClass['@_version'] || !documentClass['@_validFrom']) {
-        throw new Error('Attributi obbligatori mancanti in DocumentClass (uuid, name, version, validFrom)');
+      if (
+        !documentClass['@_uuid'] ||
+        !documentClass['@_name'] ||
+        !documentClass['@_version'] ||
+        !documentClass['@_validFrom']
+      ) {
+        throw new Error(
+          'Attributi obbligatori mancanti in DocumentClass (uuid, name, version, validFrom)',
+        );
       }
 
       if (!documentClass.AiP?.length) {

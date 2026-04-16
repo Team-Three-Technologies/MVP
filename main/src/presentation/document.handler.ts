@@ -10,12 +10,16 @@ import { DocumentRequestDTO } from '../../../shared/request/document.request.dto
 export class DocumentHandler {
   constructor(
     @inject(TOKENS.GetDocumentDetailsUseCase)
-    private readonly getDocumentDetailsUseCase: GetDocumentDetailsUseCase
-  ) { }
+    private readonly getDocumentDetailsUseCase: GetDocumentDetailsUseCase,
+  ) {}
 
-  public async getDocumentDetails(documentRequestDto: DocumentRequestDTO): Promise<IpcResponse<DocumentDetailsResponseDTO>> {
+  public async getDocumentDetails(
+    documentRequestDto: DocumentRequestDTO,
+  ): Promise<IpcResponse<DocumentDetailsResponseDTO>> {
     try {
-      const response = await this.getDocumentDetailsUseCase.execute(documentRequestDto.documentUuid);
+      const response = await this.getDocumentDetailsUseCase.execute(
+        documentRequestDto.documentUuid,
+      );
       return ok(response);
     } catch (e) {
       return fail((e as Error).message);

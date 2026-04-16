@@ -4,5 +4,5 @@ export enum MetadataTypeEnum {
   BOOLEAN = 'boolean',
   DATE = 'date',
   TIME = 'time',
-  BASE64 = 'base64'
+  BASE64 = 'base64',
 }

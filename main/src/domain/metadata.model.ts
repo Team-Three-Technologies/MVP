@@ -4,8 +4,8 @@ export class Metadata {
   constructor(
     private name: string,
     private value: string,
-    private type: MetadataTypeEnum
-  ) { }
+    private type: MetadataTypeEnum,
+  ) {}
 
   public getName(): string {
     return this.name;

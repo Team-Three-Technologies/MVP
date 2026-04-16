@@ -13,17 +13,19 @@ import { SWSubject } from '../domain/sw-subject.model';
 export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
   constructor(
     @inject(TOKENS.DatabaseProvider)
-    private readonly dbProvider: DatabaseProvider
-  ) { }
+    private readonly dbProvider: DatabaseProvider,
+  ) {}
 
   private insertBaseSubject(type: string): number {
     const row = this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO soggetti (tipo)
         VALUES (@tipo);
-      `)
+      `,
+      )
       .run({
-        tipo: type
+        tipo: type,
       });
 
     return Number(row.lastInsertRowid);
@@ -32,10 +34,12 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
   public visitAsSubject(subject: ASSubject): number {
     const id = this.insertBaseSubject(SubjectTypeEnum.AS);
     this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO soggetti_as (id, cognome, nome, cf, den_organizzazione, den_ufficio, indirizzi_dig_riferimento)
         VALUES (@id, @cognome, @nome, @cf, @den_org, @den_uff, @indirizzi);
-      `)
+      `,
+      )
       .run({
         id: id,
         cognome: subject.getSurname(),
@@ -43,7 +47,7 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
         cf: subject.getCf(),
         den_org: subject.getOrganizationDen(),
         den_uff: subject.getOfficeDen(),
-        indirizzi: subject.getDigitalAddresses().join(' ')
+        indirizzi: subject.getDigitalAddresses().join(' '),
       });
 
     return id;
@@ -52,15 +56,17 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
   public visitPaeSubject(subject: PAESubject): number {
     const id = this.insertBaseSubject(SubjectTypeEnum.PAE);
     this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO soggetti_pae (id, den_amministrazione, den_ufficio, indirizzi_dig_riferimento)
         VALUES (@id, @den_amm, @den_uff, @indirizzi);
-      `)
+      `,
+      )
       .run({
         id: id,
         den_amm: subject.getAdministrationDen(),
         den_uff: subject.getOfficeDen(),
-        indirizzi: subject.getDigitalAddresses().join(' ')
+        indirizzi: subject.getDigitalAddresses().join(' '),
       });
 
     return id;
@@ -69,10 +75,12 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
   public visitPaiSubject(subject: PAISubject): number {
     const id = this.insertBaseSubject(SubjectTypeEnum.PAI);
     this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO soggetti_pai (id, den_amministrazione, codice_ipa, den_amministrazione_aoo, codice_ipa_aoo, den_amministrazione_uor, codice_ipa_uor, indirizzi_dig_riferimento)
         VALUES (@id, @den, @ipa, @den_aoo, @aoo, @den_uor, @uor, @indirizzi);
-      `)
+      `,
+      )
       .run({
         id: id,
         den: subject.getAdministrationDen(),
@@ -81,7 +89,7 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
         aoo: subject.getIpaAooCode(),
         den_uor: subject.getUorAdministrationDen(),
         uor: subject.getIpaUorCode(),
-        indirizzi: subject.getDigitalAddresses().join(' ')
+        indirizzi: subject.getDigitalAddresses().join(' '),
       });
 
     return id;
@@ -90,16 +98,18 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
   public visitPfSubject(subject: PFSubject): number {
     const id = this.insertBaseSubject(SubjectTypeEnum.PF);
     this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO soggetti_pf (id, cognome, nome, cf, indirizzi_dig_riferimento)
         VALUES (@id, @cognome, @nome, @cf, @indirizzi);
-      `)
+      `,
+      )
       .run({
         id: id,
         cognome: subject.getSurname(),
         nome: subject.getName(),
         cf: subject.getCf(),
-        indirizzi: subject.getDigitalAddresses().join(' ')
+        indirizzi: subject.getDigitalAddresses().join(' '),
       });
 
     return id;
@@ -108,16 +118,18 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
   public visitPgSubject(subject: PGSubject): number {
     const id = this.insertBaseSubject(SubjectTypeEnum.PG);
     this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO soggetti_pg (id, den_organizzazione, p_iva, den_ufficio, indirizzi_dig_riferimento)
         VALUES (@id, @den_org, @p_iva, @den_uff, @indirizzi);
-      `)
+      `,
+      )
       .run({
         id: id,
         den_org: subject.getOrganizationDen(),
         p_iva: subject.getVatCode(),
         den_uff: subject.getOfficeDen(),
-        indirizzi: subject.getDigitalAddresses().join(' ')
+        indirizzi: subject.getDigitalAddresses().join(' '),
       });
 
     return id;
@@ -126,13 +138,15 @@ export class SubjectRepositoryVisitor implements SubjectVisitor<number> {
   public visitSwSubject(subject: SWSubject): number {
     const id = this.insertBaseSubject(SubjectTypeEnum.SW);
     this.dbProvider.instance
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO soggetti_sw (id, den_sistema)
         VALUES (@id, @den_sis);
-      `)
+      `,
+      )
       .run({
         id: id,
-        den_sis: subject.getSystemDen()
+        den_sis: subject.getSystemDen(),
       });
 
     return id;

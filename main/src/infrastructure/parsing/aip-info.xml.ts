@@ -71,7 +71,14 @@ export interface PreservationSessionXml {
   Start: AiPInfoXml['AiPInfo']['Process']['Start'];
   End?: AiPInfoXml['AiPInfo']['Process']['End'];
   HashEncoding?: 'Hex' | 'Base64' | string;
-  AdvancedElectronicSignaturesFormat?: 'XAdES' | 'PAdES' | 'CAdES' | 'JAdES' | 'ASiC' | 'Other' | string;
+  AdvancedElectronicSignaturesFormat?:
+    | 'XAdES'
+    | 'PAdES'
+    | 'CAdES'
+    | 'JAdES'
+    | 'ASiC'
+    | 'Other'
+    | string;
   DocumentsStats: {
     SipCount?: number | string;
     DocumentsCount: number | string;
@@ -80,13 +87,15 @@ export interface PreservationSessionXml {
       '#text'?: string;
       '@_ark-aip:unit'?: 'bytes' | 'kilobytes' | 'megabytes' | 'gigabytes' | 'terabytes' | string;
     };
-    MimeTypeStats?: Array<{
-      '#text'?: string;
-      '@_ark-aip:MIMETypeExtension'?: string;
-    }> | {
-      '#text'?: string;
-      '@_ark-aip:MIMETypeExtension'?: string;
-    };
+    MimeTypeStats?:
+      | Array<{
+          '#text'?: string;
+          '@_ark-aip:MIMETypeExtension'?: string;
+        }>
+      | {
+          '#text'?: string;
+          '@_ark-aip:MIMETypeExtension'?: string;
+        };
     MoreData?: MoreDataXml | MoreDataXml[];
   };
   MoreData?: MoreDataXml | MoreDataXml[];

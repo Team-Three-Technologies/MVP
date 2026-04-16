@@ -10,7 +10,7 @@ export class ConservationProcessMapper {
       Number(aipInfoXml.AiPInfo.Process.PreservationSession.DocumentsStats.SipCount),
       Number(aipInfoXml.AiPInfo.Process.PreservationSession.DocumentsStats.DocumentsCount),
       Number(aipInfoXml.AiPInfo.Process.PreservationSession.DocumentsStats.DocumentsFilesCount),
-      aipInfoXml.AiPInfo.Process.DocumentClass['@_ark-aip:uuid']
+      aipInfoXml.AiPInfo.Process.DocumentClass['@_ark-aip:uuid'],
     );
   }
 }

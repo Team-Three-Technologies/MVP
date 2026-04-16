@@ -8,7 +8,7 @@ export class ASSubject extends Subject {
     private person: Person,
     private organizationDen: string,
     private officeDen: string,
-    private digitalAddresses: string[]
+    private digitalAddresses: string[],
   ) {
     super(id);
   }

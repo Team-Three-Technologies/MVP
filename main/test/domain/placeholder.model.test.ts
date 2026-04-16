@@ -9,5 +9,5 @@ describe('PlaceholderModel', () => {
 
   it('Restituisce true', () => {
     expect(true).toBeTruthy();
-  })
+  });
 });
