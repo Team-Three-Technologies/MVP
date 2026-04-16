@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { DipDashboardContainer } from './dip-dashboard/dip-dashboard-container/dip-dashboard-container';
 import { BackendFacade } from './facades/backend.facade';
 
