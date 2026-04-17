@@ -1,6 +1,6 @@
 import { container, Lifecycle } from 'tsyringe';
 import { TOKENS } from './tokens';
-import type { AppConfig } from '../app.config';
+import { AppConfig } from '../app.config';
 import * as path from 'node:path';
 import { app } from 'electron';
 import { DatabaseProvider } from '../database/database.provider';
@@ -8,14 +8,16 @@ import { SQLiteDipRepository } from '../../repositories/dip.repository.sqlite';
 import { SQLiteDocumentClassRepository } from '../../repositories/document-class.repository.sqlite';
 import { SQLiteConservationProcessRepository } from '../../repositories/conservation-process.repository.sqlite';
 import { SQLiteDocumentRepository } from '../../repositories/document.repository.sqlite';
-import { FileFinderImpl } from '../../infrastructure/fs/file.finder.impl';
-import { SHA256HashServiceImpl } from '../../infrastructure/hash/hash.service.sha256.impl';
+import { LocalFileSystemProvider } from '../fs/file-system.provider.local';
+import { Base64ProviderImpl } from '../../infrastructure/base64/base64.provider.impl';
+import { CryptoHashProvider } from '../hash/hash.provider.crypto';
 import { DipParserImpl } from '../../infrastructure/parsing/dip.parser.impl';
 import { DipIndexParserImpl } from '../../infrastructure/parsing/dip-index.parser.impl';
 import { AipInfoParserImpl } from '../../infrastructure/parsing/aip-info.parser.impl';
 import { MetadataParserImpl } from '../../infrastructure/parsing/metadata.parser.impl';
 import { AutoImportDipService } from '../../application/auto-import-dip.service';
 import { GetDipContentService } from '../../application/get-dip-content.service';
+import { CheckDipIntegrityService } from '../../application/check-dip-integrity.service';
 import { GetDocumentDetailsService } from '../../application/get-document-details.service';
 import { DipHandler } from '../../presentation/dip.handler';
 import { DocumentHandler } from '../../presentation/document.handler';
@@ -43,22 +45,28 @@ export function registerDependencies(): void {
   });
 
   // infrastructure
+  // fs
+  container.register(
+    TOKENS.FileSystemProvider,
+    { useClass: LocalFileSystemProvider },
+    { lifecycle: Lifecycle.Singleton },
+  );
   // db
   container.register(
     TOKENS.DatabaseProvider,
     { useClass: DatabaseProvider },
     { lifecycle: Lifecycle.Singleton },
   );
-  // fs
+  // base64
   container.register(
-    TOKENS.FileFinder,
-    { useClass: FileFinderImpl },
+    TOKENS.Base64Provider,
+    { useClass: Base64ProviderImpl },
     { lifecycle: Lifecycle.Singleton },
   );
   // hash
   container.register(
-    TOKENS.HashService,
-    { useClass: SHA256HashServiceImpl },
+    TOKENS.HashProvider,
+    { useClass: CryptoHashProvider },
     { lifecycle: Lifecycle.Singleton },
   );
   // parsing
@@ -106,6 +114,11 @@ export function registerDependencies(): void {
   container.register(
     TOKENS.GetDocumentDetailsUseCase,
     { useClass: GetDocumentDetailsService },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.CheckDipIntegrityUseCase,
+    { useClass: CheckDipIntegrityService },
     { lifecycle: Lifecycle.Singleton },
   );
   container.register(

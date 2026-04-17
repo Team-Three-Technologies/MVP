@@ -1,9 +1,11 @@
 export const TOKENS = {
   AutoImportDipUseCase: Symbol('AutoImportDipUseCase'),
   GetDipContentUseCase: Symbol('GetDipContentUseCase'),
+  CheckDipIntegrityUseCase: Symbol('CheckDipIntegrityUseCase'),
   GetDocumentDetailsUseCase: Symbol('GetDocumentDetailsUseCase'),
-  FileFinder: Symbol('FileFinder'),
-  HashService: Symbol('HashService'),
+  FileSystemProvider: Symbol('FileSystemProvider'),
+  Base64Provider: Symbol('Base64Provider'),
+  HashProvider: Symbol('HashProvider'),
   DipParser: Symbol('DipParser'),
   DipIndexParser: Symbol('DipIndexParser'),
   AipInfoParser: Symbol('AipInfoParser'),

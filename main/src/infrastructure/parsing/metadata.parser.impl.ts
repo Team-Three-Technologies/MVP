@@ -1,7 +1,6 @@
 import { injectable } from 'tsyringe';
 import { MetadataParser } from './metadata.parser.interface';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import * as fsp from 'node:fs/promises';
 import { DocumentMetadataXml } from './document-metadata.xml';
 
 @injectable()
@@ -30,11 +29,9 @@ export class MetadataParserImpl implements MetadataParser {
     });
   }
 
-  public async parseMetadata(xmlPath: string): Promise<DocumentMetadataXml> {
-    const xml = await fsp.readFile(xmlPath, 'utf-8');
-
+  public async parseMetadata(xml: string): Promise<DocumentMetadataXml> {
     const validation = XMLValidator.validate(xml);
-    if (!validation) {
+    if (validation !== true) {
       throw new Error(`DocumentMetadata XML non valido: ${JSON.stringify(validation)}`);
     }
 

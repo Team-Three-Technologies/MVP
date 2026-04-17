@@ -6,7 +6,7 @@ import { DocumentRepository } from '../repositories/document.repository.interfac
 import {
   DipContentResponseDTO,
   DocumentEssentialsDTO,
-} from '../../../shared/response/dip-details.response.dto';
+} from '../../../shared/response/dip-content.response.dto';
 import { File } from '../domain/file.model';
 
 @injectable()

@@ -1,7 +1,6 @@
 import { injectable } from 'tsyringe';
 import { DipIndexParser } from './dip-index.parser.interface';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import * as fsp from 'node:fs/promises';
 import { DiPIndexXml } from './dip-index.xml';
 
 @injectable()
@@ -34,11 +33,9 @@ export class DipIndexParserImpl implements DipIndexParser {
     });
   }
 
-  public async parseDipIndex(xmlPath: string): Promise<DiPIndexXml> {
-    const xml = await fsp.readFile(xmlPath, 'utf-8');
-
+  public async parseDipIndex(xml: string): Promise<DiPIndexXml> {
     const validation = XMLValidator.validate(xml);
-    if (!validation) {
+    if (validation !== true) {
       throw new Error(`DiPIndex XML non valido: ${JSON.stringify(validation)}`);
     }
 

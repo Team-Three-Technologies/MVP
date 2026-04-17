@@ -4,10 +4,12 @@ import { DipParser } from './dip.parser.interface';
 import { DipIndexParser } from './dip-index.parser.interface';
 import { AipInfoParser } from './aip-info.parser.interface';
 import { MetadataParser } from './metadata.parser.interface';
+import { FileSystemProvider } from '../fs/file-system.provider.interface';
 import { DiPIndexXml } from './dip-index.xml';
 import { AiPInfoXml } from './aip-info.xml';
 import { DocumentParsingResult } from './document-parsing.result';
 import * as path from 'node:path';
+import { Buffer } from 'node:buffer';
 
 @injectable()
 export class DipParserImpl implements DipParser {
@@ -18,22 +20,16 @@ export class DipParserImpl implements DipParser {
     private readonly aipInfoParser: AipInfoParser,
     @inject(TOKENS.MetadataParser)
     private readonly metadataParser: MetadataParser,
+    @inject(TOKENS.FileSystemProvider)
+    private readonly fileSystemProvider: FileSystemProvider,
   ) {}
 
-  public async parseDipIndex(dipIndexPath: string): Promise<DiPIndexXml> {
-    try {
-      return await this.dipIndexParser.parseDipIndex(dipIndexPath);
-    } catch (e) {
-      throw e;
-    }
+  public async parseDipIndex(dipIndexBuffer: Buffer): Promise<DiPIndexXml> {
+    return await this.dipIndexParser.parseDipIndex(dipIndexBuffer.toString('utf8'));
   }
 
-  public async parseAipInfo(aipInfoPath: string): Promise<AiPInfoXml> {
-    try {
-      return await this.aipInfoParser.parseAipInfo(aipInfoPath);
-    } catch (e) {
-      throw e;
-    }
+  public async parseAipInfo(aipInfoBuffer: Buffer): Promise<AiPInfoXml> {
+    return await this.aipInfoParser.parseAipInfo(aipInfoBuffer.toString('utf8'));
   }
 
   public async *parseDocumentsStream(
@@ -46,7 +42,9 @@ export class DipParserImpl implements DipParser {
           const documentPath = path.join(dir, aip.AiPRoot, doc.DocumentPath);
 
           const metadataFile = path.join(documentPath, doc.Files.Metadata['#text']);
-          const metadata = await this.metadataParser.parseMetadata(metadataFile);
+
+          const metadataBuffer = await this.fileSystemProvider.readFile(metadataFile);
+          const metadata = await this.metadataParser.parseMetadata(metadataBuffer.toString('utf8'));
 
           yield {
             uuid: doc['@_uuid'],
