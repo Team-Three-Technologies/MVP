@@ -193,7 +193,7 @@ export interface ChiaveDescrittivaXml {
 }
 
 export interface AllegatiXml {
-  NumeroAllegati: number | string;
+  NumeroAllegati: number;
   IndiceAllegati?: IndiceAllegatiXml[];
 }
 
@@ -265,7 +265,7 @@ export interface DocumentInformationXml {
   PreservationProcessUUID: string;
   PreservationProcessDate: string;
   DocumentUUID: string;
-  FilesCount: number | string;
+  FilesCount: number;
   TotalSize: SizeXml;
   MoreData?: MoreDataXml[];
 }

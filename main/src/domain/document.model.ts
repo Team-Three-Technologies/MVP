@@ -70,7 +70,11 @@ export class Document {
     this.conservationProcessUuid = conservationProcessUuid;
   }
 
-  public getMetadataValue(name: string): string | null {
+  public getMetadataValueByName(name: string): string | null {
     return this.metadata.find((metadata) => metadata.getName() === name)?.getValue() ?? null;
+  }
+
+  public getMetadataValueByRegex(name: RegExp): string | null {
+    return this.metadata.find((metadata) => metadata.getName().match(name))?.getValue() ?? null;
   }
 }

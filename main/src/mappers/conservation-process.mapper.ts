@@ -1,6 +1,8 @@
+import { injectable } from 'tsyringe';
 import { AiPInfoXml } from '../infrastructure/parsing/aip-info.xml';
 import { ConservationProcess } from '../domain/conservation-process.model';
 
+@injectable()
 export class ConservationProcessMapper {
   public toDomain(aipInfoXml: AiPInfoXml): ConservationProcess {
     return new ConservationProcess(

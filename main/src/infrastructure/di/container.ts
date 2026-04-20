@@ -3,18 +3,24 @@ import { TOKENS } from './tokens';
 import { AppConfig } from '../app.config';
 import * as path from 'node:path';
 import { app } from 'electron';
-import { DatabaseProvider } from '../database/database.provider';
-import { SQLiteDipRepository } from '../../repositories/dip.repository.sqlite';
-import { SQLiteDocumentClassRepository } from '../../repositories/document-class.repository.sqlite';
-import { SQLiteConservationProcessRepository } from '../../repositories/conservation-process.repository.sqlite';
-import { SQLiteDocumentRepository } from '../../repositories/document.repository.sqlite';
 import { LocalFileSystemProvider } from '../fs/file-system.provider.local';
+import { DatabaseProvider } from '../database/database.provider';
 import { Base64ProviderImpl } from '../../infrastructure/base64/base64.provider.impl';
 import { CryptoHashProvider } from '../hash/hash.provider.crypto';
 import { DipParserImpl } from '../../infrastructure/parsing/dip.parser.impl';
 import { DipIndexParserImpl } from '../../infrastructure/parsing/dip-index.parser.impl';
 import { AipInfoParserImpl } from '../../infrastructure/parsing/aip-info.parser.impl';
 import { MetadataParserImpl } from '../../infrastructure/parsing/metadata.parser.impl';
+import { SQLiteDipRepository } from '../../repositories/dip.repository.sqlite';
+import { SQLiteDocumentClassRepository } from '../../repositories/document-class.repository.sqlite';
+import { SQLiteConservationProcessRepository } from '../../repositories/conservation-process.repository.sqlite';
+import { SQLiteDocumentRepository } from '../../repositories/document.repository.sqlite';
+import { MetadataFlattener } from '../../mappers/metadata.flattener';
+import { SubjectMapper } from '../../mappers/subject.mapper';
+import { DocumentMapper } from '../../mappers/document.mapper';
+import { ConservationProcessMapper } from '../../mappers/conservation-process.mapper';
+import { DocumentClassMapper } from '../../mappers/document-class.mapper';
+import { DipMapper } from '../../mappers/dip.mapper';
 import { AutoImportDipService } from '../../application/auto-import-dip.service';
 import { GetDipContentService } from '../../application/get-dip-content.service';
 import { CheckDipIntegrityService } from '../../application/check-dip-integrity.service';
@@ -92,18 +98,62 @@ export function registerDependencies(): void {
   );
 
   // repositories
-  container.register(TOKENS.DipRepository, {
-    useClass: SQLiteDipRepository,
-  });
-  container.register(TOKENS.DocumentClassRepository, {
-    useClass: SQLiteDocumentClassRepository,
-  });
-  container.register(TOKENS.ConservationProcessRepository, {
-    useClass: SQLiteConservationProcessRepository,
-  });
-  container.register(TOKENS.DocumentRepository, {
-    useClass: SQLiteDocumentRepository,
-  });
+  container.register(
+    TOKENS.DipRepository,
+    {
+      useClass: SQLiteDipRepository,
+    },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.DocumentClassRepository,
+    {
+      useClass: SQLiteDocumentClassRepository,
+    },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.ConservationProcessRepository,
+    {
+      useClass: SQLiteConservationProcessRepository,
+    },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.DocumentRepository,
+    {
+      useClass: SQLiteDocumentRepository,
+    },
+    { lifecycle: Lifecycle.Singleton },
+  );
+
+  // mappers
+  container.register(
+    TOKENS.MetadataFlattener,
+    { useClass: MetadataFlattener },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.SubjectMapper,
+    { useClass: SubjectMapper },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.DocumentMapper,
+    { useClass: DocumentMapper },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.ConservationProcessMapper,
+    { useClass: ConservationProcessMapper },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.DocumentClassMapper,
+    { useClass: DocumentClassMapper },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(TOKENS.DipMapper, { useClass: DipMapper }, { lifecycle: Lifecycle.Singleton });
 
   // use cases
   container.register(

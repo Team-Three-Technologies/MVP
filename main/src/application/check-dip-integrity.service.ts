@@ -25,19 +25,54 @@ export class CheckDipIntegrityService implements CheckDipIntegrityUseCase {
   public async execute(dipUuid: string): Promise<DipIntegrityResponseDTO> {
     const documents = await this.documentRepository.findAllByDipUuid(dipUuid);
 
+    const results = [];
+
     for (const doc of documents) {
-      const trace = doc.getMetadataValue('IdDoc.ImprontaCrittograficaDelDocumento.Impronta');
-      if (trace) {
+      const trace = doc.getMetadataValueByName(
+        'DocumentoInformatico.IdDoc.ImprontaCrittograficaDelDocumento.Impronta',
+      );
+      const algorithm = doc.getMetadataValueByName(
+        'DocumentoInformatico.IdDoc.ImprontaCrittograficaDelDocumento.Algoritmo',
+      );
+      let result = false;
+      if (trace && algorithm) {
         const expectedHash = this.base64Provider.decodeToBytes(trace);
         const docPath = path.join(doc.getPath(), doc.getMain().getPath());
         const actualHash = await this.hashProvider.hashStream(
           this.fileSystemProvider.createReadStream(docPath),
           HASH_ALGORITHMS.SHA256,
         );
-        const result = this.hashProvider.areEqualsHashBytes(expectedHash, actualHash);
+        result = this.hashProvider.areEqualsHashBytes(expectedHash, actualHash);
       }
+      const attachments = [];
+      for (const att of doc.getAttachments()) {
+        for (let i = 0; i < doc.getAttachments().length; i++) {
+          const attUuid = doc.getMetadataValueByName(
+            `DocumentoInformatico.Allegati.IndiceAllegati.${i}.IdDoc.Identificativo`,
+          );
+          if (attUuid && att.getUuid() === attUuid) {
+            const attTrace = doc.getMetadataValueByName(
+              `DocumentoInformatico.Allegati.IndiceAllegati.${i}.IdDoc.ImprontaCrittograficaDelDocumento.Impronta`,
+            );
+            if (attTrace) {
+              const expectedHash = this.base64Provider.decodeToBytes(attTrace);
+              const attPath = path.join(doc.getPath(), att.getPath());
+              const actualHash = await this.hashProvider.hashStream(
+                this.fileSystemProvider.createReadStream(attPath),
+                HASH_ALGORITHMS.SHA256,
+              );
+              const result = this.hashProvider.areEqualsHashBytes(expectedHash, actualHash);
+              attachments.push({ uuid: att.getUuid(), status: result });
+            }
+          }
+        }
+      }
+      results.push({
+        integrity: { uuid: doc.getUuid(), status: result },
+        attachments: attachments,
+      });
     }
 
-    return {};
+    return { documents: results };
   }
 }

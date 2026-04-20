@@ -22,6 +22,14 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     private readonly fileSystemProvider: FileSystemProvider,
     @inject(TOKENS.DipParser)
     private readonly dipParser: DipParser,
+    @inject(TOKENS.DipMapper)
+    private readonly dipMapper: DipMapper,
+    @inject(TOKENS.DocumentClassMapper)
+    private readonly documentClassMapper: DocumentClassMapper,
+    @inject(TOKENS.ConservationProcessMapper)
+    private readonly conservationProcessMapper: ConservationProcessMapper,
+    @inject(TOKENS.DocumentMapper)
+    private readonly documentMapper: DocumentMapper,
     @inject(TOKENS.DipRepository)
     private readonly dipRepository: DipRepository,
     @inject(TOKENS.DocumentClassRepository)
@@ -46,8 +54,7 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     const dipIndexBuffer = await this.fileSystemProvider.readFile(dipIndexPath);
     const dipIndex = await this.dipParser.parseDipIndex(dipIndexBuffer);
 
-    const dipMapper = new DipMapper();
-    const dip = dipMapper.toDomain(dipIndex.DiPIndex.PackageInfo);
+    const dip = this.dipMapper.toDomain(dipIndex.DiPIndex.PackageInfo);
 
     if (!(await this.dipRepository.findByUuid(dip.getProcessUuid()))) {
       await this.dipRepository.save(dip);
@@ -55,10 +62,8 @@ export class AutoImportDipService implements AutoImportDipUseCase {
       throw new Error('DiP già importato in precedenza');
     }
 
-    const documentClassMapper = new DocumentClassMapper();
-    const conservationProcessMapper = new ConservationProcessMapper();
     for (const dc of dipIndex.DiPIndex.PackageContent.DiPDocuments.DocumentClass) {
-      const documentClass = documentClassMapper.toDomain(dc, dip.getProcessUuid());
+      const documentClass = this.documentClassMapper.toDomain(dc, dip.getProcessUuid());
       await this.documentClassRepository.save(documentClass);
 
       for (const cp of dc.AiP) {
@@ -74,14 +79,13 @@ export class AutoImportDipService implements AutoImportDipUseCase {
         const aipInfoBuffer = await this.fileSystemProvider.readFile(aipInfoPath);
         const aipInfo = await this.dipParser.parseAipInfo(aipInfoBuffer);
 
-        const conservationProcess = conservationProcessMapper.toDomain(aipInfo);
+        const conservationProcess = this.conservationProcessMapper.toDomain(aipInfo);
         await this.conservationProcessRepository.save(conservationProcess);
       }
     }
 
-    const documentMapper = new DocumentMapper();
     for await (const doc of this.dipParser.parseDocumentsStream(dipIndex, dir)) {
-      const document = documentMapper.toDomain(doc);
+      const document = this.documentMapper.toDomain(doc);
       await this.documentRepository.save(document);
     }
 

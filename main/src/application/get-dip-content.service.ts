@@ -7,7 +7,6 @@ import {
   DipContentResponseDTO,
   DocumentEssentialsDTO,
 } from '../../../shared/response/dip-content.response.dto';
-import { File } from '../domain/file.model';
 
 @injectable()
 export class GetDipContentService implements GetDipContentUseCase {

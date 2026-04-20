@@ -80,9 +80,9 @@ export interface PreservationSessionXml {
     | 'Other'
     | string;
   DocumentsStats: {
-    SipCount?: number | string;
-    DocumentsCount: number | string;
-    DocumentsFilesCount: number | string;
+    SipCount?: number;
+    DocumentsCount: number;
+    DocumentsFilesCount: number;
     DocumentsOverallSize: {
       '#text'?: string;
       '@_ark-aip:unit'?: 'bytes' | 'kilobytes' | 'megabytes' | 'gigabytes' | 'terabytes' | string;
