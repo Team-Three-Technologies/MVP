@@ -34,7 +34,10 @@ export class AutoImportDipService implements AutoImportDipUseCase {
   public async execute(): Promise<AutoImportDipResponseDTO> {
     // leggero: 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403';
     // 4gb: 'D:\\filip\\Downloads\\dip.2026115.d7a27175-16b3-4a7d-877d-26f2b1baadda';
-    const dir = 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'; // this.fileFinder.getStartDir();
+    //linux :/home/nenad/GitHubRepo/ProgettoSWE/materiale_proponente/EsempiDiP/dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403
+      //'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'; // this.fileFinder.getStartDir();
+
+    const dir ='/home/nenad/GitHubRepo/ProgettoSWE/materiale_proponente/EsempiDiP/dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'
     const dipIndexPath = await this.fileFinder.findDipIndex(dir);
 
     // se non trova il dip index
