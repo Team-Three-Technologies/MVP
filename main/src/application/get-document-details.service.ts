@@ -41,7 +41,7 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
         document.getMetadataValueByName('ArchimemoData.DocumentInformation.FilesCount'),
       ),
       totalSize:
-        document.getMetadataValueByName('ArchimemoData.DocumentInformation.TotalSize') ?? '',
+        `${document.getMetadataValueByName('ArchimemoData.DocumentInformation.TotalSize.#text')} ${document.getMetadataValueByName('ArchimemoData.DocumentInformation.TotalSize.@_unit')}`,
       attachmentsCount: document.getAttachments().length,
       attachments: document.getAttachments().map((att) => {
         return {
@@ -51,8 +51,6 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
         };
       }),
     };
-
-    console.log(dto);
 
     return dto;
   }

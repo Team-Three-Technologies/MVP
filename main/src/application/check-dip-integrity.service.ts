@@ -7,7 +7,6 @@ import { Base64Provider } from '../infrastructure/base64/base64.provider.interfa
 import { HashProvider } from '../infrastructure/hash/hash.provider.interface';
 import { DipIntegrityResponseDTO } from '../../../shared/response/dip-integrity.response.dto';
 import * as path from 'node:path';
-import { HASH_ALGORITHMS } from '../infrastructure/hash/hash.algorithms';
 
 @injectable()
 export class CheckDipIntegrityService implements CheckDipIntegrityUseCase {
@@ -20,7 +19,7 @@ export class CheckDipIntegrityService implements CheckDipIntegrityUseCase {
     private readonly base64Provider: Base64Provider,
     @inject(TOKENS.HashProvider)
     private readonly hashProvider: HashProvider,
-  ) {}
+  ) { }
 
   public async execute(dipUuid: string): Promise<DipIntegrityResponseDTO> {
     const documents = await this.documentRepository.findAllByDipUuid(dipUuid);
@@ -34,13 +33,14 @@ export class CheckDipIntegrityService implements CheckDipIntegrityUseCase {
       const algorithm = doc.getMetadataValueByName(
         'DocumentoInformatico.IdDoc.ImprontaCrittograficaDelDocumento.Algoritmo',
       );
+
       let result = false;
       if (trace && algorithm) {
         const expectedHash = this.base64Provider.decodeToBytes(trace);
         const docPath = path.join(doc.getPath(), doc.getMain().getPath());
         const actualHash = await this.hashProvider.hashStream(
           this.fileSystemProvider.createReadStream(docPath),
-          HASH_ALGORITHMS.SHA256,
+          this.hashProvider.toHashAlgorithm(algorithm),
         );
         result = this.hashProvider.areEqualsHashBytes(expectedHash, actualHash);
       }
@@ -54,12 +54,15 @@ export class CheckDipIntegrityService implements CheckDipIntegrityUseCase {
             const attTrace = doc.getMetadataValueByName(
               `DocumentoInformatico.Allegati.IndiceAllegati.${i}.IdDoc.ImprontaCrittograficaDelDocumento.Impronta`,
             );
-            if (attTrace) {
+            const attAlgorithm = doc.getMetadataValueByName(
+              `DocumentoInformatico.Allegati.IndiceAllegati.${i}.IdDoc.ImprontaCrittograficaDelDocumento.Algoritmo`,
+            );
+            if (attTrace && attAlgorithm) {
               const expectedHash = this.base64Provider.decodeToBytes(attTrace);
               const attPath = path.join(doc.getPath(), att.getPath());
               const actualHash = await this.hashProvider.hashStream(
                 this.fileSystemProvider.createReadStream(attPath),
-                HASH_ALGORITHMS.SHA256,
+                this.hashProvider.toHashAlgorithm(attAlgorithm),
               );
               const result = this.hashProvider.areEqualsHashBytes(expectedHash, actualHash);
               attachments.push({ uuid: att.getUuid(), status: result });
@@ -72,7 +75,6 @@ export class CheckDipIntegrityService implements CheckDipIntegrityUseCase {
         attachments: attachments,
       });
     }
-
     return { documents: results };
   }
 }

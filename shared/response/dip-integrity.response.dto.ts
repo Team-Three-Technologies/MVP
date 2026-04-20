@@ -1,13 +1,13 @@
-export interface FileIntegrity {
+export interface FileIntegrityDTO {
   uuid: string;
   status: boolean;
 }
 
-export interface DocumentIntegrity {
-  integrity: FileIntegrity;
-  attachments: FileIntegrity[];
+export interface DocumentIntegrityDTO {
+  integrity: FileIntegrityDTO;
+  attachments: FileIntegrityDTO[];
 }
 
 export interface DipIntegrityResponseDTO {
-  documents: DocumentIntegrity[];
+  documents: DocumentIntegrityDTO[];
 }
