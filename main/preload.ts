@@ -5,6 +5,7 @@ import { DocumentRequestDTO } from '../shared/request/document.request.dto';
 const IPC_CHANNELS = {
   DIP_AUTO_IMPORT: 'dip:auto-import',
   DIP_CONTENT: 'dip:content',
+  DIP_CHECK_INTEGRITY: 'dip:check-integrity',
   DOCUMENT_DETAILS: 'document:details',
 };
 
@@ -13,6 +14,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   dip: { // invoca evento (si trova in ipc-channels.ts)
     autoImport: () => ipcRenderer.invoke(IPC_CHANNELS.DIP_AUTO_IMPORT),
     content: (dipRequestDto: DipRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_CONTENT, dipRequestDto),
+    checkIntegrity: (dipRequestDto: DipRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_CHECK_INTEGRITY, dipRequestDto),
   },
   document: {
     details: (documentRequestDto: DocumentRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENT_DETAILS, documentRequestDto),

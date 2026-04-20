@@ -14,6 +14,9 @@ export function registerAllHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.DIP_CONTENT, (_, dipRequestDto: DipRequestDTO) =>
     dipHandler.getDipContent(dipRequestDto),
   );
+  ipcMain.handle(IPC_CHANNELS.DIP_CHECK_INTEGRITY, (_, dipRequestDto: DipRequestDTO) =>
+    dipHandler.checkDipIntegrity(dipRequestDto),
+  );
 
   ipcMain.handle(IPC_CHANNELS.DOCUMENT_DETAILS, (_, documentRequestDto: DocumentRequestDTO) =>
     documentHandler.getDocumentDetails(documentRequestDto),

@@ -1,7 +1,6 @@
 import { injectable } from 'tsyringe';
 import { AipInfoParser } from './aip-info.parser.interface';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import * as fsp from 'node:fs/promises';
 import { AiPInfoXml } from './aip-info.xml';
 
 @injectable()
@@ -28,11 +27,9 @@ export class AipInfoParserImpl implements AipInfoParser {
     });
   }
 
-  public async parseAipInfo(xmlPath: string): Promise<AiPInfoXml> {
-    const xml = await fsp.readFile(xmlPath, 'utf-8');
-
+  public async parseAipInfo(xml: string): Promise<AiPInfoXml> {
     const validation = XMLValidator.validate(xml);
-    if (!validation) {
+    if (validation !== true) {
       throw new Error(`AiPInfo XML non valido: ${JSON.stringify(validation)}`);
     }
 

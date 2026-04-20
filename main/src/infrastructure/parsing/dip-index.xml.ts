@@ -16,8 +16,8 @@ export interface PackageInfoXml {
   CreatingApplication: CreatingApplicationXml;
   ProcessUUID: string;
   CreationDate: string;
-  DocumentsCount: number | string;
-  AiPCount: number | string;
+  DocumentsCount: number;
+  AiPCount: number;
 }
 
 export interface CreatingApplicationXml {
@@ -78,7 +78,7 @@ export interface DocumentXml {
 }
 
 export interface DocumentFilesXml {
-  '@_FilesCount': number | string;
+  '@_FilesCount': number;
   Metadata: FileXml;
   Primary: FileXml;
   Attachments?: FileXml[];

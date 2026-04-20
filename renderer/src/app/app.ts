@@ -34,11 +34,18 @@ export class App implements OnInit {
     return res.data;
   }
 
+  async test4(): Promise<string> {
+    const res = await this.api.dip.checkIntegrity({ dipUuid: 'cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403' });
+    if (res.error) throw new Error(res.error);
+    return res.data;
+  }
+
   async ngOnInit() {
     try {
-      this.message = await this.test();
+      // this.message = await this.test();
       this.message = await this.test2();
       this.message = await this.test3();
+      this.message = await this.test4();
     } catch (e) {
       this.message = (e as Error).message;
     } finally {

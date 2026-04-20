@@ -18,46 +18,30 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
       throw new Error('Non esiste un documento con questo UUID');
     }
 
-    const registrationType = document.getMetadataValue('DatiDiRegistrazione.TipoRegistro') ?? '';
-    let registrationDate = '';
-    let registrationTime = '';
-
-    if (registrationType === 'Nessuno') {
-      registrationDate =
-        document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.Nessuno.DataDocumento') ?? '';
-      registrationTime =
-        document.getMetadataValue('DatiDiRegistrazione.TipoRegistro.Nessuno.OraDocumento') ?? '';
-    } else if (registrationType === 'Repertorio\\Registro') {
-      registrationDate =
-        document.getMetadataValue(
-          'DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.DataRegistrazioneDocumento',
-        ) ?? '';
-      registrationTime =
-        document.getMetadataValue(
-          'DatiDiRegistrazione.TipoRegistro.Repertorio_Registro.OraRegistrazioneDocumento',
-        ) ?? '';
-    } else if (registrationType === 'ProtocolloOrdinario\\ProtocolloEmergenza') {
-      registrationDate =
-        document.getMetadataValue(
-          'DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.DataProtocollazioneDocumento',
-        ) ?? '';
-      registrationTime =
-        document.getMetadataValue(
-          'DatiDiRegistrazione.TipoRegistro.ProtocolloOrdinario_ProtocolloEmergenza.OraProtocollazioneDocumento',
-        ) ?? '';
-    }
-
     const dto = {
       uuid: document.getUuid(),
       name: document.getMain().getFilename(),
       extension: document.getMain().getExtension(),
-      registrationType: registrationType,
-      registrationDate: registrationDate,
-      registrationTime: registrationTime,
-      content: document.getMetadataValue('ChiaveDescrittiva.Oggetto') ?? '',
-      version: document.getMetadataValue('VersioneDelDocumento') ?? '',
-      filesCount: Number(document.getMetadataValue('ArchimemoData.DocumentInformation.FilesCount')),
-      totalSize: document.getMetadataValue('ArchimemoData.DocumentInformation.TotalSize') ?? '',
+      registrationType:
+        document.getMetadataValueByRegex(
+          /DocumentoInformatico\.DatiDiRegistrazione\.TipoRegistro\.\w+\.TipoRegistro/,
+        ) ?? '',
+      registrationDate:
+        document.getMetadataValueByRegex(
+          /DocumentoInformatico\.DatiDiRegistrazione\.TipoRegistro\.\w+\.Data\w+/,
+        ) ?? '',
+      registrationTime:
+        document.getMetadataValueByRegex(
+          /DocumentoInformatico\.DatiDiRegistrazione\.TipoRegistro\.\w+\.Ora\w+/,
+        ) ?? '',
+      content:
+        document.getMetadataValueByName('DocumentoInformatico.ChiaveDescrittiva.Oggetto') ?? '',
+      version: document.getMetadataValueByName('DocumentoInformatico.VersioneDelDocumento') ?? '',
+      filesCount: Number(
+        document.getMetadataValueByName('ArchimemoData.DocumentInformation.FilesCount'),
+      ),
+      totalSize:
+        document.getMetadataValueByName('ArchimemoData.DocumentInformation.TotalSize') ?? '',
       attachmentsCount: document.getAttachments().length,
       attachments: document.getAttachments().map((att) => {
         return {
@@ -67,6 +51,8 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
         };
       }),
     };
+
+    console.log(dto);
 
     return dto;
   }

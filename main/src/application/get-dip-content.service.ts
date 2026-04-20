@@ -6,8 +6,7 @@ import { DocumentRepository } from '../repositories/document.repository.interfac
 import {
   DipContentResponseDTO,
   DocumentEssentialsDTO,
-} from '../../../shared/response/dip-details.response.dto';
-import { File } from '../domain/file.model';
+} from '../../../shared/response/dip-content.response.dto';
 
 @injectable()
 export class GetDipContentService implements GetDipContentUseCase {
