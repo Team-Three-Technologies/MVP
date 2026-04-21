@@ -3,7 +3,7 @@ import { Readable } from 'node:stream';
 
 export interface FileSystemProvider {
   getStartDir(): string;
-  ensureDir(dir: string): Promise<string | undefined>;
+  ensureDir(dir: string): Promise<string | null>;
   findFile(dir: string, namePattern: RegExp): Promise<string | null>;
   readFile(path: string): Promise<Buffer>;
   readDir(path: string): Promise<string[]>;

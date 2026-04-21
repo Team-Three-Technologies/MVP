@@ -7,6 +7,7 @@ import { ExportFileUseCase } from '../application/export-file.use-case';
 import { DocumentRequestDTO } from '../../../shared/request/document.request.dto';
 import { DocumentDetailsResponseDTO } from '../../../shared/response/document-details.response.dto';
 import { ExportFileRequestDTO } from '../../../shared/request/export-file.request.dto';
+import { ExportFileResponseDTO } from '../../../shared/response/export-file.response';
 
 @injectable()
 export class DocumentHandler {
@@ -30,13 +31,15 @@ export class DocumentHandler {
     }
   }
 
-  public async exportFile(exportFileRequestDto: ExportFileRequestDTO): Promise<IpcResponse<void>> {
+  public async exportFile(
+    exportFileRequestDto: ExportFileRequestDTO,
+  ): Promise<IpcResponse<ExportFileResponseDTO>> {
     try {
       const response = await this.exportFileUseCase.execute(
         exportFileRequestDto.documentUuid,
         exportFileRequestDto.fileUuid,
       );
-      return ok(undefined);
+      return ok(response);
     } catch (e) {
       return fail((e as Error).message);
     }

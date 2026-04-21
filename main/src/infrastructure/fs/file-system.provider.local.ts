@@ -19,9 +19,9 @@ export class LocalFileSystemProvider implements FileSystemProvider {
     return this.config.appDir;
   }
 
-  public async ensureDir(dir: string): Promise<string | undefined> {
+  public async ensureDir(dir: string): Promise<string | null> {
     try {
-      return await fsp.mkdir(dir, { recursive: true });
+      return (await fsp.mkdir(dir, { recursive: true })) ?? null;
     } catch (e) {
       throw new Error('Creazione directory fallita');
     }
