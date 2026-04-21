@@ -1,16 +1,16 @@
 import { MetadataTypeEnum } from '../domain/metadata-type.enum';
 
 export interface TypePolicy {
-  booleanExact?: string[];
-  booleanRegex?: RegExp[];
-  numberExact?: string[];
-  numberRegex?: RegExp[];
-  base64Exact?: string[];
-  base64Regex?: RegExp[];
-  dateExact?: string[];
-  dateRegex?: RegExp[];
-  timeExact?: string[];
-  timeRegex?: RegExp[];
+  booleanExact: string[];
+  booleanRegex: RegExp[];
+  numberExact: string[];
+  numberRegex: RegExp[];
+  base64Exact: string[];
+  base64Regex: RegExp[];
+  dateExact: string[];
+  dateRegex: RegExp[];
+  timeExact: string[];
+  timeRegex: RegExp[];
 }
 
 const DEFAULT_POLICY: Required<TypePolicy> = {

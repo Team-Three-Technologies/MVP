@@ -21,7 +21,7 @@ export class GetDipContentService implements GetDipContentUseCase {
     const dip = await this.dipRepository.findByUuid(dipUuid);
 
     if (!dip) {
-      throw new Error('Non esiste un DiP con questo UUID');
+      throw new Error(`Non esiste un DiP con questo UUID: ${dipUuid}`);
     }
 
     const documentEssentials: DocumentEssentialsDTO[] = [];

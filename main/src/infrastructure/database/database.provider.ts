@@ -17,7 +17,11 @@ export class DatabaseProvider {
   ) {}
 
   public async init(): Promise<void> {
-    await this.fileSystemProvider.ensureDir(this.config.documentsPath);
+    try {
+      await this.fileSystemProvider.ensureDir(this.config.documentsPath);
+    } catch (e) {
+      console.log(e);
+    }
 
     this.db = new Database(path.join(this.config.documentsPath, 'app.db'));
     this.db.pragma('journal_mode = WAL');
@@ -34,7 +38,11 @@ export class DatabaseProvider {
   }
 
   private async runMigrations(): Promise<void> {
-    this.fileSystemProvider.ensureDir(this.config.migrationsPath);
+    try {
+      this.fileSystemProvider.ensureDir(this.config.migrationsPath);
+    } catch (e) {
+      console.log(e);
+    }
 
     const files = (await this.fileSystemProvider.readDir(this.config.migrationsPath)).sort();
 

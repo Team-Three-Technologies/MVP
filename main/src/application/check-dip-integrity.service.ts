@@ -19,7 +19,7 @@ export class CheckDipIntegrityService implements CheckDipIntegrityUseCase {
     private readonly base64Provider: Base64Provider,
     @inject(TOKENS.HashProvider)
     private readonly hashProvider: HashProvider,
-  ) { }
+  ) {}
 
   public async execute(dipUuid: string): Promise<DipIntegrityResponseDTO> {
     const documents = await this.documentRepository.findAllByDipUuid(dipUuid);

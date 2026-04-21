@@ -4,6 +4,7 @@ import { AppConfig } from '../app.config';
 import * as path from 'node:path';
 import { app } from 'electron';
 import { LocalFileSystemProvider } from '../fs/file-system.provider.local';
+import { ElectronDialogProvider } from '../dialog/dialog.provider.electron';
 import { DatabaseProvider } from '../database/database.provider';
 import { Base64ProviderImpl } from '../../infrastructure/base64/base64.provider.impl';
 import { CryptoHashProvider } from '../hash/hash.provider.crypto';
@@ -25,6 +26,7 @@ import { AutoImportDipService } from '../../application/auto-import-dip.service'
 import { GetDipContentService } from '../../application/get-dip-content.service';
 import { CheckDipIntegrityService } from '../../application/check-dip-integrity.service';
 import { GetDocumentDetailsService } from '../../application/get-document-details.service';
+import { ExportFileService } from '../../application/export-file.service';
 import { DipHandler } from '../../presentation/dip.handler';
 import { DocumentHandler } from '../../presentation/document.handler';
 
@@ -61,6 +63,12 @@ export function registerDependencies(): void {
   container.register(
     TOKENS.DatabaseProvider,
     { useClass: DatabaseProvider },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  // dialog
+  container.register(
+    TOKENS.DialogProvider,
+    { useClass: ElectronDialogProvider },
     { lifecycle: Lifecycle.Singleton },
   );
   // base64
@@ -174,6 +182,11 @@ export function registerDependencies(): void {
   container.register(
     TOKENS.GetDipContentUseCase,
     { useClass: GetDipContentService },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.ExportFileUseCase,
+    { useClass: ExportFileService },
     { lifecycle: Lifecycle.Singleton },
   );
 

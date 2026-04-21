@@ -19,8 +19,12 @@ export class LocalFileSystemProvider implements FileSystemProvider {
     return this.config.appDir;
   }
 
-  public async ensureDir(dir: string): Promise<void> {
-    fsp.mkdir(dir, { recursive: true });
+  public async ensureDir(dir: string): Promise<string | undefined> {
+    try {
+      return await fsp.mkdir(dir, { recursive: true });
+    } catch (e) {
+      throw new Error('Creazione directory fallita');
+    }
   }
 
   public async findFile(dir: string, namePattern: RegExp): Promise<string | null> {
@@ -41,5 +45,13 @@ export class LocalFileSystemProvider implements FileSystemProvider {
 
   public createReadStream(path: string): Readable {
     return createReadStream(path);
+  }
+
+  public async copyFile(sourcePath: string, destPath: string): Promise<void> {
+    try {
+      await fsp.copyFile(sourcePath, destPath);
+    } catch (e) {
+      throw new Error('Copia file fallita');
+    }
   }
 }

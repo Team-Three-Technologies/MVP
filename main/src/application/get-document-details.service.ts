@@ -15,7 +15,7 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
     const document = await this.documentRepository.findByUuid(documentUuid);
 
     if (!document) {
-      throw new Error('Non esiste un documento con questo UUID');
+      throw new Error(`Non esiste un documento con questo UUID: ${documentUuid}`);
     }
 
     const dto = {
@@ -40,8 +40,7 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
       filesCount: Number(
         document.getMetadataValueByName('ArchimemoData.DocumentInformation.FilesCount'),
       ),
-      totalSize:
-        `${document.getMetadataValueByName('ArchimemoData.DocumentInformation.TotalSize.#text')} ${document.getMetadataValueByName('ArchimemoData.DocumentInformation.TotalSize.@_unit')}`,
+      totalSize: `${document.getMetadataValueByName('ArchimemoData.DocumentInformation.TotalSize.#text')} ${document.getMetadataValueByName('ArchimemoData.DocumentInformation.TotalSize.@_unit')}`,
       attachmentsCount: document.getAttachments().length,
       attachments: document.getAttachments().map((att) => {
         return {

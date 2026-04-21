@@ -3,9 +3,10 @@ import { Readable } from 'node:stream';
 
 export interface FileSystemProvider {
   getStartDir(): string;
-  ensureDir(dir: string): Promise<void>;
+  ensureDir(dir: string): Promise<string | undefined>;
   findFile(dir: string, namePattern: RegExp): Promise<string | null>;
   readFile(path: string): Promise<Buffer>;
   readDir(path: string): Promise<string[]>;
   createReadStream(path: string): Readable;
+  copyFile(sourcePath: string, destPath: string): Promise<void>;
 }

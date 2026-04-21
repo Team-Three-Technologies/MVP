@@ -1,8 +1,8 @@
 export interface PathPolicy {
-  allowExact?: string[];
-  allowRegex?: RegExp[];
-  denyExact?: string[];
-  denyRegex?: RegExp[];
+  allowExact: string[];
+  allowRegex: RegExp[];
+  denyExact: string[];
+  denyRegex: RegExp[];
 }
 
 const DEFAULT_POLICY: Required<PathPolicy> = {
