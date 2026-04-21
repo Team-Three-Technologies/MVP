@@ -1,5 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { DocumentModel, Allegato } from '../models/document';
+import {
+  AttachmentResponseDTO,
+  DocumentDetailsResponseDTO,
+} from '@shared/response/document-details.response.dto';
 import { signal } from '@angular/core';
 import { ElectronIpc } from '../services/electron-ipc';
 import { FilterModel } from '../models/filter';
@@ -9,10 +12,10 @@ import { DipInfoModel } from '../models/dip-info';
 })
 export class BackendFacade {
   private readonly electronIpc = inject(ElectronIpc);
-  private _selectedDocumentState = signal<DocumentModel | null>(null);
+  private _selectedDocumentState = signal<DocumentDetailsResponseDTO | null>(null);
   public selectedDocumentState = this._selectedDocumentState.asReadonly();
   public errorMessage = signal<string | null>(null);
-  private _documentList = signal<DocumentModel[]>([]);
+  private _documentList = signal<DocumentDetailsResponseDTO[]>([]);
   public documentList = this._documentList.asReadonly();
   private _isLoading = signal<boolean>(false);
   public isLoading = this._isLoading.asReadonly();
@@ -20,11 +23,11 @@ export class BackendFacade {
   public documentFileUrl = this._documentFileUrl.asReadonly();
   private _isLoadingPreview = signal<boolean>(false);
   public isLoadingPreview = this._isLoadingPreview.asReadonly();
-  private _previewSelectedDocumentState = signal<DocumentModel | null>(null);
+  private _previewSelectedDocumentState = signal<DocumentDetailsResponseDTO | null>(null);
   public previewSelectedDocumentState = this._previewSelectedDocumentState.asReadonly();
   private _previewItemFormato = signal<string | null>(null);
   public previewItemFormato = this._previewItemFormato.asReadonly();
-  private _selectedAllegatoState = signal<Allegato | null>(null);
+  private _selectedAllegatoState = signal<AttachmentResponseDTO | null>(null);
   public selectedAllegatoState = this._selectedAllegatoState.asReadonly();
   private _dipInfo = signal<DipInfoModel | null>(null);
   public dipInfo = this._dipInfo.asReadonly();
@@ -55,30 +58,30 @@ export class BackendFacade {
     this._isLoading.set(true);
     this._selectedDocumentState.set(null);
     this._selectedAllegatoState.set(null);
-    const document = this.documentList().find((doc: DocumentModel) => doc.uuid_documento === id);
+    const document = this.documentList().find((doc: DocumentDetailsResponseDTO) => doc.uuid === id);
     if (document) {
       this._selectedDocumentState.set(document);
     }
     this._isLoading.set(false);
   }
 
-  public selectAllegato(allegato: Allegato): void {
+  public selectAllegato(allegato: AttachmentResponseDTO): void {
     this._isLoading.set(true);
     this._selectedDocumentState.set(null);
     this._selectedAllegatoState.set(allegato);
     this._isLoading.set(false);
   }
 
-  public async previewSelect(item: DocumentModel | Allegato): Promise<void> {
-    if ('uuid_documento' in item) {
-      this._previewSelectedDocumentState.set(item as DocumentModel);
-      this._previewItemFormato.set(item.formato?.toLowerCase() || 'pdf');
-    } else if ('id_allegato' in item) {
+  public async previewSelect(item: DocumentDetailsResponseDTO | AttachmentResponseDTO): Promise<void> {
+    if ('name' in item) {
+      this._previewSelectedDocumentState.set(item);
+      this._previewItemFormato.set(item.extension?.toLowerCase() || 'pdf');
+    } else {
       const doc = this.documentList().find((d) =>
-        d.allegati.some((a) => a.id_allegato === item.id_allegato),
+        d.attachments.some((a) => a.uuid === item.uuid),
       );
       this._previewSelectedDocumentState.set(doc || null);
-      this._previewItemFormato.set(item.formato?.toLowerCase() || 'pdf');
+      this._previewItemFormato.set(item.extension?.toLowerCase() || 'pdf');
     }
     await this.loadDocumentFile(item);
   }
@@ -125,25 +128,25 @@ export class BackendFacade {
     }
   }
 
-  public async loadDocumentFile(item: DocumentModel | Allegato): Promise<void> {
+  public async loadDocumentFile(item: DocumentDetailsResponseDTO | AttachmentResponseDTO): Promise<void> {
     if (this.documentFileUrl()) URL.revokeObjectURL(this.documentFileUrl()!);
-    const filePercorso = item.percorso;
+    const filePath = 'path' in item ? item.path : null;
 
-    if (!filePercorso) {
+    if (!filePath) {
       this.errorMessage.set('No file found for this document.');
       this._documentFileUrl.set(null);
       return;
     }
 
     let mimeType = 'application/pdf';
-    const form = item.formato?.toLowerCase() || 'pdf';
+    const form = item.extension?.toLowerCase() || 'pdf';
     if (form === 'png') mimeType = 'image/png';
     else if (form === 'jpg' || form === 'jpeg') mimeType = 'image/jpeg';
     else if (form === 'txt') mimeType = 'text/plain';
 
     this._isLoadingPreview.set(true);
     try {
-      const bytes = await this.electronIpc.loadDocumentFile(filePercorso);
+      const bytes = await this.electronIpc.loadDocumentFile(filePath);
       const blobBytes = Uint8Array.from(bytes);
       this._documentFileUrl.set(URL.createObjectURL(new Blob([blobBytes], { type: mimeType })));
     } catch (error) {

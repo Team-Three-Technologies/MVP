@@ -1,4 +1,4 @@
-import { DocumentModel } from '../models/document';
+import { DocumentDetailsResponseDTO } from '@shared/response/document-details.response.dto';
 import { FilterModel } from '../models/filter';
 import { DipInfoModel } from '../models/dip-info';
 
@@ -7,8 +7,8 @@ declare global {
     electronAPI: {
       dip: {
         autoImport(): Promise<void>;
-        loadDocuments(): Promise<DocumentModel[]>;
-        searchDocuments(filters: FilterModel[]): Promise<DocumentModel[]>;
+        loadDocuments(): Promise<DocumentDetailsResponseDTO[]>;
+        searchDocuments(filters: FilterModel[]): Promise<DocumentDetailsResponseDTO[]>;
         loadDocumentFile(filePath: string): Promise<number[]>;
         loadDipInfo(): Promise<DipInfoModel>;
       };

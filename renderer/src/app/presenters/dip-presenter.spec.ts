@@ -9,4 +9,3 @@ describe('DipPresenter', () => {
   });
   it('should create an instance', () => expect(presenter).toBeTruthy());
 });
-

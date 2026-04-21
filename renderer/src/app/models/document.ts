@@ -8,7 +8,7 @@ export interface DocumentModel {
   uuid_documento: string;
   nome_documento: string;
   formato: string;
-  percorso: string;           
+  percorso: string;
   data_registrazione: string;
   ora_registrazione: string;
   oggetto: string;

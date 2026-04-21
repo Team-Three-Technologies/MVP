@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DocumentModel } from '../models/document';
+import { DocumentDetailsResponseDTO } from '@shared/response/document-details.response.dto';
 import { FilterModel } from '../models/filter';
 import { DipInfoModel } from '../models/dip-info';
 
@@ -28,20 +28,20 @@ export class ElectronIpc {
     }
   }
 
-  public async loadDocuments(): Promise<DocumentModel[]> {
+  public async loadDocuments(): Promise<DocumentDetailsResponseDTO[]> {
     try {
       const documents = await this.api.dip.loadDocuments();
-      return documents as DocumentModel[];
+      return documents as DocumentDetailsResponseDTO[];
     } catch (error) {
       console.error('Error loading documents:', error);
       throw error;
     }
   }
 
-  public async searchDocuments(filters: FilterModel[]): Promise<DocumentModel[]> {
+  public async searchDocuments(filters: FilterModel[]): Promise<DocumentDetailsResponseDTO[]> {
     try {
       const filteredDocuments = await this.api.dip.searchDocuments(filters);
-      return filteredDocuments as DocumentModel[];
+      return filteredDocuments as DocumentDetailsResponseDTO[];
     } catch (error) {
       console.error('Error searching documents:', error);
       throw error;

@@ -9,14 +9,15 @@
   <h3 class="titolo-lista">Documenti</h3>
 
   <ul class="lista-principale" role="list">
-    @for (doc of documents; track doc.uuid_documento) {
+    @for (doc of documents; track doc.uuid) {
     <li class="item-doc">
       <div class="item-row">
-        <button class="btn-link" type="button" (click)="onRowClick(doc.uuid_documento)">
-          {{ doc.nome_documento }}
+        <button class="btn-link" type="button" (click)="onRowClick(doc.uuid)">
+          {{ doc.name }}
         </button>
 
-        <button class="btn-icon btn-visualizza" type="button" (click)="onViewClick(doc, $event)" aria-label="Visualizza documento" title="Visualizza">
+        <button class="btn-icon btn-visualizza" type="button" (click)="onViewClick(doc, $event)"
+          aria-label="Visualizza documento" title="Visualizza">
           <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
             <circle cx="12" cy="12" r="3"></circle>
@@ -24,15 +25,16 @@
         </button>
       </div>
 
-      @if (doc.allegati.length > 0) {
+      @if (doc.attachments.length > 0) {
       <ul class="lista-allegati" role="list">
-        @for (allegato of doc.allegati; track allegato.id_allegato) {
+        @for (allegato of doc.attachments; track allegato.uuid) {
         <li class="item-allegato item-row">
           <span class="attachment-dash">-</span>
           <button class="btn-link btn-allegato" type="button" (click)="onAttachmentClick(doc, allegato, $event)">
-            {{ allegato.percorso.split('/').pop() || allegato.percorso }}
+            {{ allegato.path.split('/').pop() || allegato.path }}
           </button>
-          <button class="btn-icon btn-visualizza-allegato" type="button" (click)="onViewClick(allegato, $event)" aria-label="Visualizza allegato" title="Visualizza allegato">
+          <button class="btn-icon btn-visualizza-allegato" type="button" (click)="onViewClick(allegato, $event)"
+            aria-label="Visualizza allegato" title="Visualizza allegato">
             <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
               <circle cx="12" cy="12" r="3"></circle>

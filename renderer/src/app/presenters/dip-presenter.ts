@@ -1,5 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { DocumentModel, Allegato } from '../models/document';
+import {
+  AttachmentResponseDTO,
+  DocumentDetailsResponseDTO,
+} from '@shared/response/document-details.response.dto';
 import { BackendFacade } from '../facades/backend.facade';
 import { FilterModel } from '../models/filter';
 import { DipInfoModel } from '../models/dip-info';
@@ -35,7 +38,7 @@ export class DipPresenter {
     }
   }
 
-  async selectAllegato(allegato: Allegato): Promise<void> {
+  async selectAllegato(allegato: AttachmentResponseDTO): Promise<void> {
     try {
       await this.facade.selectAllegato(allegato);
     } catch (error) {
@@ -47,7 +50,7 @@ export class DipPresenter {
     await this.facade.loadDocuments();
   }
 
-  async loadDocumentFile(doc: DocumentModel): Promise<void> {
+  async loadDocumentFile(doc: DocumentDetailsResponseDTO): Promise<void> {
     await this.facade.loadDocumentFile(doc);
   }
 
@@ -55,11 +58,9 @@ export class DipPresenter {
     await this.facade.clearSelection();
   }
 
-  async previewDocument(item: DocumentModel | Allegato): Promise<void> {
+  async previewDocument(item: DocumentDetailsResponseDTO | AttachmentResponseDTO): Promise<void> {
     try {
-      if ('uuid_documento' in item || 'id_allegato' in item) {
-        await this.facade.previewSelect(item);
-      }
+      await this.facade.previewSelect(item);
     } catch (error) {
       console.error('Error in presenter while previewing document:', error);
     }

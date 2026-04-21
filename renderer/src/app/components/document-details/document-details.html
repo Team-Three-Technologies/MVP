@@ -7,15 +7,15 @@
   <div class="card-body">
     <div class="info-row">
       <span class="info-label">Nome file:</span>
-      <span class="info-value">{{ allegato.percorso.split('/').pop() || allegato.percorso }}</span>
+      <span class="info-value">{{ allegato.path.split('/').pop() || allegato.path }}</span>
     </div>
     <div class="info-row">
       <span class="info-label">Formato:</span>
-      <span class="info-value">{{ allegato.formato }}</span>
+      <span class="info-value">{{ allegato.extension }}</span>
     </div>
     <div class="info-row">
       <span class="info-label">Identificativo:</span>
-      <span class="info-value">{{ allegato.id_allegato }}</span>
+      <span class="info-value">{{ allegato.uuid }}</span>
     </div>
   </div>
 
@@ -26,28 +26,28 @@
   <div class="card-body">
     <div class="info-row">
       <span class="info-label">Nome file:</span>
-      <span class="info-value">{{ document.nome_documento }}</span>
+      <span class="info-value">{{ document.name }}</span>
     </div>
     <div class="info-row">
       <span class="info-label">Formato:</span>
-      <span class="info-value">{{ document.formato }}</span>
+      <span class="info-value">{{ document.extension }}</span>
     </div>
     <div class="info-row">
       <span class="info-label">Identificativo:</span>
-      <span class="info-value">{{ document.uuid_documento }}</span>
+      <span class="info-value">{{ document.uuid }}</span>
     </div>
     <div class="info-row">
       <span class="info-label">Data e ora registrazione:</span>
-      <span class="info-value">{{ document.data_registrazione }} {{ document.ora_registrazione }}</span>
+      <span class="info-value">{{ document.registrationDate }} {{ document.registrationTime }}</span>
     </div>
     <div class="allegati-section">
-      <span class="info-label">Allegati ({{ document.num_allegati }}):</span>
-      @if (document.allegati.length > 0) {
+      <span class="info-label">Allegati ({{ document.attachmentsCount }}):</span>
+      @if (document.attachments.length > 0) {
       <ul class="allegati-list">
-        @for (allegato of document.allegati; track allegato.id_allegato) {
+        @for (allegato of document.attachments; track allegato.uuid) {
         <li class="allegato-item">
-          <span class="allegato-nome">{{ allegato.percorso }}</span>
-          <span class="allegato-formato">{{ allegato.formato }}</span>
+          <span class="allegato-nome">{{ allegato.path }}</span>
+          <span class="allegato-formato">{{ allegato.extension }}</span>
         </li>
         }
       </ul>
