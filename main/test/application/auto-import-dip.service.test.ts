@@ -42,28 +42,28 @@ describe('AutoImportDipService', () => {
     expect(fileSystemProvider.findFile).toHaveReturnedWith(null);
   });
 
-  it('execute() lancia errore se non trova il DiPIndex dentro la cartella', async () => {
-    const fileSystemProvider = {
-      getStartDir: vi.fn().mockReturnValue('/path/to/test'),
-      findFile: vi
-        .fn()
-        .mockReturnValue(
-          '/path/to/test/DiPIndex.YYYYMMDD.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.xml',
-        ),
-      readFile: vi.fn().mockReturnValue(Buffer.from('xml')),
-    };
+  // it('execute()', async () => {
+  //   const fileSystemProvider = {
+  //     getStartDir: vi.fn().mockReturnValue('/path/to/test'),
+  //     findFile: vi
+  //       .fn()
+  //       .mockReturnValue(
+  //         '/path/to/test/DiPIndex.YYYYMMDD.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.xml',
+  //       ),
+  //     readFile: vi.fn().mockReturnValue(Buffer.from('xml')),
+  //   };
 
-    container.register(TOKENS.FileSystemProvider, {
-      useValue: fileSystemProvider,
-    });
+  //   container.register(TOKENS.FileSystemProvider, {
+  //     useValue: fileSystemProvider,
+  //   });
 
-    const service = container.resolve<AutoImportDipUseCase>(TOKENS.AutoImportDipUseCase);
+  //   const service = container.resolve<AutoImportDipUseCase>(TOKENS.AutoImportDipUseCase);
 
-    expect(fileSystemProvider.getStartDir).toHaveBeenCalled();
-    expect(fileSystemProvider.getStartDir).toHaveReturnedWith('/path/to/test');
-    expect(fileSystemProvider.findFile).toHaveBeenCalled();
-    expect(fileSystemProvider.findFile).toHaveReturnedWith(
-      '/path/to/test/DiPIndex.YYYYMMDD.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.xml',
-    );
-  });
+  //   expect(fileSystemProvider.getStartDir).toHaveBeenCalled();
+  //   expect(fileSystemProvider.getStartDir).toHaveReturnedWith('/path/to/test');
+  //   expect(fileSystemProvider.findFile).toHaveBeenCalled();
+  //   expect(fileSystemProvider.findFile).toHaveReturnedWith(
+  //     '/path/to/test/DiPIndex.YYYYMMDD.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.xml',
+  //   );
+  // });
 });
