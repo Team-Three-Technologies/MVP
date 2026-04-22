@@ -1,4 +1,5 @@
 import { Document } from '../domain/document.model';
+import {SearchFilterDTO} from '../../../shared/request/search-from-metadata.request.dto'
 
 export interface DocumentRepository {
   save(document: Document): Promise<Document>;
@@ -6,4 +7,5 @@ export interface DocumentRepository {
   findAllByDipUuid(dipUuid: string): Promise<Document[]>;
   findAllByDocumentClassUuid(documentClassUuid: string): Promise<Document[]>;
   findAllByConservationProcessUuid(conservationProcessUuid: string): Promise<Document[]>;
+    findAllByMetadata(filters:SearchFilterDTO[]): Promise<Document[]>
 }

@@ -1,13 +1,8 @@
 import {SearchFilterDTO} from '../../../shared/request/search-from-metadata.request.dto';
 export class SearchQueryBuilder{
 
-    constructor(private queryList:string[],
-                private metadataOnlyFilters:SearchFilterDTO[]
-                )
-                {
-                    queryList=[];
-                    metadataOnlyFilters=[];
-                }
+    private queryList:string[]=[];
+    private metadataOnlyFilters:SearchFilterDTO[]=[];
 
     public addFilter(filter: SearchFilterDTO):void
     {
