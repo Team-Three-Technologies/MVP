@@ -42,7 +42,7 @@ export class App implements OnInit {
 
   async ngOnInit() {
     try {
-      // this.message = await this.test();
+      this.message = await this.test();
       this.message = await this.test2();
       this.message = await this.test3();
       this.message = await this.test4();

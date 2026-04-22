@@ -46,7 +46,12 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     //linux :/home/nenad/GitHubRepo/ProgettoSWE/materiale_proponente/EsempiDiP/dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403
       //'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'; // this.fileFinder.getStartDir();
 
+    //const dir ='/home/nenad/GitHubRepo/ProgettoSWE/materiale_proponente/EsempiDiP/dip.2026115.d7a27175-16b3-4a7d-877d-26f2b1baadda'
+    //const dir ='/home/nenad/GitHubRepo/ProgettoSWE/materiale_proponente/EsempiDiP/dip.20251111.0413d8ee-8e82-4331-864e-7f8098bcc419'
+    //errore no metadat const dir ='/home/nenad/GitHubRepo/ProgettoSWE/materiale_proponente/EsempiDiP/dip.2026115.cbe221f9-becc-41d4-b5fb-76e701fa5eac'
     const dir ='/home/nenad/GitHubRepo/ProgettoSWE/materiale_proponente/EsempiDiP/dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'
+    //const dir ='/home/nenad/GitHubRepo/ProgettoSWE/materiale_proponente/EsempiDiP/dip.20251111.ec276d29-f80c-4693-b3c9-1cb650e23114'
+
     const dipIndexPath = await this.fileSystemProvider.findFile(dir, FILE_NAME_PATTERNS.DIP_INDEX);
 
     // se non trova il dip index

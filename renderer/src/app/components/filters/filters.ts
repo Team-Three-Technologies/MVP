@@ -14,7 +14,7 @@ export class Filters {
   @Output() searchRequested = new EventEmitter<FilterModel[]>();
 
   opzioniFiltro = [
-    'Identificativo documento',
+    'Identificativo documento (UUID)',
     'Modalità di formazione',
     'Tipologia documentale',
     'Tipologia di flusso',
@@ -42,8 +42,9 @@ export class Filters {
     'Oggetto',
     'Parola chiave',
     'Numero allegati',
-    'Impronta crittografica allegato',
-    'Identificativo allegato',
+    'Impronta crittografica (hash)',
+    'Impronta crittografica (algoritmo)',
+    'Identificativo allegato (UUID)',
     'Descrizione allegato',
     'Indice di classificazione',
     'Descrizione dell’indice di classificazione',
