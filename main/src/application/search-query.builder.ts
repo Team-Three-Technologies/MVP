@@ -323,19 +323,50 @@ export class SearchQueryBuilder{
                                FROM ruoli r JOIN soggetti_sw s ON r.uuid_documento=s.id
                                WHERE s.den_sistema='${filter.value}`);
             break;
+
+            default:
+            break;
         }
 
     }
 
     public getResult():string
     {
-
-        for(const filter of this.metadataOnlyFilters)
+        //Costruzione query sulla tabella metadata
+        let remainingFilters=this.metadataOnlyFilters.length;
+        if(remainingFilters!==0)
         {
-            this.queryList.push(`SELECT DISTINCT uuid_documento AS uuid_document
-                                FROM metadata
-                                WHERE nome='${filter.type}' AND valore='${filter.value}'`);
+            let queryOnlyMetadata = `SELECT uuid_documento AS uuid_document
+            FROM metadata
+            WHERE `;
+            for(const filter of this.metadataOnlyFilters)
+                {
+                    remainingFilters--;
+                    queryOnlyMetadata.concat(`(nome='${filter.type}' AND valore='${filter.value}')`);
+
+                    if(remainingFilters!==0)
+                        queryOnlyMetadata.concat(` OR `);
+                }
+                queryOnlyMetadata.concat(` GROUP BY uuid_documento
+                                         HAVING COUNT(DISTINCT nome)=${this.metadataOnlyFilters.length}`);
+
+            this.queryList.push(queryOnlyMetadata);
         }
-            return "";
+        
+        //Costruzione query completa
+        remainingFilters=this.queryList.length;
+        let completeQuery=``;
+
+        for(const query of this.queryList)
+        {
+            remainingFilters--;
+            completeQuery.concat(query);
+
+            if(remainingFilters!==0)
+                completeQuery.concat(` INTERSECT `);
+        }
+        completeQuery.concat(`;`);
+
+        return completeQuery;
     }
 }
