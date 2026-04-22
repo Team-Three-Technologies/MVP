@@ -8,10 +8,10 @@ import { ElectronDialogProvider } from '../dialog/dialog.provider.electron';
 import { DatabaseProvider } from '../database/database.provider';
 import { Base64ProviderImpl } from '../../infrastructure/base64/base64.provider.impl';
 import { CryptoHashProvider } from '../hash/hash.provider.crypto';
-import { DipParserImpl } from '../../infrastructure/parsing/dip.parser.impl';
-import { DipIndexParserImpl } from '../../infrastructure/parsing/dip-index.parser.impl';
-import { AipInfoParserImpl } from '../../infrastructure/parsing/aip-info.parser.impl';
-import { MetadataParserImpl } from '../../infrastructure/parsing/metadata.parser.impl';
+import { DipParserV1 } from '../parsing/dip.parser.v1';
+import { DipIndexParserV1 } from '../../infrastructure/parsing/dip-index.parser.v1';
+import { AipInfoParserV1 } from '../../infrastructure/parsing/aip-info.parser.v1';
+import { DocumentMetadataParserV1 } from '../parsing/document-metadata.parser.v1';
 import { SQLiteDipRepository } from '../../repositories/dip.repository.sqlite';
 import { SQLiteDocumentClassRepository } from '../../repositories/document-class.repository.sqlite';
 import { SQLiteConservationProcessRepository } from '../../repositories/conservation-process.repository.sqlite';
@@ -86,22 +86,22 @@ export function registerDependencies(): void {
   // parsing
   container.register(
     TOKENS.DipParser,
-    { useClass: DipParserImpl },
+    { useClass: DipParserV1 },
     { lifecycle: Lifecycle.Singleton },
   );
   container.register(
     TOKENS.DipIndexParser,
-    { useClass: DipIndexParserImpl },
+    { useClass: DipIndexParserV1 },
     { lifecycle: Lifecycle.Singleton },
   );
   container.register(
     TOKENS.AipInfoParser,
-    { useClass: AipInfoParserImpl },
+    { useClass: AipInfoParserV1 },
     { lifecycle: Lifecycle.Singleton },
   );
   container.register(
-    TOKENS.MetadataParser,
-    { useClass: MetadataParserImpl },
+    TOKENS.DocumentMetadataParser,
+    { useClass: DocumentMetadataParserV1 },
     { lifecycle: Lifecycle.Singleton },
   );
 

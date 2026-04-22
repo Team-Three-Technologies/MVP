@@ -7,6 +7,7 @@ export class ConservationProcess {
     private documentsCount: number,
     private filesCount: number,
     private documentClassUuid: string,
+    private documentClassVersion: string,
   ) {}
 
   public getUuid(): string {
@@ -37,6 +38,10 @@ export class ConservationProcess {
     return this.documentClassUuid;
   }
 
+  public getDocumentClassVersion(): string {
+    return this.documentClassVersion;
+  }
+
   public setUuid(uuid: string): void {
     this.uuid = uuid;
   }
@@ -63,5 +68,9 @@ export class ConservationProcess {
 
   public setDocumentClassUuid(documentClassUuid: string): void {
     this.documentClassUuid = documentClassUuid;
+  }
+
+  public setDocumentClassVersion(documentClassVersion: string): void {
+    this.documentClassVersion = documentClassVersion;
   }
 }

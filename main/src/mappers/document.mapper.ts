@@ -18,11 +18,15 @@ export class DocumentMapper {
   ) {}
 
   public toDomain(parsedDocument: DocumentParsingResult): Document {
+    const baseMetadata =
+      parsedDocument.documentMetadata.Document.DocumentoInformatico ??
+      parsedDocument.documentMetadata.Document.DocumentoAmministrativoInformatico ??
+      parsedDocument.documentMetadata.Document.AggregazioneDocumentaliInformatiche;
+
     const primary = parsedDocument.documentMetadata.Document.ArchimemoData.FileInformation?.find(
-      (f) => f['@_isPrimary'],
+      (f: any) => f['@_isPrimary'],
     );
-    const uuid: string =
-      parsedDocument.documentMetadata.Document.DocumentoInformatico.IdDoc.Identificativo;
+    const uuid: string = baseMetadata.IdDoc.Identificativo;
     const documentPath: string = parsedDocument.documentPath;
 
     const main: File = new File(
@@ -34,7 +38,7 @@ export class DocumentMapper {
     const attachments: File[] = parsedDocument.attachmentsFilesPath.map((a) => {
       const attachmentXml = (
         parsedDocument.documentMetadata.Document.ArchimemoData.FileInformation ?? []
-      ).find((att) => att.FileUUID === a[0]);
+      ).find((att: any) => att.FileUUID === a[0]);
 
       return new File(
         a[0],
@@ -47,9 +51,7 @@ export class DocumentMapper {
       parsedDocument.documentMetadata.Document as unknown as Record<string, unknown>,
     );
 
-    const entries = this.subjectMapper.toDomain(
-      parsedDocument.documentMetadata.Document.DocumentoInformatico.Soggetti.Ruolo,
-    );
+    const entries = this.subjectMapper.toDomain(baseMetadata.Soggetti.Ruolo);
 
     const subjects = new Map<Subject, RolesTypeEnum>(
       entries.map((e) => [e.subject, e.roleType] as [Subject, RolesTypeEnum]),

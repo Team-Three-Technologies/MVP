@@ -8,40 +8,15 @@ import { PAESubject } from '../domain/pae-subject.model';
 import { PAISubject } from '../domain/pai-subject.model';
 import { SWSubject } from '../domain/sw-subject.model';
 import { Person } from '../domain/person.model';
-import {
-  RuoloXml,
-  TipoSoggetto11Xml,
-  TipoSoggetto12Xml,
-  TipoSoggetto13Xml,
-  TipoSoggetto21Xml,
-  TipoSoggetto22Xml,
-  TipoSoggetto31Xml,
-  TipoSoggetto32Xml,
-  TipoSoggetto33Xml,
-  TipoSoggetto34Xml,
-  TipoSoggetto4Xml,
-} from '../infrastructure/parsing/document-metadata.xml';
 
 type SubjectRoleEntry = {
   roleType: RolesTypeEnum;
   subject: Subject;
 };
-
-type RolePayload =
-  | TipoSoggetto11Xml
-  | TipoSoggetto12Xml
-  | TipoSoggetto13Xml
-  | TipoSoggetto21Xml
-  | TipoSoggetto22Xml
-  | TipoSoggetto31Xml
-  | TipoSoggetto32Xml
-  | TipoSoggetto33Xml
-  | TipoSoggetto34Xml
-  | TipoSoggetto4Xml;
-
+// TODO sistemare
 @injectable()
 export class SubjectMapper {
-  private toSubjectFromPayload(payload: RolePayload): Subject | undefined {
+  private toSubjectFromPayload(payload: any): Subject | undefined {
     if ('AS' in payload && payload.AS) {
       return new ASSubject(
         null,
@@ -99,9 +74,7 @@ export class SubjectMapper {
     return undefined;
   }
 
-  private pickRolePayload(
-    role: RuoloXml,
-  ): { roleType: RolesTypeEnum; payload: RolePayload } | undefined {
+  private pickRolePayload(role: any): { roleType: RolesTypeEnum; payload: any } | undefined {
     if (role.Altro) return { roleType: RolesTypeEnum.ALT, payload: role.Altro };
     if (role.Assegnatario) return { roleType: RolesTypeEnum.ASS, payload: role.Assegnatario };
     if (role.Autore) return { roleType: RolesTypeEnum.AUT, payload: role.Autore };
@@ -127,7 +100,7 @@ export class SubjectMapper {
     return undefined;
   }
 
-  public toDomain(roles: RuoloXml[]): SubjectRoleEntry[] {
+  public toDomain(roles: any[]): SubjectRoleEntry[] {
     return roles
       .map((role) => {
         const picked = this.pickRolePayload(role);

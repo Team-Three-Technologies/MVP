@@ -6,12 +6,13 @@ CREATE TABLE IF NOT EXISTS archivi_dip (
 );
 
 CREATE TABLE IF NOT EXISTS classi_documentali (
-    uuid TEXT PRIMARY KEY,
+    uuid TEXT,
     nome TEXT NOT NULL,
-    versione TEXT NOT NULL,
+    versione TEXT,
     valida_da TEXT NOT NULL,
     valida_fino TEXT,
     uuid_dip TEXT,
+    PRIMARY KEY (uuid, versione),
     FOREIGN KEY (uuid_dip) REFERENCES archivi_dip(uuid_processo)
 );
 
@@ -23,7 +24,8 @@ CREATE TABLE IF NOT EXISTS processi_conservazione (
     numero_documenti INTEGER NOT NULL,
     numero_file_documenti INTEGER NOT NULL,
     uuid_classe_documentale TEXT,
-    FOREIGN KEY (uuid_classe_documentale) REFERENCES classi_documentali(uuid)
+    versione_classe_documentale TEXT,
+    FOREIGN KEY (uuid_classe_documentale, versione_classe_documentale) REFERENCES classi_documentali(uuid, versione)
 );
 
 CREATE TABLE IF NOT EXISTS files (
@@ -38,7 +40,7 @@ CREATE TABLE IF NOT EXISTS documenti (
     percorso TEXT NOT NULL,
     uuid_processo_conservazione TEXT,
     uuid_file_principale TEXT NOT NULL,
-    FOREIGN KEY(uuid_file_principale) REFERENCES files(uuid),
+    FOREIGN KEY (uuid_file_principale) REFERENCES files(uuid),
     FOREIGN KEY (uuid_processo_conservazione) REFERENCES processi_conservazione(uuid)
 );
 

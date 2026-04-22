@@ -16,8 +16,8 @@ export class SQLiteConservationProcessRepository implements ConservationProcessR
     this.dbProvider.instance
       .prepare(
         `
-        INSERT INTO processi_conservazione (uuid, data_creazione, dimensione_totale, numero_sip, numero_documenti, numero_file_documenti, uuid_classe_documentale)
-        VALUES (@uuid, @creationDate, @totalSize, @sipCount, @documentsCount, @filesCount, @documentClassUuid);
+        INSERT INTO processi_conservazione (uuid, data_creazione, dimensione_totale, numero_sip, numero_documenti, numero_file_documenti, uuid_classe_documentale, versione_classe_documentale)
+        VALUES (@uuid, @creationDate, @totalSize, @sipCount, @documentsCount, @filesCount, @documentClassUuid, @documentClassVersion);
       `,
       )
       .run({
@@ -28,6 +28,7 @@ export class SQLiteConservationProcessRepository implements ConservationProcessR
         documentsCount: conservationProcess.getDocumentsCount(),
         filesCount: conservationProcess.getFilesCount(),
         documentClassUuid: conservationProcess.getDocumentClassUuid(),
+        documentClassVersion: conservationProcess.getDocumentClassVersion(),
       });
 
     return conservationProcess;
@@ -37,7 +38,7 @@ export class SQLiteConservationProcessRepository implements ConservationProcessR
     const rows = this.dbProvider.instance
       .prepare(
         `
-        SELECT pc.uuid, pc.data_creazione, pc.dimensione_totale, pc.numero_sip, pc.numero_documenti, pc.numero_file_documenti, pc.uuid_classe_documentale FROM processi_conservazione pc
+        SELECT pc.uuid, pc.data_creazione, pc.dimensione_totale, pc.numero_sip, pc.numero_documenti, pc.numero_file_documenti, pc.uuid_classe_documentale, pc.versione_classe_documentale FROM processi_conservazione pc
         JOIN classi_documentali cd ON pc.uuid_classe_documentale = cd.uuid
         JOIN archivi_dip ad ON cd.uuid_dip = ad.uuid_processo
         WHERE ad.uuid_processo = ?;
@@ -54,22 +55,24 @@ export class SQLiteConservationProcessRepository implements ConservationProcessR
         row.numero_documenti,
         row.numero_file_documenti,
         row.uuid_classe_documentale,
+        row.versione_classe_documentale,
       );
     });
   }
 
-  public async findAllByDocumentClassUuid(
+  public async findAllByDocumentClassUuidAndVersion(
     documentClassUuid: string,
+    documentClassVersion: string,
   ): Promise<ConservationProcess[]> {
     const rows = this.dbProvider.instance
       .prepare(
         `
-        SELECT pc.uuid, pc.data_creazione, pc.dimensione_totale, pc.numero_sip, pc.numero_documenti, pc.numero_file_documenti, pc.uuid_classe_documentale FROM processi_conservazione pc
+        SELECT pc.uuid, pc.data_creazione, pc.dimensione_totale, pc.numero_sip, pc.numero_documenti, pc.numero_file_documenti, pc.uuid_classe_documentale, pc.versione_classe_documentale FROM processi_conservazione pc
         JOIN classi_documentali cd ON pc.uuid_classe_documentale = cd.uuid
-        WHERE cd.uuid = ?;
+        WHERE cd.uuid = ? AND cd.versione = ?;
       `,
       )
-      .all(documentClassUuid) as ConservationProcessRow[];
+      .all(documentClassUuid, documentClassVersion) as ConservationProcessRow[];
 
     return rows.map((row: ConservationProcessRow) => {
       return new ConservationProcess(
@@ -80,6 +83,7 @@ export class SQLiteConservationProcessRepository implements ConservationProcessR
         row.numero_documenti,
         row.numero_file_documenti,
         row.uuid_classe_documentale,
+        row.versione_classe_documentale,
       );
     });
   }

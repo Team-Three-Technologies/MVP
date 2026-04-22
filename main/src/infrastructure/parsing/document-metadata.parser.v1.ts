@@ -1,10 +1,9 @@
 import { injectable } from 'tsyringe';
-import { MetadataParser } from './metadata.parser.interface';
+import { DocumentMetadataParser } from './document-metadata.parser.interface';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import { DocumentMetadataXml } from './document-metadata.xml';
 
 @injectable()
-export class MetadataParserImpl implements MetadataParser {
+export class DocumentMetadataParserV1 implements DocumentMetadataParser {
   private readonly parser: XMLParser;
 
   constructor() {
@@ -29,23 +28,23 @@ export class MetadataParserImpl implements MetadataParser {
     });
   }
 
-  public async parseMetadata(xml: string): Promise<DocumentMetadataXml> {
+  public async parseMetadata(xml: string): Promise<any> {
     const validation = XMLValidator.validate(xml);
     if (validation !== true) {
       throw new Error(`DocumentMetadata XML non valido: ${JSON.stringify(validation)}`);
     }
 
-    const raw = this.parser.parse(xml) as DocumentMetadataXml;
+    const raw = this.parser.parse(xml);
     if (!raw.Document) {
       throw new Error(`Elemento Document mancante`);
     }
 
-    this.assertRequiredStructure(raw);
+    // this.assertRequiredStructure(raw);
 
     return raw;
   }
 
-  private assertRequiredStructure(root: DocumentMetadataXml): void {
+  private assertRequiredStructure(root: any): void {
     const doc = root.Document;
 
     if (!doc.DocumentoInformatico) {
