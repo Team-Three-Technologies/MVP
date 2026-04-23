@@ -10,6 +10,8 @@ describe('DocumentHandler', () => {
     container.clearInstances();
     container.register(TOKENS.GetDocumentDetailsUseCase, { useValue: {} });
     container.register(TOKENS.ExportFileUseCase, { useValue: {} });
+    container.register(TOKENS.FileInternalPreviewUseCase, { useValue: {} });
+    container.register(TOKENS.FileExternalPreviewUseCase, { useValue: {} });
   });
 
   it('getDocumentDetails() restituisce IpcResponse con data = DocumentDetailsResponseDTO e error = null se GetDocumentDetailsUseCase.execute() termina correttamente', async () => {
