@@ -8,6 +8,7 @@ import { ElectronDialogProvider } from '../dialog/dialog.provider.electron';
 import { DatabaseProvider } from '../database/database.provider';
 import { Base64ProviderImpl } from '../../infrastructure/base64/base64.provider.impl';
 import { CryptoHashProvider } from '../hash/hash.provider.crypto';
+import { ElectronShellProvider } from '../shell/shell.provider.electron';
 import { DipParserV1 } from '../parsing/dip.parser.v1';
 import { DipIndexParserV1 } from '../../infrastructure/parsing/dip-index.parser.v1';
 import { AipInfoParserV1 } from '../../infrastructure/parsing/aip-info.parser.v1';
@@ -27,6 +28,8 @@ import { GetDipContentService } from '../../application/get-dip-content.service'
 import { CheckDipIntegrityService } from '../../application/check-dip-integrity.service';
 import { GetDocumentDetailsService } from '../../application/get-document-details.service';
 import { ExportFileService } from '../../application/export-file.service';
+import { FileInternalPreviewService } from '../../application/file-internal-preview.service';
+import { FileExternalPreviewService } from '../../application/file-external-preview.service';
 import { DipHandler } from '../../presentation/dip.handler';
 import { DocumentHandler } from '../../presentation/document.handler';
 
@@ -81,6 +84,11 @@ export function registerDependencies(): void {
   container.register(
     TOKENS.HashProvider,
     { useClass: CryptoHashProvider },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.ShellProvider,
+    { useClass: ElectronShellProvider },
     { lifecycle: Lifecycle.Singleton },
   );
   // parsing
@@ -187,6 +195,16 @@ export function registerDependencies(): void {
   container.register(
     TOKENS.ExportFileUseCase,
     { useClass: ExportFileService },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.FileInternalPreviewUseCase,
+    { useClass: FileInternalPreviewService },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.FileExternalPreviewUseCase,
+    { useClass: FileExternalPreviewService },
     { lifecycle: Lifecycle.Singleton },
   );
 

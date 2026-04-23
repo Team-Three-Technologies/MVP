@@ -45,14 +45,21 @@ export class App implements OnInit {
     if (res.error) throw new Error(res.error);
     return res.data;
   }
+  
+  async test6(): Promise<string> {
+    const res = await this.api.document.fileExternalPreview({ documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab' });
+    if (res.error) throw new Error(res.error);
+    return res.data;
+  }
 
   async ngOnInit() {
     try {
-      this.message = await this.test();
+      // this.message = await this.test();
       // this.message = await this.test2();
       // this.message = await this.test3();
       // this.message = await this.test4();
       // this.message = await this.test5();
+      // this.message = await this.test6();
     } catch (e) {
       this.message = (e as Error).message;
     } finally {

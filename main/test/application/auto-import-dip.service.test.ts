@@ -42,28 +42,50 @@ describe('AutoImportDipService', () => {
     expect(fileSystemProvider.findFile).toHaveReturnedWith(null);
   });
 
-  // it('execute()', async () => {
-  //   const fileSystemProvider = {
-  //     getStartDir: vi.fn().mockReturnValue('/path/to/test'),
-  //     findFile: vi
-  //       .fn()
-  //       .mockReturnValue(
-  //         '/path/to/test/DiPIndex.YYYYMMDD.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.xml',
-  //       ),
-  //     readFile: vi.fn().mockReturnValue(Buffer.from('xml')),
-  //   };
+  it('execute()', async () => {
+    const fileSystemProvider = {
+      getStartDir: vi.fn().mockReturnValue('/path/to/test'),
+      findFile: vi
+        .fn()
+        .mockReturnValue(
+          '/path/to/test/DiPIndex.YYYYMMDD.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.xml',
+        ),
+      readFile: vi.fn().mockReturnValue(Buffer.from('xml')),
+    };
+    const dipParser = {
+      parseDipIndex: vi.fn().mockReturnValue({
+        DiPIndex: {
+          PackageInfo: {},
+          PackageContent: { DiPDocuments: { DocumentClass: [] } },
+        },
+      }),
+    };
+    const dipMapper = {
+      toDomain: vi.fn().mockReturnValue({
+        getProcessUuid: () => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+      }),
+    };
+    const dipRepository = {
+      findByUuid: vi.fn().mockResolvedValue({}),
+    };
 
-  //   container.register(TOKENS.FileSystemProvider, {
-  //     useValue: fileSystemProvider,
-  //   });
+    container.register(TOKENS.FileSystemProvider, {
+      useValue: fileSystemProvider,
+    });
+    container.register(TOKENS.DipParser, { useValue: dipParser });
+    container.register(TOKENS.DipMapper, { useValue: dipMapper });
+    container.register(TOKENS.DipRepository, { useValue: dipRepository });
 
-  //   const service = container.resolve<AutoImportDipUseCase>(TOKENS.AutoImportDipUseCase);
+    const service = container.resolve<AutoImportDipUseCase>(TOKENS.AutoImportDipUseCase);
 
-  //   expect(fileSystemProvider.getStartDir).toHaveBeenCalled();
-  //   expect(fileSystemProvider.getStartDir).toHaveReturnedWith('/path/to/test');
-  //   expect(fileSystemProvider.findFile).toHaveBeenCalled();
-  //   expect(fileSystemProvider.findFile).toHaveReturnedWith(
-  //     '/path/to/test/DiPIndex.YYYYMMDD.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.xml',
-  //   );
-  // });
+    await expect(service.execute()).rejects.toThrow('DiP già importato in precedenza');
+    expect(fileSystemProvider.getStartDir).toHaveBeenCalled();
+    expect(fileSystemProvider.getStartDir).toHaveReturnedWith('/path/to/test');
+    expect(fileSystemProvider.findFile).toHaveBeenCalled();
+    expect(fileSystemProvider.findFile).toHaveReturnedWith(
+      '/path/to/test/DiPIndex.YYYYMMDD.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.xml',
+    );
+    expect(fileSystemProvider.readFile).toHaveBeenCalled();
+    expect(fileSystemProvider.readFile).toHaveReturnedWith(Buffer.from('xml'));
+  });
 });

@@ -4,6 +4,6 @@ import { HashAlgorithm } from './hash.algorithms';
 
 export interface HashProvider {
   toHashAlgorithm(metadataValue: string): HashAlgorithm;
-  hashStream(stream: Readable, algorithm: string): Promise<Buffer>;
+  hashStream(stream: Readable, algorithm: HashAlgorithm): Promise<Buffer>;
   areEqualsHashBytes(hashA: Buffer, hashB: Buffer): boolean;
 }

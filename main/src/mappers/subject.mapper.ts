@@ -13,6 +13,11 @@ type SubjectRoleEntry = {
   roleType: RolesTypeEnum;
   subject: Subject;
 };
+
+type RolePayloadPair = {
+  roleType: RolesTypeEnum;
+  payload: any;
+};
 // TODO sistemare
 @injectable()
 export class SubjectMapper {
@@ -74,7 +79,7 @@ export class SubjectMapper {
     return undefined;
   }
 
-  private pickRolePayload(role: any): { roleType: RolesTypeEnum; payload: any } | undefined {
+  private pickRolePayload(role: any): RolePayloadPair | undefined {
     if (role.Altro) return { roleType: RolesTypeEnum.ALT, payload: role.Altro };
     if (role.Assegnatario) return { roleType: RolesTypeEnum.ASS, payload: role.Assegnatario };
     if (role.Autore) return { roleType: RolesTypeEnum.AUT, payload: role.Autore };
