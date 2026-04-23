@@ -4,6 +4,7 @@ import { DocumentRequestDTO } from '@shared/request/document.request.dto';
 import { AutoImportDipResponseDTO } from '@shared/response/auto-import-dip.response.dto';
 import { DipContentResponseDTO } from '@shared/response/dip-details.response.dto';
 import { DocumentDetailsResponseDTO } from '@shared/response/document-details.response.dto';
+import { SearchFilterDTO } from '@shared/request/search-filter.request.dto';
 
 declare global {
   interface Window {
@@ -12,7 +13,7 @@ declare global {
         autoImport(): Promise<IpcResponse<AutoImportDipResponseDTO>>;
         content?(dipRequestDto: DipRequestDTO): Promise<IpcResponse<DipContentResponseDTO>>;
         loadDocuments(): Promise<IpcResponse<DocumentDetailsResponseDTO[]>>;
-        searchDocuments(filters: FilterModel[]): Promise<IpcResponse<DocumentDetailsResponseDTO[]>>;
+        searchDocuments(filters: SearchFilterDTO[]): Promise<IpcResponse<DocumentDetailsResponseDTO[]>>;
         loadDocumentFile(filePath: string): Promise<IpcResponse<Uint8Array>>;
         loadDipInfo(): Promise<IpcResponse<DipContentResponseDTO>>;
       };

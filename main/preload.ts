@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { DipRequestDTO } from '../shared/request/dip.request.dto';
 import { DocumentRequestDTO } from '../shared/request/document.request.dto';
 import { FileRequestDTO } from '../shared/request/file.request.dto';
+import { SearchFilterDTO } from '../shared/request/search-filter.request.dto';
 
 const IPC_CHANNELS = {
   DIP_AUTO_IMPORT: 'dip:auto-import',
@@ -11,6 +12,7 @@ const IPC_CHANNELS = {
   DOCUMENT_EXPORT_FILE: 'document:export-file',
   DOCUMENT_FILE_INTERNAL_PREVIEW: 'document:file-internal-preview',
   DOCUMENT_FILE_EXTERNAL_PREVIEW: 'document:file-external-preview',
+  DIP_SEARCH_FROM_METADATA: 'dip:searchDocuments',
 };
 
 // definita API di comunicazione
@@ -19,6 +21,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     autoImport: () => ipcRenderer.invoke(IPC_CHANNELS.DIP_AUTO_IMPORT),
     content: (dipRequestDto: DipRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_CONTENT, dipRequestDto),
     checkIntegrity: (dipRequestDto: DipRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_CHECK_INTEGRITY, dipRequestDto),
+    searchDocuments: (filters: SearchFilterDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_SEARCH_FROM_METADATA, filters),
   },
   document: {
     details: (documentRequestDto: DocumentRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENT_DETAILS, documentRequestDto),

@@ -373,15 +373,19 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     return row ? new File(row.uuid, row.percorso, row.dimensione) : null;
   }
   public async findAllByMetadata(filters: SearchFilterDTO[]): Promise<Document[]> {
-    let builder = new SearchQueryBuilder();
-    for (let filter of filters) builder.addFilter(filter);
-    const uuidDocumenti = this.dbProvider.instance.prepare(builder.getResult()).all() as string[];
+      if(filters.length!==0)
+      {
+          let builder = new SearchQueryBuilder();
+          for (let filter of filters) builder.addFilter(filter);
+          const uuidDocumenti = this.dbProvider.instance.prepare(builder.getResult()).all() as {uuid_documento:string}[];
 
-    let documents: Document[] = [];
-    for (const uuid of uuidDocumenti) {
-      let doc = await this.findByUuid(uuid);
-      if (doc !== null) documents.push(doc);
-    }
-    return documents;
+          let documents: Document[] = [];
+          for (const uuid of uuidDocumenti) {
+              let doc = await this.findByUuid(uuid.uuid_documento);
+              if (doc !== null) documents.push(doc);
+          }
+          return documents;
+      }
+        return [];
   }
 }

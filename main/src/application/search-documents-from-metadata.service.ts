@@ -13,7 +13,7 @@ export class SearchDocumentsFromMetadataService implements SearchDocumentsFromMe
   ) {}
 
   public async execute(filters: SearchFilterDTO[]): Promise<DocumentEssentialsDTO[]> {
-    const documents = await this.documentRepository.findAllByMetadata(filters);
+      const documents = await this.documentRepository.findAllByMetadata(filters);
 
     let docEssentialsList: DocumentEssentialsDTO[] = [];
     if (documents !== null) {
@@ -33,6 +33,7 @@ export class SearchDocumentsFromMetadataService implements SearchDocumentsFromMe
         });
       }
     }
+    //console.log(docEssentialsList);
     return docEssentialsList;
   }
 }
