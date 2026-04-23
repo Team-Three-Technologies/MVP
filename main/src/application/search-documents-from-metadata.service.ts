@@ -2,7 +2,7 @@ import { TOKENS } from '../infrastructure/di/tokens';
 import { DocumentRepository } from '../repositories/document.repository.interface';
 import { inject, injectable } from 'tsyringe';
 import {SearchDocumentsFromMetadataUseCase} from './search-documents-from-metadata.use-case';
-import { SearchFilterDTO } from '../../../shared/request/search-from-metadata.request.dto';
+import { SearchFilterDTO } from '../../../shared/request/search-filter.request.dto';
 import { DocumentEssentialsDTO } from '../../../shared/response/dip-content.response.dto';
 
 

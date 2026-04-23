@@ -20,7 +20,7 @@ import { PAESubject } from '../domain/pae-subject.model';
 import { ASSubject } from '../domain/as-subject.model';
 import { SWSubject } from '../domain/sw-subject.model';
 import { Person } from '../domain/person.model';
-import { SearchFilterDTO } from '../../../shared/request/search-from-metadata.request.dto';
+import { SearchFilterDTO } from '../../../shared/request/search-filter.request.dto';
 import { SearchQueryBuilder } from './search-query.builder';
 
 @injectable()

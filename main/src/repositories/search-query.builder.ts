@@ -1,4 +1,4 @@
-import {SearchFilterDTO} from '../../../shared/request/search-from-metadata.request.dto';
+import {SearchFilterDTO} from '../../../shared/request/search-filter.request.dto';
 export class SearchQueryBuilder{
 
     private queryList:string[]=[];

@@ -1,5 +1,5 @@
 import { Document } from '../domain/document.model';
-import {SearchFilterDTO} from '../../../shared/request/search-from-metadata.request.dto'
+import {SearchFilterDTO} from '../../../shared/request/search-filter.request.dto'
 
 export interface DocumentRepository {
   save(document: Document): Promise<Document>;
