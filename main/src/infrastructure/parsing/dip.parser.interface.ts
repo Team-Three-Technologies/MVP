@@ -1,9 +1,8 @@
-import { DiPIndexXml } from './dip-index.xml';
-import { AiPInfoXml } from './aip-info.xml';
+import { Buffer } from 'node:buffer';
 import { DocumentParsingResult } from './document-parsing.result';
 
 export interface DipParser {
-  parseDipIndex(dipIndexPath: string): Promise<DiPIndexXml>;
-  parseAipInfo(aipInfoPath: string): Promise<AiPInfoXml>;
-  parseDocumentsStream(dipIndex: DiPIndexXml, dir: string): AsyncIterable<DocumentParsingResult>;
+  parseDipIndex(dipIndexBuffer: Buffer): Promise<any>;
+  parseAipInfo(aipInfoBuffer: Buffer): Promise<any>;
+  parseDocumentsStream(dipIndex: any, dir: string): AsyncIterable<DocumentParsingResult>;
 }

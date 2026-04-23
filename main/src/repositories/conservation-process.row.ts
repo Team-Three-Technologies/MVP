@@ -6,4 +6,5 @@ export interface ConservationProcessRow {
   numero_documenti: number;
   numero_file_documenti: number;
   uuid_classe_documentale: string;
+  versione_classe_documentale: string;
 }

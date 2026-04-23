@@ -1,0 +1,18 @@
+export const HASH_ALGORITHMS = {
+  SHA256: 'sha256',
+  SHA512: 'sha512',
+} as const;
+
+export type HashAlgorithm = (typeof HASH_ALGORITHMS)[keyof typeof HASH_ALGORITHMS];
+
+export const METADATA_TO_HASH_ALGO: Record<string, HashAlgorithm> = {
+  'SHA-256': HASH_ALGORITHMS.SHA256,
+  'SHA256': HASH_ALGORITHMS.SHA256,
+  'sha-256': HASH_ALGORITHMS.SHA256,
+  'sha256': HASH_ALGORITHMS.SHA256,
+
+  'SHA-512': HASH_ALGORITHMS.SHA512,
+  'SHA512': HASH_ALGORITHMS.SHA512,
+  'sha-512': HASH_ALGORITHMS.SHA512,
+  'sha512': HASH_ALGORITHMS.SHA512,
+};

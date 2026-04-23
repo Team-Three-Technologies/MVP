@@ -1,11 +1,16 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { DipRequestDTO } from '../shared/request/dip.request.dto';
 import { DocumentRequestDTO } from '../shared/request/document.request.dto';
+import { FileRequestDTO } from '../shared/request/file.request.dto';
 
 const IPC_CHANNELS = {
   DIP_AUTO_IMPORT: 'dip:auto-import',
   DIP_CONTENT: 'dip:content',
+  DIP_CHECK_INTEGRITY: 'dip:check-integrity',
   DOCUMENT_DETAILS: 'document:details',
+  DOCUMENT_EXPORT_FILE: 'document:export-file',
+  DOCUMENT_FILE_INTERNAL_PREVIEW: 'document:file-internal-preview',
+  DOCUMENT_FILE_EXTERNAL_PREVIEW: 'document:file-external-preview',
 };
 
 // definita API di comunicazione
@@ -13,9 +18,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
   dip: { // invoca evento (si trova in ipc-channels.ts)
     autoImport: () => ipcRenderer.invoke(IPC_CHANNELS.DIP_AUTO_IMPORT),
     content: (dipRequestDto: DipRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_CONTENT, dipRequestDto),
+    checkIntegrity: (dipRequestDto: DipRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_CHECK_INTEGRITY, dipRequestDto),
   },
   document: {
     details: (documentRequestDto: DocumentRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENT_DETAILS, documentRequestDto),
+    exportFile: (fileRequestDto: FileRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENT_EXPORT_FILE, fileRequestDto),
+    fileInternalPreview: (fileRequestDto: FileRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENT_FILE_INTERNAL_PREVIEW, fileRequestDto),
+    fileExternalPreview: (fileRequestDto: FileRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENT_FILE_EXTERNAL_PREVIEW, fileRequestDto),
   },
   on: (channel: string, callback: (data: unknown) => void) => {
     ipcRenderer.on(channel, (_, data) => callback(data));

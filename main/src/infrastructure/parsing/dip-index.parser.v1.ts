@@ -1,11 +1,9 @@
 import { injectable } from 'tsyringe';
 import { DipIndexParser } from './dip-index.parser.interface';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import * as fsp from 'node:fs/promises';
-import { DiPIndexXml } from './dip-index.xml';
 
 @injectable()
-export class DipIndexParserImpl implements DipIndexParser {
+export class DipIndexParserV1 implements DipIndexParser {
   private readonly parser: XMLParser;
 
   constructor() {
@@ -34,15 +32,13 @@ export class DipIndexParserImpl implements DipIndexParser {
     });
   }
 
-  public async parseDipIndex(xmlPath: string): Promise<DiPIndexXml> {
-    const xml = await fsp.readFile(xmlPath, 'utf-8');
-
+  public async parseDipIndex(xml: string): Promise<any> {
     const validation = XMLValidator.validate(xml);
-    if (!validation) {
+    if (validation !== true) {
       throw new Error(`DiPIndex XML non valido: ${JSON.stringify(validation)}`);
     }
 
-    const raw = this.parser.parse(xml) as DiPIndexXml;
+    const raw = this.parser.parse(xml);
     if (!raw.DiPIndex) {
       throw new Error(`Elemento DiPIndex mancante`);
     }
@@ -52,7 +48,7 @@ export class DipIndexParserImpl implements DipIndexParser {
     return raw;
   }
 
-  private assertRequiredStructure(root: DiPIndexXml): void {
+  private assertRequiredStructure(root: any): void {
     const diPIndex = root.DiPIndex;
 
     if (!diPIndex.PackageInfo) {

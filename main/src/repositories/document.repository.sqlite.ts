@@ -357,4 +357,17 @@ export class SQLiteDocumentRepository implements DocumentRepository {
 
     return documents;
   }
+
+  public async findFileByUuid(fileUuid: string): Promise<File | null> {
+    const row = this.dbProvider.instance
+      .prepare(
+        `
+        SELECT * FROM files
+        WHERE uuid = ?;
+      `,
+      )
+      .get(fileUuid) as FileRow;
+
+    return row ? new File(row.uuid, row.percorso, row.dimensione) : null;
+  }
 }

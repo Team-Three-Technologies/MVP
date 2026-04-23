@@ -1,11 +1,9 @@
 import { injectable } from 'tsyringe';
 import { AipInfoParser } from './aip-info.parser.interface';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import * as fsp from 'node:fs/promises';
-import { AiPInfoXml } from './aip-info.xml';
 
 @injectable()
-export class AipInfoParserImpl implements AipInfoParser {
+export class AipInfoParserV1 implements AipInfoParser {
   private readonly parser: XMLParser;
 
   constructor() {
@@ -28,19 +26,19 @@ export class AipInfoParserImpl implements AipInfoParser {
     });
   }
 
-  public async parseAipInfo(xmlPath: string): Promise<AiPInfoXml> {
-    const xml = await fsp.readFile(xmlPath, 'utf-8');
-
+  public async parseAipInfo(xml: string): Promise<any> {
     const validation = XMLValidator.validate(xml);
-    if (!validation) {
+    if (validation !== true) {
       throw new Error(`AiPInfo XML non valido: ${JSON.stringify(validation)}`);
     }
 
-    const raw = this.parser.parse(xml) as AiPInfoXml;
+    const raw = this.parser.parse(xml);
     if (!raw.AiPInfo) {
       throw new Error(`Elemento AiPInfo mancante`);
     }
 
     return raw;
   }
+
+  // TODO: assertRequiredStructure se ha senso
 }

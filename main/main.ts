@@ -3,9 +3,13 @@ import { app, BrowserWindow } from 'electron';
 import * as path from 'node:path';
 import { registerDependencies } from './src/infrastructure/di/container';
 import { registerAllHandlers } from './src/presentation/router';
+import { container } from 'tsyringe';
+import { TOKENS } from './src/infrastructure/di/tokens';
+import { DatabaseProvider } from './src/infrastructure/database/database.provider';
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   registerDependencies();
+  await container.resolve<DatabaseProvider>(TOKENS.DatabaseProvider).init();
   registerAllHandlers();
   createWindow();
 });
