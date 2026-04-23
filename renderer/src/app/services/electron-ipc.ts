@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { IpcResponse } from '@shared/ipc-response';
 import { DocumentDetailsResponseDTO } from '@shared/response/document-details.response.dto';
-import { FilterModel } from '../models/filter';
-import { DipInfoModel } from '../models/dip-info';
+import { DipContentResponseDTO } from '@shared/response/dip-details.response.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -9,19 +9,32 @@ import { DipInfoModel } from '../models/dip-info';
 export class ElectronIpc {
   private api = window.electronAPI;
 
+  private unwrapIpcResponse<T>(response: IpcResponse<T>, fallbackMessage: string): T {
+    if (response.error) {
+      throw new Error(response.error);
+    }
+
+    if (response.data === null) {
+      throw new Error(fallbackMessage);
+    }
+
+    return response.data;
+  }
+
   public async autoImport(): Promise<void> {
     try {
-      await this.api.dip.autoImport();
+      const response = await this.api.dip.autoImport();
+      this.unwrapIpcResponse(response, 'Invalid response during auto import');
     } catch (error) {
       console.error('Error during auto import:', error);
       throw error;
     }
   }
 
-  public async loadDipInfo(): Promise<DipInfoModel> {
+  public async loadDipInfo(): Promise<DipContentResponseDTO> {
     try {
-      const dipInfo = await this.api.dip.loadDipInfo();
-      return dipInfo as DipInfoModel;
+      const response = await this.api.dip.loadDipInfo();
+      return this.unwrapIpcResponse(response, 'Invalid response while loading DIP info');
     } catch (error) {
       console.error('Error loading DIP info:', error);
       throw error;
@@ -30,8 +43,8 @@ export class ElectronIpc {
 
   public async loadDocuments(): Promise<DocumentDetailsResponseDTO[]> {
     try {
-      const documents = await this.api.dip.loadDocuments();
-      return documents as DocumentDetailsResponseDTO[];
+      const response = await this.api.dip.loadDocuments();
+      return this.unwrapIpcResponse(response, 'Invalid response while loading documents');
     } catch (error) {
       console.error('Error loading documents:', error);
       throw error;
@@ -40,8 +53,8 @@ export class ElectronIpc {
 
   public async searchDocuments(filters: FilterModel[]): Promise<DocumentDetailsResponseDTO[]> {
     try {
-      const filteredDocuments = await this.api.dip.searchDocuments(filters);
-      return filteredDocuments as DocumentDetailsResponseDTO[];
+      const response = await this.api.dip.searchDocuments(filters);
+      return this.unwrapIpcResponse(response, 'Invalid response while searching documents');
     } catch (error) {
       console.error('Error searching documents:', error);
       throw error;
@@ -50,7 +63,8 @@ export class ElectronIpc {
 
   public async loadDocumentFile(filePath: string): Promise<Uint8Array> {
     try {
-      const file = await this.api.dip.loadDocumentFile(filePath);
+      const response = await this.api.dip.loadDocumentFile(filePath);
+      const file = this.unwrapIpcResponse(response, 'Invalid response while loading document file');
       return new Uint8Array(file);
     } catch (error) {
       console.error('Error loading document file:', error);

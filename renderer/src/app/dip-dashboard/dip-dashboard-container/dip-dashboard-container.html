@@ -12,7 +12,7 @@
   </aside>
   <main class="main-content">
     <section class="list-section">
-      <app-document-list [documents]="documentList()" [isLoading]="isLoading()"
+      <app-document-list [documents]="documentList()" [isLoading]="isLoading()" [errorMessage]="errorMessage()"
         (documentSelected)="onDocumentSelected($event)" (attachmentSelected)="onAttachmentSelected($event)"
         (itemPreview)="onItemPreview($event)">
       </app-document-list>

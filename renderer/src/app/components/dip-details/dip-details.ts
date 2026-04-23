@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DipInfoModel } from '../../models/dip-info';
+import { DipContentResponseDTO } from '@shared/response/dip-details.response.dto';
 
 @Component({
   selector: 'app-dip-details',
@@ -10,5 +10,5 @@ import { DipInfoModel } from '../../models/dip-info';
   styleUrl: './dip-details.css',
 })
 export class DipDetails {
-  @Input() dipInfo: DipInfoModel | null = null;
+  @Input() dipInfo: DipContentResponseDTO | null = null;
 }

@@ -12,18 +12,29 @@
 
     <div class="info-row">
       <span class="info-label">Data Creazione:</span>
-      <span class="info-value">{{ dipInfo.creation_date ? (dipInfo.creation_date | date:'dd/MM/yyyy HH:mm') : 'N/D'
+      <span class="info-value">{{ dipInfo.creationDate ? (dipInfo.creationDate | date:'dd/MM/yyyy HH:mm') : 'N/D'
         }}</span>
     </div>
 
     <div class="info-row highlight">
       <span class="info-label">Numero Documenti:</span>
-      <span>{{ dipInfo.document_number ?? 'N/D' }}</span>
+      <span>{{ dipInfo.documentNumber ?? 'N/D' }}</span>
     </div>
 
     <div class="info-row">
       <span class="info-label">Numero AIP:</span>
-      <span class="info-value">{{ dipInfo.aip_number ?? 'N/D' }}</span>
+      <span class="info-value">{{ dipInfo.aipNumber ?? 'N/D' }}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Stato:</span>
+      <span class="info-value status-with-icon">
+        @if (dipInfo.status) {
+        <span class="status-icon" [class.verified]="isDipVerified(dipInfo.status)"
+          [class.not-verified]="!isDipVerified(dipInfo.status)" aria-hidden="true"></span>
+        }
+        <span>{{ dipInfo.status || 'N/D' }}</span>
+      </span>
     </div>
   </div>
   } @else {

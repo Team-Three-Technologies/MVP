@@ -23,6 +23,7 @@ export class DocumentList {
     allegato: AttachmentResponseDTO;
   }>();
   @Output() itemPreview = new EventEmitter<DocumentDetailsResponseDTO | AttachmentResponseDTO>();
+
   onRowClick(id: string): void {
     this.documentSelected.emit(id);
   }

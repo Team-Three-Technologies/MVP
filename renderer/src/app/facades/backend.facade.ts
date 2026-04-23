@@ -3,10 +3,10 @@ import {
   AttachmentResponseDTO,
   DocumentDetailsResponseDTO,
 } from '@shared/response/document-details.response.dto';
+import { DipContentResponseDTO } from '@shared/response/dip-details.response.dto';
 import { signal } from '@angular/core';
 import { ElectronIpc } from '../services/electron-ipc';
 import { FilterModel } from '../models/filter';
-import { DipInfoModel } from '../models/dip-info';
 @Injectable({
   providedIn: 'root',
 })
@@ -29,7 +29,7 @@ export class BackendFacade {
   public previewItemFormato = this._previewItemFormato.asReadonly();
   private _selectedAllegatoState = signal<AttachmentResponseDTO | null>(null);
   public selectedAllegatoState = this._selectedAllegatoState.asReadonly();
-  private _dipInfo = signal<DipInfoModel | null>(null);
+  private _dipInfo = signal<DipContentResponseDTO | null>(null);
   public dipInfo = this._dipInfo.asReadonly();
 
   public async loadDocuments(): Promise<void> {

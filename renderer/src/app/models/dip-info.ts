@@ -1,6 +1,6 @@
 export interface DipInfoModel {
-  uuid: string | undefined;
-  creation_date: Date | undefined;
-  document_number: number | undefined;
-  aip_number: number | undefined;
+  uuid: string;
+  creationDate: Date;
+  documentNumber: number;
+  aipNumber: number;
 }

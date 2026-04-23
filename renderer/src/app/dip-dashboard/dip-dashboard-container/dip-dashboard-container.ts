@@ -5,7 +5,7 @@ import { Filters } from '../../components/filters/filters';
 import { DipDetails } from '../../components/dip-details/dip-details';
 import { DocumentDetails } from '../../components/document-details/document-details';
 import { FilterModel } from '../../models/filter';
-import { DipPresenter } from '../../presenters/dip-presenter';
+import { BackendFacade } from '../../facades/backend.facade';
 import {
   AttachmentResponseDTO,
   DocumentDetailsResponseDTO,
@@ -14,52 +14,53 @@ import {
 @Component({
   selector: 'app-dip-dashboard-container',
   imports: [DocumentList, DocumentPreview, Filters, DipDetails, DocumentDetails],
-  providers: [DipPresenter],
   templateUrl: './dip-dashboard-container.html',
   styleUrl: './dip-dashboard-container.css',
 })
 export class DipDashboardContainer implements OnInit, OnDestroy {
-  private presenter = inject(DipPresenter);
-  public dipInfo = this.presenter.dipInfo;
-  public documentList = this.presenter.documentList;
-  public selectedDocument = this.presenter.selectedDocumentState;
-  public selectedAllegato = this.presenter.selectedAllegatoState;
-  public isLoading = this.presenter.isLoading;
-  public documentFileUrl = this.presenter.documentFileUrl;
-  public isLoadingPreview = this.presenter.isLoadingPreview;
-  public previewSelectedDocument = this.presenter.previewSelectedDocumentState;
-  public previewItemFormato = this.presenter.previewItemFormato;
+  private facade = inject(BackendFacade);
+  public dipInfo = this.facade.dipInfo;
+  public documentList = this.facade.documentList;
+  public selectedDocument = this.facade.selectedDocumentState;
+  public selectedAllegato = this.facade.selectedAllegatoState;
+  public isLoading = this.facade.isLoading;
+  public errorMessage = this.facade.errorMessage;
+  public documentFileUrl = this.facade.documentFileUrl;
+  public isLoadingPreview = this.facade.isLoadingPreview;
+  public previewSelectedDocument = this.facade.previewSelectedDocumentState;
+  public previewItemFormato = this.facade.previewItemFormato;
 
   public async onDocumentSelected(id: string): Promise<void> {
-    await this.presenter.selectDocument(id);
+    this.facade.selectDocument(id);
   }
 
   public async onAttachmentSelected(event: {
     doc: DocumentDetailsResponseDTO;
     allegato: AttachmentResponseDTO;
   }): Promise<void> {
-    await this.presenter.selectAllegato(event.allegato);
+    this.facade.selectAllegato(event.allegato);
   }
 
   public async ngOnInit(): Promise<void> {
-    await this.presenter.loadDocuments();
-    await this.presenter.loadDipInfo();
+    await this.facade.loadDocuments();
+    await this.facade.loadDipInfo();
   }
+
   public async onSearch(filters: FilterModel[]): Promise<void> {
-    await this.presenter.searchDocuments(filters);
+    await this.facade.searchDocuments(filters);
   }
 
   public async ngOnDestroy(): Promise<void> {
-    await this.presenter.clearSelection();
+    this.facade.clearSelection();
   }
 
   public async onItemPreview(
     item: DocumentDetailsResponseDTO | AttachmentResponseDTO,
   ): Promise<void> {
-    await this.presenter.previewDocument(item);
+    await this.facade.previewSelect(item);
   }
 
   public async closePreview(): Promise<void> {
-    await this.presenter.closePreview();
+    await this.facade.clearPreview();
   }
 }
