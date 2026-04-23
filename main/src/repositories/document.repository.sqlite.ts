@@ -20,6 +20,8 @@ import { PAESubject } from '../domain/pae-subject.model';
 import { ASSubject } from '../domain/as-subject.model';
 import { SWSubject } from '../domain/sw-subject.model';
 import { Person } from '../domain/person.model';
+import { SearchFilterDTO } from '../../../shared/request/search-filter.request.dto';
+import { SearchQueryBuilder } from './search-query.builder';
 
 @injectable()
 export class SQLiteDocumentRepository implements DocumentRepository {
@@ -369,5 +371,21 @@ export class SQLiteDocumentRepository implements DocumentRepository {
       .get(fileUuid) as FileRow;
 
     return row ? new File(row.uuid, row.percorso, row.dimensione) : null;
+
+  }
+    public async findAllByMetadata(filters: SearchFilterDTO[]): Promise<Document[]> {
+        let builder = new SearchQueryBuilder();
+        for(let filter of filters)
+            builder.addFilter(filter);      
+        const uuidDocumenti = this.dbProvider.instance.prepare(builder.getResult()).all() as string[];
+
+        let documents:Document[]=[];
+        for(const uuid of uuidDocumenti)
+        {
+            let doc = await this.findByUuid(uuid);
+            if(doc !== null)
+                documents.push(doc);
+        }
+        return documents;
   }
 }
