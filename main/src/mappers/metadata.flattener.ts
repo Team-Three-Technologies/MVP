@@ -1,3 +1,4 @@
+import { MetadataTypeEnum } from '../domain/metadata-type.enum';
 import { Metadata } from '../domain/metadata.model';
 import { MetadataPathPolicy } from './metadata-path.policy';
 import { MetadataTypePolicy } from './metadata-type.policy';
@@ -12,6 +13,13 @@ export class MetadataFlattener {
     return v === null || typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean';
   }
 
+  private createUtilityMetadata(path: string, name: string, type: MetadataTypeEnum): Metadata {
+    const split = path.split('.');
+    const value = split.pop();
+    
+    return new Metadata(split.join('.').concat(name), String(value), type);
+  }
+
   public flatten(root: Record<string, unknown>, rootPath = ''): Metadata[] {
     const out: Metadata[] = [];
 
@@ -24,6 +32,10 @@ export class MetadataFlattener {
 
         out.push(new Metadata(path, String(node), this.typePolicy.type(path)));
         return;
+      }
+
+      if (this.pathPolicy.utility(path)) {
+        out.push(this.createUtilityMetadata(path, 'TipoSoggetto', MetadataTypeEnum.STRING));
       }
 
       if (Array.isArray(node)) {
