@@ -1,4 +1,4 @@
-export interface SearchFilterDTO{
-    type: string;
-    value: string;
+export interface SearchFilterDTO {
+  type: string;
+  value: string;
 }

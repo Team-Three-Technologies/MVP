@@ -35,19 +35,25 @@ export class App implements OnInit {
   }
 
   async test4(): Promise<string> {
-    const res = await this.api.dip.checkIntegrity({ dipUuid: 'cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403' });
+    const res = await this.api.dip.checkIntegrity({
+      dipUuid: 'cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403',
+    });
     if (res.error) throw new Error(res.error);
     return res.data;
   }
 
   async test5(): Promise<string> {
-    const res = await this.api.document.exportFile({ documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab' });
+    const res = await this.api.document.exportFile({
+      documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab',
+    });
     if (res.error) throw new Error(res.error);
     return res.data;
   }
 
   async test6(): Promise<string> {
-    const res = await this.api.document.fileExternalPreview({ documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab' });
+    const res = await this.api.document.fileExternalPreview({
+      documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab',
+    });
     if (res.error) throw new Error(res.error);
     return res.data;
   }

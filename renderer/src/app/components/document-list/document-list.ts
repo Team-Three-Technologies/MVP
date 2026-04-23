@@ -28,7 +28,11 @@ export class DocumentList {
     this.documentSelected.emit(id);
   }
 
-  onAttachmentClick(doc: DocumentDetailsResponseDTO, allegato: AttachmentResponseDTO, event: Event) {
+  onAttachmentClick(
+    doc: DocumentDetailsResponseDTO,
+    allegato: AttachmentResponseDTO,
+    event: Event,
+  ) {
     event.stopPropagation();
     this.attachmentSelected.emit({ doc, allegato });
   }
