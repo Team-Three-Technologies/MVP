@@ -118,9 +118,9 @@ export class Filters {
       }))
       .filter((f) => f.value !== '' && this.isValidForType(f.type, f.value));
       
-    if (!this.checkAssociation()) {
-      return;
-    }
+    // if (!this.checkAssociation()) {
+    //   return;
+    // }
     // verso il padre
     this.searchRequested.emit(filtriValidi);
     console.log('Ricerca richiesta con filtri:', filtriValidi);

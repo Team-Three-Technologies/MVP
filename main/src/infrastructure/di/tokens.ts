@@ -11,7 +11,6 @@ export const TOKENS = {
   DocumentClassMapper: Symbol('DocumentClassMapper'),
   ConservationProcessMapper: Symbol('ConservationProcessMapper'),
   DocumentMapper: Symbol('DocumentMapper'),
-  SubjectMapper: Symbol('SubjectMapper'),
   MetadataFlattener: Symbol('MetadataFlattener'),
   FileSystemProvider: Symbol('FileSystemProvider'),
   DialogProvider: Symbol('DialogProvider'),

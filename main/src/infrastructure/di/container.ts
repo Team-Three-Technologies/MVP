@@ -19,7 +19,6 @@ import { SQLiteDocumentClassRepository } from '../../repositories/document-class
 import { SQLiteConservationProcessRepository } from '../../repositories/conservation-process.repository.sqlite';
 import { SQLiteDocumentRepository } from '../../repositories/document.repository.sqlite';
 import { MetadataFlattener } from '../../mappers/metadata.flattener';
-import { SubjectMapper } from '../../mappers/subject.mapper';
 import { DocumentMapper } from '../../mappers/document.mapper';
 import { ConservationProcessMapper } from '../../mappers/conservation-process.mapper';
 import { DocumentClassMapper } from '../../mappers/document-class.mapper';
@@ -156,11 +155,6 @@ export function registerDependencies(): void {
   container.register(
     TOKENS.MetadataFlattener,
     { useClass: MetadataFlattener },
-    { lifecycle: Lifecycle.Singleton },
-  );
-  container.register(
-    TOKENS.SubjectMapper,
-    { useClass: SubjectMapper },
     { lifecycle: Lifecycle.Singleton },
   );
   container.register(
