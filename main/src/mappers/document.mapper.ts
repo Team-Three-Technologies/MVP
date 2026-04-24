@@ -1,18 +1,12 @@
 import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '../infrastructure/di/tokens';
-import { SubjectMapper } from './subject.mapper';
 import { MetadataFlattener } from './metadata.flattener';
 import { Document } from '../domain/document.model';
 import { File } from '../domain/file.model';
 import { DocumentParsingResult } from '../infrastructure/parsing/document-parsing.result';
-import { Subject } from '../domain/subject.model';
-import { RolesTypeEnum } from '../domain/roles-type.enum';
-
 @injectable()
 export class DocumentMapper {
   constructor(
-    @inject(TOKENS.SubjectMapper)
-    private readonly subjectMapper: SubjectMapper,
     @inject(TOKENS.MetadataFlattener)
     private readonly metadataFlattener: MetadataFlattener,
   ) {}
@@ -51,11 +45,6 @@ export class DocumentMapper {
       parsedDocument.documentMetadata.Document as unknown as Record<string, unknown>,
     );
 
-    const entries = this.subjectMapper.toDomain(baseMetadata.Soggetti.Ruolo);
-
-    const subjects = new Map<Subject, RolesTypeEnum>(
-      entries.map((e) => [e.subject, e.roleType] as [Subject, RolesTypeEnum]),
-    );
     const conservationProcessUuid =
       parsedDocument.documentMetadata.Document.ArchimemoData.DocumentInformation
         .PreservationProcessUUID;
@@ -66,7 +55,6 @@ export class DocumentMapper {
       main,
       attachments,
       metadata,
-      subjects,
       conservationProcessUuid,
     );
   }

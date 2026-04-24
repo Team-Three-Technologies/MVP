@@ -1,7 +1,5 @@
 import { File } from './file.model';
 import { Metadata } from './metadata.model';
-import { Subject } from './subject.model';
-import { RolesTypeEnum } from './roles-type.enum';
 
 export class Document {
   constructor(
@@ -10,7 +8,6 @@ export class Document {
     private main: File,
     private attachments: File[],
     private metadata: Metadata[],
-    private subjects: Map<Subject, RolesTypeEnum>,
     private conservationProcessUuid: string,
   ) {}
 
@@ -32,10 +29,6 @@ export class Document {
 
   public getMetadata(): Metadata[] {
     return this.metadata;
-  }
-
-  public getSubjects(): Map<Subject, RolesTypeEnum> {
-    return this.subjects;
   }
 
   public getConservationProcessUuid(): string {
@@ -60,10 +53,6 @@ export class Document {
 
   public setMetadata(metadata: Metadata[]): void {
     this.metadata = metadata;
-  }
-
-  public setSubjects(subject: Map<Subject, RolesTypeEnum>): void {
-    this.subjects = subject;
   }
 
   public setConservationProcessUuid(conservationProcessUuid: string): void {

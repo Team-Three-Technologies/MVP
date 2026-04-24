@@ -2,8 +2,12 @@ import { TOKENS } from '../infrastructure/di/tokens';
 import { DocumentRepository } from '../repositories/document.repository.interface';
 import { inject, injectable } from 'tsyringe';
 import { SearchDocumentsFromMetadataUseCase } from './search-documents-from-metadata.use-case';
-import { SearchFilterDTO } from '../../../shared/request/search-filter.request.dto';
-import { DocumentEssentialsDTO } from '../../../shared/response/dip-content.response.dto';
+import { SearchResponseDTO } from '../../../shared/response/search.response.dto';
+import {
+  DocumentEssentialsAttachmentDTO,
+  DocumentEssentialsDTO,
+} from '../../../shared/response/dip-content.response.dto';
+import { MetadataFilter } from '../domain/metadata-filter.model';
 
 @injectable()
 export class SearchDocumentsFromMetadataService implements SearchDocumentsFromMetadataUseCase {
@@ -12,28 +16,29 @@ export class SearchDocumentsFromMetadataService implements SearchDocumentsFromMe
     private readonly documentRepository: DocumentRepository,
   ) {}
 
-  public async execute(filters: SearchFilterDTO[]): Promise<DocumentEssentialsDTO[]> {
-      const documents = await this.documentRepository.findAllByMetadata(filters);
+  public async execute(filters: { type: string; value: string }[]): Promise<SearchResponseDTO> {
+    const documents = await this.documentRepository.findAllByMetadata(
+      filters.map((f) => new MetadataFilter(f.type, f.value)),
+    );
 
-    let docEssentialsList: DocumentEssentialsDTO[] = [];
-    if (documents !== null) {
-      for (const doc of documents) {
-        const attachments: { uuid: string; name: string }[] = [];
-        for (const attach of doc.getAttachments()) {
-          attachments.push({
-            uuid: attach.getUuid(),
-            name: attach.getFilename(),
-          });
-        }
+    const docEssentialsList: DocumentEssentialsDTO[] = [];
 
-        docEssentialsList.push({
-          documentUuid: doc.getUuid(),
-          documentName: doc.getMain().getFilename(),
-          documentAttachments: attachments,
+    for (const doc of documents) {
+      const attachments: DocumentEssentialsAttachmentDTO[] = [];
+      for (const attach of doc.getAttachments()) {
+        attachments.push({
+          uuid: attach.getUuid(),
+          name: attach.getFilename(),
         });
       }
+
+      docEssentialsList.push({
+        documentUuid: doc.getUuid(),
+        documentName: doc.getMain().getFilename(),
+        documentAttachments: attachments,
+      });
     }
-    //console.log(docEssentialsList);
-    return docEssentialsList;
+
+    return { results: docEssentialsList };
   }
 }

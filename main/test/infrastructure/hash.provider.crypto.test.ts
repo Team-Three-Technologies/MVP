@@ -13,8 +13,9 @@ describe('CryptoHashProvider', () => {
   it('toHashAlgorithm() lancia errore se metadataValue non è algoritmo hash supportato', () => {
     const cryptoHashProvider = new CryptoHashProvider();
 
-    expect(() => cryptoHashProvider.toHashAlgorithm('unknown'))
-      .toThrow('Algoritmo hash non supportato nei metadata: unknown');
+    expect(() => cryptoHashProvider.toHashAlgorithm('unknown')).toThrow(
+      'Algoritmo hash non supportato nei metadata: unknown',
+    );
   });
 
   it('hashStream() calcola hash da stream', async () => {

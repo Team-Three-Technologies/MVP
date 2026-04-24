@@ -13,12 +13,12 @@ import { DipParserV1 } from '../parsing/dip.parser.v1';
 import { DipIndexParserV1 } from '../../infrastructure/parsing/dip-index.parser.v1';
 import { AipInfoParserV1 } from '../../infrastructure/parsing/aip-info.parser.v1';
 import { DocumentMetadataParserV1 } from '../parsing/document-metadata.parser.v1';
+import { SearchQueryBuilder } from '../../repositories/search-query.builder';
 import { SQLiteDipRepository } from '../../repositories/dip.repository.sqlite';
 import { SQLiteDocumentClassRepository } from '../../repositories/document-class.repository.sqlite';
 import { SQLiteConservationProcessRepository } from '../../repositories/conservation-process.repository.sqlite';
 import { SQLiteDocumentRepository } from '../../repositories/document.repository.sqlite';
 import { MetadataFlattener } from '../../mappers/metadata.flattener';
-import { SubjectMapper } from '../../mappers/subject.mapper';
 import { DocumentMapper } from '../../mappers/document.mapper';
 import { ConservationProcessMapper } from '../../mappers/conservation-process.mapper';
 import { DocumentClassMapper } from '../../mappers/document-class.mapper';
@@ -27,12 +27,12 @@ import { AutoImportDipService } from '../../application/auto-import-dip.service'
 import { GetDipContentService } from '../../application/get-dip-content.service';
 import { CheckDipIntegrityService } from '../../application/check-dip-integrity.service';
 import { GetDocumentDetailsService } from '../../application/get-document-details.service';
+import { SearchDocumentsFromMetadataService } from '../../application/search-documents-from-metadata.service';
 import { ExportFileService } from '../../application/export-file.service';
 import { FileInternalPreviewService } from '../../application/file-internal-preview.service';
 import { FileExternalPreviewService } from '../../application/file-external-preview.service';
 import { DipHandler } from '../../presentation/dip.handler';
 import { DocumentHandler } from '../../presentation/document.handler';
-import {SearchDocumentsFromMetadataService} from '../../application/search-documents-from-metadata.service'
 
 function getLaunchDir(): string {
   const dirFromEnv = process.env.PORTABLE_EXECUTABLE_DIR;
@@ -116,6 +116,13 @@ export function registerDependencies(): void {
 
   // repositories
   container.register(
+    TOKENS.SearchQueryBuilder,
+    {
+      useClass: SearchQueryBuilder,
+    },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
     TOKENS.DipRepository,
     {
       useClass: SQLiteDipRepository,
@@ -148,11 +155,6 @@ export function registerDependencies(): void {
   container.register(
     TOKENS.MetadataFlattener,
     { useClass: MetadataFlattener },
-    { lifecycle: Lifecycle.Singleton },
-  );
-  container.register(
-    TOKENS.SubjectMapper,
-    { useClass: SubjectMapper },
     { lifecycle: Lifecycle.Singleton },
   );
   container.register(
@@ -194,6 +196,11 @@ export function registerDependencies(): void {
     { lifecycle: Lifecycle.Singleton },
   );
   container.register(
+    TOKENS.SearchDocumentsFromMetadataUseCase,
+    { useClass: SearchDocumentsFromMetadataService },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
     TOKENS.ExportFileUseCase,
     { useClass: ExportFileService },
     { lifecycle: Lifecycle.Singleton },
@@ -208,12 +215,6 @@ export function registerDependencies(): void {
     { useClass: FileExternalPreviewService },
     { lifecycle: Lifecycle.Singleton },
   );
-  container.register(
-    TOKENS.SearchDocumentsFromMetadataUseCase,
-    { useClass: SearchDocumentsFromMetadataService  },
-    { lifecycle: Lifecycle.Singleton },
-  );
-
 
   // handlers
   container.registerSingleton(DipHandler);

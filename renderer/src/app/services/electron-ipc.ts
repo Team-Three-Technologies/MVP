@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IpcResponse } from '@shared/ipc-response';
 import { DocumentDetailsResponseDTO } from '@shared/response/document-details.response.dto';
 import { DipContentResponseDTO } from '@shared/response/dip-content.response.dto';
-import { SearchFilterDTO } from '@shared/request/search-filter.request.dto';
+import { SearchRequestDTO } from '@shared/request/search.request.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -52,16 +52,15 @@ export class ElectronIpc {
     }
   }
 
-
-   public async searchDocuments(filters: SearchFilterDTO[]): Promise<DocumentDetailsResponseDTO[]> {
-     try {
-       const response = await this.api.dip.searchDocuments(filters);
-       return this.unwrapIpcResponse(response, 'Invalid response while searching documents');
-     } catch (error) {
-       console.error('Error searching documents:', error);
-       throw error;
-     }
-   }
+  public async searchDocuments(filters: SearchRequestDTO): Promise<DocumentDetailsResponseDTO[]> {
+    try {
+      const response = await this.api.document.searchDocuments(filters);
+      return this.unwrapIpcResponse(response, 'Invalid response while searching documents');
+    } catch (error) {
+      console.error('Error searching documents:', error);
+      throw error;
+    }
+  }
 
   public async loadDocumentFile(filePath: string): Promise<Uint8Array> {
     try {

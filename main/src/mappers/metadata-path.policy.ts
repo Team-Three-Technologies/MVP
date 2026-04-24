@@ -53,10 +53,13 @@ export class MetadataPathPolicy {
   }
 
   public utility(path: string): boolean {
-    if (this.policy.utilityExact.includes(path) || this.policy.utilityRegex.some((r) => r.test(path))) {
+    if (
+      this.policy.utilityExact.includes(path) ||
+      this.policy.utilityRegex.some((r) => r.test(path))
+    ) {
       return true;
     }
-    
+
     return false;
   }
 }

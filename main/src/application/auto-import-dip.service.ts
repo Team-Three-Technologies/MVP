@@ -41,12 +41,12 @@ export class AutoImportDipService implements AutoImportDipUseCase {
   ) {}
 
   public async execute(): Promise<AutoImportDipResponseDTO> {
-    // 1GB: 'D:\\filip\\Downloads\\dip.2026115.cbe221f9-becc-41d4-b5fb-76e701fa5eac'; // TODO: da fixare i soggetti
+    // 1GB: 'D:\\filip\\Downloads\\dip.2026115.cbe221f9-becc-41d4-b5fb-76e701fa5eac';
     // 4GB: 'D:\\filip\\Downloads\\dip.2026115.d7a27175-16b3-4a7d-877d-26f2b1baadda';
-    // 3MB: 'D:\\filip\\Downloads\\dip.20251111.0413d8ee-8e82-4331-864e-7f8098bcc419'; // TODO: da fixare i soggetti
+    // 3MB: 'D:\\filip\\Downloads\\dip.20251111.0413d8ee-8e82-4331-864e-7f8098bcc419';
     // 176kB: 'D:\\filip\\Downloads\\dip.20251111.ec276d29-f80c-4693-b3c9-1cb650e23114';
     // 1MB: 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403';
-    const dir = '/home/nenad/GitHubRepo/ProgettoSWE/materiale_proponente/EsempiDiP/dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403'; // this.fileSystemProvider.getStartDir();
+    const dir = this.fileSystemProvider.getStartDir();
     const dipIndexPath = await this.fileSystemProvider.findFile(dir, FILE_NAME_PATTERNS.DIP_INDEX);
     //TODO: per il db da capire se svuotarlo alla fine, molto sensato imo
     // se non trova il dip index

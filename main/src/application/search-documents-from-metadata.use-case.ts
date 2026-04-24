@@ -1,6 +1,5 @@
-import { SearchFilterDTO } from '../../../shared/request/search-filter.request.dto';
-import { DocumentEssentialsDTO } from '../../../shared/response/dip-content.response.dto';
+import { SearchResponseDTO } from '../../../shared/response/search.response.dto';
 
 export interface SearchDocumentsFromMetadataUseCase {
-  execute(filters: SearchFilterDTO[]): Promise<DocumentEssentialsDTO[]>;
+  execute(filters: { type: string; value: string }[]): Promise<SearchResponseDTO>;
 }
