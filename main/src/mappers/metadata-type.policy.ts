@@ -62,11 +62,17 @@ export class MetadataTypePolicy {
       return MetadataTypeEnum.BOOLEAN;
     }
 
-    if (this.policy.numberExact.includes(path) || this.policy.numberRegex.some((r) => r.test(path))) {
+    if (
+      this.policy.numberExact.includes(path) ||
+      this.policy.numberRegex.some((r) => r.test(path))
+    ) {
       return MetadataTypeEnum.NUMBER;
     }
 
-    if (this.policy.base64Exact.includes(path) || this.policy.base64Regex.some((r) => r.test(path))) {
+    if (
+      this.policy.base64Exact.includes(path) ||
+      this.policy.base64Regex.some((r) => r.test(path))
+    ) {
       return MetadataTypeEnum.BASE64;
     }
 

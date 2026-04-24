@@ -22,6 +22,7 @@ export const TOKENS = {
   DipIndexParser: Symbol('DipIndexParser'),
   AipInfoParser: Symbol('AipInfoParser'),
   DocumentMetadataParser: Symbol('DocumentMetadataParser'),
+  SearchQueryBuilder: Symbol('SearchQueryBuilder'),
   DipRepository: Symbol('DipRepository'),
   DocumentClassRepository: Symbol('DocumentClassRepository'),
   ConservationProcessRepository: Symbol('ConservationProcessRepository'),

@@ -3,7 +3,7 @@ import { File } from '../domain/file.model';
 import { Metadata } from '../domain/metadata.model';
 import { Subject } from '../domain/subject.model';
 import { RolesTypeEnum } from '../domain/roles-type.enum';
-import { SearchFilterDTO } from '../../../shared/request/search-filter.request.dto';
+import { MetadataFilter } from '../domain/metadata-filter.model';
 
 export interface DocumentRepository {
   save(document: Document): Promise<Document>;
@@ -16,5 +16,5 @@ export interface DocumentRepository {
   findAllByDocumentClassUuid(documentClassUuid: string): Promise<Document[]>;
   findAllByConservationProcessUuid(conservationProcessUuid: string): Promise<Document[]>;
   findFileByUuid(fileUuid: string): Promise<File | null>;
-  findAllByMetadata(filters: SearchFilterDTO[]): Promise<Document[]>;
+  findAllByMetadata(filters: MetadataFilter[]): Promise<Document[]>;
 }

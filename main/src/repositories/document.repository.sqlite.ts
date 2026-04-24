@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 import { DocumentRepository } from './document.repository.interface';
 import { TOKENS } from '../infrastructure/di/tokens';
 import { DatabaseProvider } from '../infrastructure/database/database.provider';
+import { SearchQueryBuilder } from './search-query.builder';
 import { Document } from '../domain/document.model';
 import { File } from '../domain/file.model';
 import { Metadata } from '../domain/metadata.model';
@@ -20,14 +21,16 @@ import { PAESubject } from '../domain/pae-subject.model';
 import { ASSubject } from '../domain/as-subject.model';
 import { SWSubject } from '../domain/sw-subject.model';
 import { Person } from '../domain/person.model';
-import { SearchFilterDTO } from '../../../shared/request/search-filter.request.dto';
-import { SearchQueryBuilder } from './search-query.builder';
+import { MetadataFilter } from '../domain/metadata-filter.model';
+import { DocumentUuidRow } from './document-uuid.row';
 
 @injectable()
 export class SQLiteDocumentRepository implements DocumentRepository {
   constructor(
     @inject(TOKENS.DatabaseProvider)
     private readonly dbProvider: DatabaseProvider,
+    @inject(TOKENS.SearchQueryBuilder)
+    private readonly searchQueryBuilder: SearchQueryBuilder,
   ) {}
 
   public async save(document: Document): Promise<Document> {
@@ -372,20 +375,25 @@ export class SQLiteDocumentRepository implements DocumentRepository {
 
     return row ? new File(row.uuid, row.percorso, row.dimensione) : null;
   }
-  public async findAllByMetadata(filters: SearchFilterDTO[]): Promise<Document[]> {
-      if(filters.length!==0)
-      {
-          let builder = new SearchQueryBuilder();
-          for (let filter of filters) builder.addFilter(filter);
-          const uuidDocumenti = this.dbProvider.instance.prepare(builder.getResult()).all() as {uuid_documento:string}[];
 
-          let documents: Document[] = [];
-          for (const uuid of uuidDocumenti) {
-              let doc = await this.findByUuid(uuid.uuid_documento);
-              if (doc !== null) documents.push(doc);
-          }
-          return documents;
-      }
-        return [];
+  public async findAllByMetadata(filters: MetadataFilter[]): Promise<Document[]> {
+    if (filters.length === 0) return [];
+
+    for (const filter of filters) {
+      this.searchQueryBuilder.withFilter(filter);
+    }
+    const result = this.searchQueryBuilder.buildQuery();
+
+    const rows = this.dbProvider.instance
+      .prepare(result.query)
+      .all(result.params) as DocumentUuidRow[];
+
+    const documents: Document[] = [];
+    for (const row of rows) {
+      let doc = await this.findByUuid(row.uuid_documento);
+      if (doc !== null) documents.push(doc);
+    }
+
+    return documents;
   }
 }

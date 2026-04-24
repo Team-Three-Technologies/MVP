@@ -2,7 +2,6 @@ import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '../infrastructure/di/tokens';
 import { AutoImportDipUseCase } from '../application/auto-import-dip.use-case';
 import { GetDipContentUseCase } from '../application/get-dip-content.use-case';
-import { SearchDocumentsFromMetadataUseCase  } from '../application/search-documents-from-metadata.use-case';
 import { CheckDipIntegrityUseCase } from '../application/check-dip-integrity.use-case';
 import { AutoImportDipResponseDTO } from '../../../shared/response/auto-import-dip.response.dto';
 import { DipRequestDTO } from '../../../shared/request/dip.request.dto';
@@ -10,8 +9,6 @@ import { DipContentResponseDTO } from '../../../shared/response/dip-content.resp
 import { DipIntegrityResponseDTO } from '../../../shared/response/dip-integrity.response.dto';
 import { IpcResponse } from '../../../shared/ipc-response';
 import { ok, fail } from './ipc-response.utils';
-import { SearchFilterDTO } from '../../../shared/request/search-filter.request.dto';
-import { DocumentEssentialsDTO } from '../../../shared/response/dip-content.response.dto';
 
 @injectable()
 export class DipHandler {
@@ -22,9 +19,6 @@ export class DipHandler {
     private readonly getDipContentUseCase: GetDipContentUseCase,
     @inject(TOKENS.CheckDipIntegrityUseCase)
     private readonly checkDipIntegrityUseCase: CheckDipIntegrityUseCase,
-    @inject(TOKENS.SearchDocumentsFromMetadataUseCase)
-    private readonly searchDocumentsFromMetadataUseCase: SearchDocumentsFromMetadataUseCase,
-
   ) {}
 
   public async autoImport(): Promise<IpcResponse<AutoImportDipResponseDTO>> {
@@ -43,18 +37,6 @@ export class DipHandler {
       const response = await this.getDipContentUseCase.execute(dipRequestDto.dipUuid);
       return ok(response);
     } catch (e) {
-      return fail((e as Error).message);
-    }
-  }
-  public async searchDocuments(
-    filters:SearchFilterDTO[],
-  ): Promise<IpcResponse<DocumentEssentialsDTO[]>> {
-    try {
-
-      const response = await this.searchDocumentsFromMetadataUseCase.execute(filters);
-      return ok(response);
-    } catch (e) {
-        console.log((e as Error).message);
       return fail((e as Error).message);
     }
   }

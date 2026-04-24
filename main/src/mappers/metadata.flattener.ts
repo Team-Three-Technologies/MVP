@@ -16,8 +16,8 @@ export class MetadataFlattener {
   private createUtilityMetadata(path: string, name: string, type: MetadataTypeEnum): Metadata {
     const split = path.split('.');
     const value = split.pop();
-    
-    return new Metadata(split.join('.').concat(name), String(value), type);
+
+    return new Metadata(split.join('.').concat('.', name), String(value), type);
   }
 
   public flatten(root: Record<string, unknown>, rootPath = ''): Metadata[] {
