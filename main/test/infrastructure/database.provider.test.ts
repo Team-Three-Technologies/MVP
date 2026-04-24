@@ -1,8 +1,7 @@
-// just to push
 import { container } from 'tsyringe';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-describe('PlaceholderModel', () => {
+describe('DatabaseProvider', () => {
   beforeEach(() => {
     container.clearInstances();
   });

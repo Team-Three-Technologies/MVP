@@ -58,20 +58,25 @@ export class MetadataTypePolicy {
     if (
       this.policy.booleanExact.includes(path) ||
       this.policy.booleanRegex.some((r) => r.test(path))
-    )
+    ) {
       return MetadataTypeEnum.BOOLEAN;
+    }
 
-    if (this.policy.numberExact.includes(path) || this.policy.numberRegex.some((r) => r.test(path)))
+    if (this.policy.numberExact.includes(path) || this.policy.numberRegex.some((r) => r.test(path))) {
       return MetadataTypeEnum.NUMBER;
+    }
 
-    if (this.policy.base64Exact.includes(path) || this.policy.base64Regex.some((r) => r.test(path)))
+    if (this.policy.base64Exact.includes(path) || this.policy.base64Regex.some((r) => r.test(path))) {
       return MetadataTypeEnum.BASE64;
+    }
 
-    if (this.policy.dateExact.includes(path) || this.policy.dateRegex.some((r) => r.test(path)))
+    if (this.policy.dateExact.includes(path) || this.policy.dateRegex.some((r) => r.test(path))) {
       return MetadataTypeEnum.DATE;
+    }
 
-    if (this.policy.timeExact.includes(path) || this.policy.timeRegex.some((r) => r.test(path)))
+    if (this.policy.timeExact.includes(path) || this.policy.timeRegex.some((r) => r.test(path))) {
       return MetadataTypeEnum.TIME;
+    }
 
     return MetadataTypeEnum.STRING;
   }

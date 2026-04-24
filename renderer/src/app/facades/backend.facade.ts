@@ -3,7 +3,7 @@ import {
   AttachmentResponseDTO,
   DocumentDetailsResponseDTO,
 } from '@shared/response/document-details.response.dto';
-import { DipContentResponseDTO } from '@shared/response/dip-details.response.dto';
+import { DipContentResponseDTO } from '@shared/response/dip-content.response.dto';
 import { signal } from '@angular/core';
 import { ElectronIpc } from '../services/electron-ipc';
 import { FilterModel } from '../models/filter';
@@ -72,14 +72,14 @@ export class BackendFacade {
     this._isLoading.set(false);
   }
 
-  public async previewSelect(item: DocumentDetailsResponseDTO | AttachmentResponseDTO): Promise<void> {
+  public async previewSelect(
+    item: DocumentDetailsResponseDTO | AttachmentResponseDTO,
+  ): Promise<void> {
     if ('name' in item) {
       this._previewSelectedDocumentState.set(item);
       this._previewItemFormato.set(item.extension?.toLowerCase() || 'pdf');
     } else {
-      const doc = this.documentList().find((d) =>
-        d.attachments.some((a) => a.uuid === item.uuid),
-      );
+      const doc = this.documentList().find((d) => d.attachments.some((a) => a.uuid === item.uuid));
       this._previewSelectedDocumentState.set(doc || null);
       this._previewItemFormato.set(item.extension?.toLowerCase() || 'pdf');
     }
@@ -91,16 +91,17 @@ export class BackendFacade {
     this._isLoading.set(true);
     this.errorMessage.set(null);
 
-    try {
-      const filteredDocuments = await this.electronIpc.searchDocuments(filters);
-      this._documentList.set(filteredDocuments);
-    } catch (error) {
-      console.error('Error searching documents:', error);
-      this.errorMessage.set('Failed to search documents. Please try again.');
-    } finally {
-      this._isLoading.set(false);
-    }
+    // try {
+    //   const filteredDocuments = await this.electronIpc.searchDocuments(filters);
+    //   this._documentList.set(filteredDocuments);
+    // } catch (error) {
+    //   console.error('Error searching documents:', error);
+    //   this.errorMessage.set('Failed to search documents. Please try again.');
+    // } finally {
+    //   this._isLoading.set(false);
+    // }
   }
+
   public clearSelection(): void {
     this._selectedDocumentState.set(null);
     this._selectedAllegatoState.set(null);
@@ -118,17 +119,20 @@ export class BackendFacade {
     this.errorMessage.set(null);
     try {
       await this.electronIpc.autoImport();
-      await this.loadDocuments();
-      await this.loadDipInfo();
+      // await this.loadDocuments();
+      // await this.loadDipInfo();
     } catch (error) {
       console.error('Error auto importing:', error);
-      this.errorMessage.set('Failed to auto import documents. Please try again.');
+      // this.errorMessage.set('Failed to auto import documents. Please try again.');
+      this.errorMessage.set((error as Error).message);
     } finally {
       this._isLoading.set(false);
     }
   }
 
-  public async loadDocumentFile(item: DocumentDetailsResponseDTO | AttachmentResponseDTO): Promise<void> {
+  public async loadDocumentFile(
+    item: DocumentDetailsResponseDTO | AttachmentResponseDTO,
+  ): Promise<void> {
     if (this.documentFileUrl()) URL.revokeObjectURL(this.documentFileUrl()!);
     const filePath = 'path' in item ? item.path : null;
 

@@ -6,6 +6,7 @@ export const IPC_CHANNELS = {
   DOCUMENT_EXPORT_FILE: 'document:export-file',
   DOCUMENT_FILE_INTERNAL_PREVIEW: 'document:file-internal-preview',
   DOCUMENT_FILE_EXTERNAL_PREVIEW: 'document:file-external-preview',
+  DIP_SEARCH_FROM_METADATA: 'dip:searchDocuments',
 } as const;
 
 export type IpcChannel = typeof IPC_CHANNELS[keyof typeof IPC_CHANNELS];

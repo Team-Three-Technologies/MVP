@@ -43,7 +43,7 @@ export class Filters {
   ]);
 
   opzioniFiltro = [
-    'Identificativo documento',
+    'Identificativo documento (UUID)',
     'Modalità di formazione',
     'Tipologia documentale',
     'Tipologia di flusso',
@@ -71,9 +71,11 @@ export class Filters {
     'Oggetto',
     'Parola chiave',
     'Numero allegati',
-    'Impronta crittografica allegato',
-    'Impronta crittografica documento',
-    'Identificativo allegato',
+    'Impronta crittografica documento (hash)',
+    'Impronta crittografica documento (algoritmo)',
+    'Impronta crittografica allegato (hash)',
+    'Impronta crittografica allegato (algoritmo)',
+    'Identificativo allegato (UUID)',
     'Descrizione allegato',
     'Indice di classificazione',
     'Descrizione dell’indice di classificazione',

@@ -18,15 +18,15 @@
 
     <div class="info-row highlight">
       <span class="info-label">Numero Documenti:</span>
-      <span>{{ dipInfo.documentNumber ?? 'N/D' }}</span>
+      <span>{{ dipInfo.documentNumber || 'N/D' }}</span>
     </div>
 
     <div class="info-row">
       <span class="info-label">Numero AIP:</span>
-      <span class="info-value">{{ dipInfo.aipNumber ?? 'N/D' }}</span>
+      <span class="info-value">{{ dipInfo.aipNumber || 'N/D' }}</span>
     </div>
 
-    <div class="info-row">
+    <!-- <div class="info-row">
       <span class="info-label">Stato:</span>
       <span class="info-value status-with-icon">
         @if (dipInfo.status) {
@@ -35,7 +35,7 @@
         }
         <span>{{ dipInfo.status || 'N/D' }}</span>
       </span>
-    </div>
+    </div> -->
   </div>
   } @else {
   <div class="card-body empty-state">

@@ -6,6 +6,7 @@ import { IPC_CHANNELS } from '../../ipc-channels';
 import { DipRequestDTO } from '../../../shared/request/dip.request.dto';
 import { DocumentRequestDTO } from '../../../shared/request/document.request.dto';
 import { FileRequestDTO } from '../../../shared/request/file.request.dto';
+import { SearchFilterDTO} from '../../../shared/request/search-filter.request.dto';
 
 export function registerAllHandlers(): void {
   const dipHandler = container.resolve(DipHandler);
@@ -30,5 +31,8 @@ export function registerAllHandlers(): void {
   );
   ipcMain.handle(IPC_CHANNELS.DOCUMENT_FILE_EXTERNAL_PREVIEW, (_, fileRequestDto: FileRequestDTO) =>
     documentHandler.fileExternalPreview(fileRequestDto),
+  );
+  ipcMain.handle(IPC_CHANNELS.DIP_SEARCH_FROM_METADATA, (_, filters: SearchFilterDTO[]) =>
+    dipHandler.searchDocuments(filters),
   );
 }

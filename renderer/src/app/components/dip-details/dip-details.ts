@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DipContentResponseDTO } from '@shared/response/dip-details.response.dto';
+import { DipContentResponseDTO } from '@shared/response/dip-content.response.dto';
 
 @Component({
   selector: 'app-dip-details',

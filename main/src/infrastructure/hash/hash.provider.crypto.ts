@@ -11,7 +11,7 @@ export class CryptoHashProvider implements HashProvider {
     const key = metadataValue.trim();
     const algorithm = METADATA_TO_HASH_ALGO[key];
     if (!algorithm) {
-      throw new Error(`Algoritmo hash non supportato nei metadata: "${metadataValue}"`);
+      throw new Error(`Algoritmo hash non supportato nei metadata: ${metadataValue}`);
     }
     return algorithm;
   }

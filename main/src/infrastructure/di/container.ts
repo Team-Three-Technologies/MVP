@@ -32,6 +32,7 @@ import { FileInternalPreviewService } from '../../application/file-internal-prev
 import { FileExternalPreviewService } from '../../application/file-external-preview.service';
 import { DipHandler } from '../../presentation/dip.handler';
 import { DocumentHandler } from '../../presentation/document.handler';
+import {SearchDocumentsFromMetadataService} from '../../application/search-documents-from-metadata.service'
 
 function getLaunchDir(): string {
   const dirFromEnv = process.env.PORTABLE_EXECUTABLE_DIR;
@@ -207,6 +208,12 @@ export function registerDependencies(): void {
     { useClass: FileExternalPreviewService },
     { lifecycle: Lifecycle.Singleton },
   );
+  container.register(
+    TOKENS.SearchDocumentsFromMetadataUseCase,
+    { useClass: SearchDocumentsFromMetadataService  },
+    { lifecycle: Lifecycle.Singleton },
+  );
+
 
   // handlers
   container.registerSingleton(DipHandler);

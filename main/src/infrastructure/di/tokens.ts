@@ -3,6 +3,7 @@ export const TOKENS = {
   GetDipContentUseCase: Symbol('GetDipContentUseCase'),
   CheckDipIntegrityUseCase: Symbol('CheckDipIntegrityUseCase'),
   GetDocumentDetailsUseCase: Symbol('GetDocumentDetailsUseCase'),
+  SearchDocumentsFromMetadataUseCase: Symbol('SearchDocumentsFromMetadataUseCase'),
   ExportFileUseCase: Symbol('ExportFileUseCase'),
   FileInternalPreviewUseCase: Symbol('FileInternalPreviewUseCase'),
   FileExternalPreviewUseCase: Symbol('FileExternalPreviewUseCase'),
