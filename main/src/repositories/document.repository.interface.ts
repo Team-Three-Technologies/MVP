@@ -10,7 +10,7 @@ export interface DocumentRepository {
   findMetadataByDocumentUuid(documentUuid: string): Promise<Metadata[]>;
   findByUuid(documentUuid: string): Promise<Document | null>;
   findAllByDipUuid(dipUuid: string): Promise<Document[]>;
-  findAllByDocumentClassUuid(documentClassUuid: string): Promise<Document[]>;
+  findAllByDocumentClassUuidAndVersion(documentClassUuid: string, documentClassVersion: string): Promise<Document[]>;
   findAllByConservationProcessUuid(conservationProcessUuid: string): Promise<Document[]>;
   findFileByUuid(fileUuid: string): Promise<File | null>;
   findAllByMetadata(filters: MetadataFilter[]): Promise<Document[]>;

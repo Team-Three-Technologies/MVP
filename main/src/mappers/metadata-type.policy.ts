@@ -14,20 +14,13 @@ export interface TypePolicy {
 }
 
 const DEFAULT_POLICY: Required<TypePolicy> = {
-  booleanExact: [
-    'DocumentoInformatico.Riservato',
-    'DocumentoInformatico.Verifica.FirmatoDigitalmente',
-    'DocumentoInformatico.Verifica.SigillatoElettronicamente',
-    'DocumentoInformatico.Verifica.MarcaturaTemporale',
-    'DocumentoInformatico.Verifica.ConformitaCopieImmagineSuSupportoInformatico',
-  ],
-  booleanRegex: [],
+  booleanExact: [],
+  booleanRegex: [/[a-zA-Z]*\.Riservato$/, /[a-zA-Z]*\.Verifica\.[a-zA-Z]*$/],
   numberExact: [
-    'DocumentoInformatico.Allegati.NumeroAllegati',
-    'DocumentoInformatico.TempoDiConservazione',
+    'AggregazioneDocumentaliInformatiche.Progressivo',
     'ArchimemoData.DocumentInformation.FilesCount',
   ],
-  numberRegex: [],
+  numberRegex: [/[a-zA-Z]*\.Allegati\.NumeroAllegati$/, /[a-zA-Z]*\.TempoDiConservazione$/],
   base64Exact: [],
   base64Regex: [/(^|\.)(Impronta)(\.|$)/i],
   dateExact: [],

@@ -183,16 +183,16 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     return documents;
   }
 
-  public async findAllByDocumentClassUuid(documentClassUuid: string): Promise<Document[]> {
+  public async findAllByDocumentClassUuidAndVersion(documentClassUuid: string, documentClassVersion: string): Promise<Document[]> {
     const rows = this.dbProvider.instance
       .prepare(
         `
         SELECT d.uuid, d.percorso, d.uuid_processo_conservazione, d.uuid_file_principale FROM documenti d
         JOIN processi_conservazione pc ON d.uuid_processo_conservazione = pc.uuid
-        WHERE pc.uuid_classe_documentale = ?; 
+        WHERE pc.uuid_classe_documentale = ? AND pc.versione_classe_documentale = ?; 
       `,
       )
-      .all(documentClassUuid) as DocumentRow[];
+      .all(documentClassUuid, documentClassVersion) as DocumentRow[];
 
     const documents: Document[] = [];
 
