@@ -72,6 +72,7 @@ export class Filters {
     'Parola chiave',
     'Numero allegati',
     'Impronta crittografica allegato',
+    'Impronta crittografica documento',
     'Identificativo allegato',
     'Descrizione allegato',
     'Indice di classificazione',
@@ -114,7 +115,10 @@ export class Filters {
         value: f.value.trim(),
       }))
       .filter((f) => f.value !== '' && this.isValidForType(f.type, f.value));
-
+      
+    if (!this.checkAssociation()) {
+      return;
+    }
     // verso il padre
     this.searchRequested.emit(filtriValidi);
     console.log('Ricerca richiesta con filtri:', filtriValidi);
