@@ -18,6 +18,7 @@
   align-items: center;
   gap: 8px;
   width: 100%;
+  flex-wrap: nowrap;
 }
 
 
@@ -38,9 +39,19 @@
   border-color: blue;
 }
 
+.select-tipo {
+  flex: 0 1 220px;
+  min-width: 160px;
+}
+
 .input-testo {
   flex: 2 1 180px;
-  width: 100%;
+  min-width: 0;
+}
+
+.input-algoritmo {
+  flex: 0 0 110px;
+  min-width: 90px;
 }
 
 .btn-icona {
@@ -110,8 +121,11 @@
   }
 
   .input-base,
-  .input-testo {
+  .input-testo,
+  .select-tipo,
+  .input-algoritmo {
     flex: 1 1 100%;
+    min-width: 0;
   }
 
   .btn-icona {

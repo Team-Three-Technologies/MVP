@@ -6,7 +6,7 @@ import {
 import { DipContentResponseDTO } from '@shared/response/dip-content.response.dto';
 import { signal } from '@angular/core';
 import { ElectronIpc } from '../services/electron-ipc';
-import { FilterModel } from '../models/filter';
+import { SearchFilterDTO } from '@shared/request/search-filter.request.dto';
 @Injectable({
   providedIn: 'root',
 })
@@ -86,7 +86,7 @@ export class BackendFacade {
     await this.loadDocumentFile(item);
   }
 
-  public async searchDocuments(filters: FilterModel[]): Promise<void> {
+  public async searchDocuments(filters: SearchFilterDTO[]): Promise<void> {
     this.clearSelection();
     this._isLoading.set(true);
     this.errorMessage.set(null);
