@@ -6,14 +6,55 @@
       <select
         [(ngModel)]="filtro.type"
         (ngModelChange)="onFilterTypeChange($index, $event)"
-        class="input-base"
+        class="input-base select-tipo"
       >
-        @for (opzione of opzioniFiltro; track opzione) {
+        @for (opzione of opzioniDisponibili($index); track opzione) {
         <option [value]="opzione">{{ opzione }}</option>
         }
       </select>
 
-      <input type="text" [(ngModel)]="filtro.value" placeholder="Valore..." class="input-base input-testo">
+     
+      @if (isDropdownFilter(filtro.type)) {
+      <select
+        [(ngModel)]="filtro.value"
+        (ngModelChange)="onFilterValueChange()"
+        class="input-base input-testo"
+      >
+        @for (opzione of getDropdownOptions(filtro.type); track opzione) {
+        <option [value]="opzione">{{ opzione }}</option>
+        }
+      </select>
+
+      } @else if (isBooleanFilter(filtro.type)) {
+      <select [(ngModel)]="filtro.value" class="input-base input-testo">
+        <option value="" disabled>Seleziona...</option>
+        <option value="true">Sì</option>
+        <option value="false">No</option>
+      </select>
+
+      } @else if (isDateFilter(filtro.type)) {
+      <input
+        type="date"
+        [(ngModel)]="filtro.value"
+        class="input-base input-testo"
+      >
+
+      } @else if (isTimeFilter(filtro.type)) {
+      <input
+        type="time"
+        step="1"
+        [(ngModel)]="filtro.value"
+        class="input-base input-testo"
+      >
+
+      } @else {
+      <input
+        type="text"
+        [(ngModel)]="filtro.value"
+        placeholder="Valore..."
+        class="input-base input-testo"
+      >
+      }
 
       <button class="btn-icona" (click)="removeFilters($index)" title="Rimuovi filtro">&#x2715;</button>
     </div>

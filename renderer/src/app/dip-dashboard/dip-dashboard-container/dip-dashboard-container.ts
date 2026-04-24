@@ -4,7 +4,7 @@ import { DocumentPreview } from '../../components/document-preview/document-prev
 import { Filters } from '../../components/filters/filters';
 import { DipDetails } from '../../components/dip-details/dip-details';
 import { DocumentDetails } from '../../components/document-details/document-details';
-import { FilterModel } from '../../models/filter';
+import { SearchFilterDTO } from '@shared/request/search-filter.request.dto';
 import { BackendFacade } from '../../facades/backend.facade';
 import {
   AttachmentResponseDTO,
@@ -46,7 +46,7 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
     await this.facade.loadDipInfo();
   }
 
-  public async onSearch(filters: FilterModel[]): Promise<void> {
+  public async onSearch(filters: SearchFilterDTO[]): Promise<void> {
     await this.facade.searchDocuments(filters);
   }
 
