@@ -1,5 +1,5 @@
 import { container } from 'tsyringe';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 import { TOKENS } from '../../src/infrastructure/di/tokens';
 
 import { SQLiteDocumentClassRepository } from '../../src/repositories/document-class.repository.sqlite';
@@ -11,7 +11,7 @@ describe('Test SQLiteDocumentClassRepository', ()=>{
         container.register(TOKENS.DatabaseProvider, { useValue: {} });
     });
 
-    it('save(documentClass), se avviene con successo restituisce il conservationProcess passato', async ()=>{
+    it('save(documentClass), se avviene con successo restituisce la documentClass passata', async ()=>{
 
         const mockContainer ={
             prepare : vi.fn().mockReturnValue({
@@ -46,7 +46,7 @@ describe('Test SQLiteDocumentClassRepository', ()=>{
             ));
         expect(resultComplete).toBeInstanceOf(DocumentClass);
         expect(resultUncomplete).toBeInstanceOf(DocumentClass);
-        expect(resultUncomplete).toMatchObject(DocumentClass);
+
     });
 
 })

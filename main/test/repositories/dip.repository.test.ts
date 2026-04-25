@@ -54,7 +54,7 @@ describe('Test SQLiteDipRepository', () =>{
         
         expect(result).toBeInstanceOf(Dip);
     });
-    it('findByUuid(string), ritorna un dip con quel uuid',async ()=>{
+    it('findByUuid(string), ritorna null',async ()=>{
         const mockStatement ={
             get : vi.fn(),
         };
