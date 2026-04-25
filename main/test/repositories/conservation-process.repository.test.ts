@@ -5,7 +5,7 @@ import { TOKENS } from '../../src/infrastructure/di/tokens';
 import { SQLiteConservationProcessRepository } from '../../src/repositories/conservation-process.repository.sqlite';
 import { ConservationProcess } from '../../src/domain/conservation-process.model';
 
-describe('Test SQLiteDocumentClassRepository', ()=>{
+describe('Test SQLiteConservationProcess', ()=>{
     beforeEach(()=>{
         container.clearInstances();
         container.register(TOKENS.DatabaseProvider, { useValue: {} });
@@ -40,25 +40,3 @@ describe('Test SQLiteDocumentClassRepository', ()=>{
     });
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
