@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SearchFilterDTO } from '@shared/request/search-filter.request.dto';
+import { SearchFilterDTO } from '@shared/request/search.request.dto';
 
 @Component({
   selector: 'app-filters',
@@ -129,10 +129,9 @@ export class Filters {
       f.some((x) => x.type === 'Impronta crittografica allegato (hash)'),
   };
 
-  // ── Lista master di tutti i filtri disponibili ────────────────
 
   private readonly tuttiFiltri: string[] = [
-    'Identificativo documento',
+    'Identificativo documento (UUID)',
     'Modalità di formazione',
     'Tipologia documentale',
     'Tipologia di flusso',
@@ -226,7 +225,6 @@ export class Filters {
     if (!filtro) return;
     filtro.type = newType;
     filtro.value = this.filtriDropdown.has(newType) ? this.opzioniPerDropdown[newType][0] : '';
-    delete filtro.algorithm;
     this._rimuoviDipendentiInvalidi();
   }
 

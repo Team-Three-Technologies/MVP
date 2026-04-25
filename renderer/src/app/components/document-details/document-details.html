@@ -3,6 +3,7 @@
   @if (allegato) {
   <div class="card-header">
     <h3>Dettagli Allegato</h3>
+    <button class="btn-primary" (click)="document && allegato && onExport(document.uuid, allegato.uuid)">Esporta</button>
   </div>
   <div class="card-body">
     <div class="info-row">
@@ -22,6 +23,7 @@
   } @else if (document) {
   <div class="card-header">
     <h3>Dettagli Documento</h3>
+    <button class="btn-primary" (click)="document && onExport(document.uuid)">Esporta</button>
   </div>
   <div class="card-body">
     <div class="info-row">

@@ -13,13 +13,13 @@
   <main class="main-content">
     <section class="list-section">
       <app-document-list [documents]="documentList()" [isLoading]="isLoading()" [errorMessage]="errorMessage()"
-        (documentSelected)="onDocumentSelected($event)" (attachmentSelected)="onAttachmentSelected($event)"
-        (itemPreview)="onItemPreview($event)">
+        [integrityMap]="integrityMap()" (documentSelected)="onDocumentSelected($event)"
+        (attachmentSelected)="onAttachmentSelected($event)" (itemPreview)="onItemPreview($event)">
       </app-document-list>
     </section>
     @if(selectedDocument() || selectedAllegato()) {
     <section class="details-section">
-      <app-document-details [document]="selectedDocument()" [allegato]="selectedAllegato()">
+      <app-document-details [document]="selectedDocument()" [allegato]="selectedAllegato()" (export)="onExport($event)">
       </app-document-details>
     </section>
     }

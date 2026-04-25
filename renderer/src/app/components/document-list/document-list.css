@@ -19,6 +19,9 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: 100%;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 
@@ -42,6 +45,28 @@
   text-decoration: underline;
   color: blue;
 }
+
+
+.btn-link.integrity-ok {
+  color: #1a7f37;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.btn-link.integrity-ok:hover {
+  color: #145f2a;
+}
+
+.btn-link.integrity-ko {
+  color: #cc0000;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.btn-link.integrity-ko:hover {
+  color: #990000;
+}
+
 
 .lista-allegati {
   list-style-type: none;
