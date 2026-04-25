@@ -7,7 +7,6 @@ import { Document  } from '../../src/domain/document.model';
 import { File  } from '../../src/domain/file.model';
 import { Metadata  } from '../../src/domain/metadata.model';
 import { MetadataTypeEnum } from '../../src/domain/metadata-type.enum';
-import { SearchFilterDTO} from '../../../shared/request/search.request.dto'
 import { MetadataFilter } from '../../src/domain/metadata-filter.model';
 
 describe('Test SQLiteDocumentRepository', ()=>{
