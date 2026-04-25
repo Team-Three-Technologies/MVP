@@ -46,6 +46,7 @@ describe('Test SQLiteDocumentClassRepository', ()=>{
             ));
         expect(resultComplete).toBeInstanceOf(DocumentClass);
         expect(resultUncomplete).toBeInstanceOf(DocumentClass);
+        expect(resultUncomplete).toMatchObject(DocumentClass);
     });
 
 })
