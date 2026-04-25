@@ -95,7 +95,8 @@
   margin-top: 8px;
 }
 
-.empty-state {
+.empty-state,
+.loading-state {
   text-align: center;
   color: #888;
   font-style: italic;

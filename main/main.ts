@@ -40,6 +40,7 @@ function createWindow(): void {
     width: 1280,
     height: 800,
     webPreferences: {
+      plugins: true,
       preload: path.join(__dirname, 'preload.js'), 
       contextIsolation: true,
       nodeIntegration: false,

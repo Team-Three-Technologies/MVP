@@ -4,6 +4,7 @@ import { FileInternalPreviewUseCase } from './file-internal-preview.use-case';
 import { FileInternalPreviewResponseDTO } from '../../../shared/response/file-internal-preview.response.dto';
 import { DocumentRepository } from '../repositories/document.repository.interface';
 import * as path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 @injectable()
 export class FileInternalPreviewService implements FileInternalPreviewUseCase {
@@ -34,6 +35,7 @@ export class FileInternalPreviewService implements FileInternalPreviewUseCase {
       fullPath = path.join(document.getPath(), attachment.getPath());
     }
 
-    return { filePath: fullPath };
+    const fileUrl = pathToFileURL(fullPath).href.replace('file://', 'localfile://');
+    return { fileUrl };
   }
 }

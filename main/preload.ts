@@ -3,8 +3,6 @@ import { DipRequestDTO } from '../shared/request/dip.request.dto';
 import { DocumentRequestDTO } from '../shared/request/document.request.dto';
 import { FileRequestDTO } from '../shared/request/file.request.dto';
 import { SearchRequestDTO } from '../shared/request/search.request.dto';
-import { pathToFileURL } from 'node:url';
-
 const IPC_CHANNELS = {
   DIP_AUTO_IMPORT: 'dip:auto-import',
   DIP_CONTENT: 'dip:content',
@@ -18,8 +16,6 @@ const IPC_CHANNELS = {
 
 // definita API di comunicazione
 contextBridge.exposeInMainWorld('electronAPI', {
-  toLocalFileUrl: (filePath: string) =>
-    pathToFileURL(filePath).href.replace('file://', 'localfile://'),
   dip: { // invoca evento (si trova in ipc-channels.ts)
     autoImport: () => ipcRenderer.invoke(IPC_CHANNELS.DIP_AUTO_IMPORT),
     content: (dipRequestDto: DipRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_CONTENT, dipRequestDto),

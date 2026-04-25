@@ -1,3 +1,3 @@
 export interface FileInternalPreviewResponseDTO {
-  filePath: string;
+  fileUrl: string;
 }

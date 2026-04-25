@@ -1,5 +1,9 @@
 <div class="document-details-card">
-
+  @if (isLoading) {
+  <div class="card-body loading-state">
+    <p>Caricamento dettagli...</p>
+  </div>
+  } @else {
   @if (allegato) {
   <div class="card-header">
     <h3>Dettagli Allegato</h3>
@@ -64,5 +68,5 @@
     <p>Seleziona un documento per visualizzarne i dettagli.</p>
   </div>
   }
-
+  }
 </div>

@@ -14,7 +14,6 @@ import { FileRequestDTO } from '@shared/request/file.request.dto';
 declare global {
   interface Window {
     electronAPI: {
-      toLocalFileUrl: (filePath: string) => string;
       dip: {
         autoImport(): Promise<IpcResponse<AutoImportDipResponseDTO>>;
         content(dipRequestDto: DipRequestDTO): Promise<IpcResponse<DipContentResponseDTO>>;

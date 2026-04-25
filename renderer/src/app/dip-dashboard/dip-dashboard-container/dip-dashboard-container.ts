@@ -37,8 +37,11 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
   private _documentList = signal<DocumentEssentialsDTO[]>([]);
   public documentList = this._documentList.asReadonly();
 
-  private _isLoading = signal<boolean>(false);
-  public isLoading = this._isLoading.asReadonly();
+  private _isListLoading = signal<boolean>(false);
+  public isListLoading = this._isListLoading.asReadonly();
+
+  private _isDetailsLoading = signal<boolean>(false);
+  public isDetailsLoading = this._isDetailsLoading.asReadonly();
 
   public errorMessage = signal<string | null>(null);
 
@@ -128,7 +131,7 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
   }
 
   private async selectDocument(id: string): Promise<void> {
-    this._isLoading.set(true);
+    this._isDetailsLoading.set(true);
     this._selectedDocumentState.set(null);
     this._selectedAllegatoState.set(null);
     try {
@@ -138,12 +141,12 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
       console.error('Error loading document details:', error);
       this.errorMessage.set('Failed to load document details.');
     } finally {
-      this._isLoading.set(false);
+      this._isDetailsLoading.set(false);
     }
   }
 
   private async selectAllegato(documentUuid: string, allegatoUuid: string): Promise<void> {
-    this._isLoading.set(true);
+    this._isDetailsLoading.set(true);
     this._selectedDocumentState.set(null);
     this._selectedAllegatoState.set(null);
     try {
@@ -158,56 +161,57 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
       console.error('Error loading attachment details:', error);
       this.errorMessage.set('Failed to load attachment details.');
     } finally {
-      this._isLoading.set(false);
+      this._isDetailsLoading.set(false);
     }
   }
 
   private async previewSelect(documentUuid: string, fileUuid?: string): Promise<void> {
-  this._isLoadingPreview.set(true);
-  try {
-    const details = await this.electronIpc.getDocumentDetails({ documentUuid });
-
-    let targetName = details.name;
-    let targetExtension = details.extension?.toLowerCase();
-
-    if (fileUuid) {
-      const allegato = details.attachments.find((a) => a.uuid === fileUuid);
-      if (allegato) {
-        targetName = allegato.path.split('/').pop() || allegato.path;
-        targetExtension = allegato.extension?.toLowerCase();
-      }
-    }
-
-    const supportedInternalFormats = ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif'];
-    
-    if (targetExtension && !supportedInternalFormats.includes(targetExtension)) {
-      await this.electronIpc.fileExternalPreview({ documentUuid, fileUuid });
-      this.clearPreview();
-      return;
-    }
-
-    this._previewSelectedDocumentState.set({ name: targetName });
-    this._previewItemFormato.set(targetExtension || 'pdf');
-
-    const response = await this.electronIpc.fileInternalPreview({ documentUuid, fileUuid });
-    
-    this._documentFileUrl.set(`safe-file://${response.filePath}`);
-  } catch (error) {
-    console.error('Errore preview interna, provo esterna:', error);
+    this._isLoadingPreview.set(true);
+    this._documentFileUrl.set(null);
     try {
-      await this.electronIpc.fileExternalPreview({ documentUuid, fileUuid });
-      this.clearPreview();
-    } catch (extError) {
-      this.errorMessage.set('Impossibile caricare l\'anteprima.');
+      const details = await this.electronIpc.getDocumentDetails({ documentUuid });
+
+      let targetName = details.name;
+      let targetExtension = details.extension?.toLowerCase();
+
+      if (fileUuid) {
+        const allegato = details.attachments.find((a) => a.uuid === fileUuid);
+        if (allegato) {
+          targetName = allegato.path.split('/').pop() || allegato.path;
+          targetExtension = allegato.extension?.toLowerCase();
+        }
+      }
+
+      const supportedInternalFormats = ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif'];
+
+
+      if (targetExtension && !supportedInternalFormats.includes(targetExtension)) {
+        await this.electronIpc.fileExternalPreview({ documentUuid, fileUuid });
+        this.clearPreview();
+        return;
+      }
+
+      this._previewSelectedDocumentState.set({ name: targetName });
+      this._previewItemFormato.set(targetExtension || 'pdf');
+
+      const { fileUrl } = await this.electronIpc.fileInternalPreview({ documentUuid, fileUuid });
+      this._documentFileUrl.set(fileUrl);
+    } catch (error) {
+      console.error('Errore preview interna, provo esterna:', error);
+      try {
+        await this.electronIpc.fileExternalPreview({ documentUuid, fileUuid });
+        this.clearPreview();
+      } catch (extError) {
+        this.errorMessage.set("Impossibile caricare l'anteprima.");
+      }
+    } finally {
+      this._isLoadingPreview.set(false);
     }
-  } finally {
-    this._isLoadingPreview.set(false);
   }
-}
 
   private async searchDocuments(filters: SearchFilterDTO[]): Promise<void> {
     this.clearSelection();
-    this._isLoading.set(true);
+    this._isListLoading.set(true);
     this.errorMessage.set(null);
 
     try {
@@ -217,7 +221,7 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
       console.error('Error searching documents:', error);
       this.errorMessage.set('Failed to search documents. Please try again.');
     } finally {
-      this._isLoading.set(false);
+      this._isListLoading.set(false);
     }
   }
 
@@ -234,19 +238,19 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
   }
 
   private async exportFile(documentUuid: string, fileUuid?: string): Promise<void> {
-    this._isLoading.set(true);
+    this._isDetailsLoading.set(true);
     try {
       await this.electronIpc.exportFile({ documentUuid, fileUuid });
     } catch (error) {
       console.error('Error exporting file:', error);
       this.errorMessage.set('Failed to export file. Please try again.');
     } finally {
-      this._isLoading.set(false);
+      this._isDetailsLoading.set(false);
     }
   }
 
   private async autoImport(): Promise<void> {
-    this._isLoading.set(true);
+    this._isListLoading.set(true);
     this.errorMessage.set(null);
     try {
       const response = await this.electronIpc.autoImport();
@@ -255,7 +259,7 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
       console.error('Error auto importing:', error);
       this.errorMessage.set((error as Error).message);
     } finally {
-      this._isLoading.set(false);
+      this._isListLoading.set(false);
     }
   }
 }
