@@ -32,26 +32,4 @@ export class SQLiteDocumentClassRepository implements DocumentClassRepository {
     return documentClass;
   }
 
-  public async findAllByDipUuid(dipUuid: string): Promise<DocumentClass[]> {
-    const rows = this.dbProvider.instance
-      .prepare(
-        `
-        SELECT cd.uuid, cd.nome, cd.versione, cd.valida_da, cd.valida_fino, cd.uuid_dip FROM classi_documentali cd
-        JOIN archivi_dip ad ON cd.uuid_dip = ad.uuid_processo
-        WHERE ad.uuid_processo = ?; 
-      `,
-      )
-      .all(dipUuid) as DocumentClassRow[];
-
-    return rows.map((row: DocumentClassRow) => {
-      return new DocumentClass(
-        row.uuid,
-        row.nome,
-        row.versione,
-        new Date(row.valida_da),
-        row.valida_fino ? new Date(row.valida_fino) : undefined,
-        row.uuid_dip,
-      );
-    });
-  }
 }

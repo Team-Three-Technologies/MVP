@@ -183,68 +183,6 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     return documents;
   }
 
-  public async findAllByDocumentClassUuidAndVersion(
-    documentClassUuid: string,
-    documentClassVersion: string,
-  ): Promise<Document[]> {
-    const rows = this.dbProvider.instance
-      .prepare(
-        `
-        SELECT d.uuid, d.percorso, d.uuid_processo_conservazione, d.uuid_file_principale FROM documenti d
-        JOIN processi_conservazione pc ON d.uuid_processo_conservazione = pc.uuid
-        WHERE pc.uuid_classe_documentale = ? AND pc.versione_classe_documentale = ?; 
-      `,
-      )
-      .all(documentClassUuid, documentClassVersion) as DocumentRow[];
-
-    const documents: Document[] = [];
-
-    for (const row of rows) {
-      documents.push(
-        new Document(
-          row.uuid,
-          row.percorso,
-          await this.findMainFileByDocumentUuid(row.uuid),
-          await this.findAttachmentsByDocumentUuid(row.uuid),
-          await this.findMetadataByDocumentUuid(row.uuid),
-          row.uuid_processo_conservazione,
-        ),
-      );
-    }
-
-    return documents;
-  }
-
-  public async findAllByConservationProcessUuid(
-    conservationProcessUuid: string,
-  ): Promise<Document[]> {
-    const rows = this.dbProvider.instance
-      .prepare(
-        `
-        SELECT * FROM documenti d
-        WHERE d.uuid_processo_conservazione = ?; 
-      `,
-      )
-      .all(conservationProcessUuid) as DocumentRow[];
-
-    const documents: Document[] = [];
-
-    for (const row of rows) {
-      documents.push(
-        new Document(
-          row.uuid,
-          row.percorso,
-          await this.findMainFileByDocumentUuid(row.uuid),
-          await this.findAttachmentsByDocumentUuid(row.uuid),
-          await this.findMetadataByDocumentUuid(row.uuid),
-          row.uuid_processo_conservazione,
-        ),
-      );
-    }
-
-    return documents;
-  }
-
   public async findFileByUuid(fileUuid: string): Promise<File | null> {
     const row = this.dbProvider.instance
       .prepare(
