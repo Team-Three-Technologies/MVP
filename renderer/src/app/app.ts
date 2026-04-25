@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DipDashboardContainer } from './dip-dashboard/dip-dashboard-container/dip-dashboard-container';
 
 @Component({
@@ -7,79 +7,4 @@ import { DipDashboardContainer } from './dip-dashboard/dip-dashboard-container/d
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit {
-  private api = (window as any).electronAPI;
-  message: string = 'prova';
-
-  constructor(private readonly cdr: ChangeDetectorRef) {}
-
-  async test(): Promise<string> {
-    const res = await this.api.dip.autoImport();
-    if (res.error) throw new Error(res.error);
-    return res.data.dipUuid;
-  }
-
-  async test2(): Promise<string> {
-    const res = await this.api.dip.content({ dipUuid: 'cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403' });
-    if (res.error) throw new Error(res.error);
-    return res.data;
-  }
-
-  async test3(): Promise<string> {
-    const res = await this.api.document.details({
-      documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab',
-    });
-    if (res.error) throw new Error(res.error);
-    return res.data;
-  }
-
-  async test4(): Promise<string> {
-    const res = await this.api.dip.checkIntegrity({
-      dipUuid: 'cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403',
-    });
-    if (res.error) throw new Error(res.error);
-    return res.data;
-  }
-
-  async test5(): Promise<string> {
-    const res = await this.api.document.exportFile({
-      documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab',
-    });
-    if (res.error) throw new Error(res.error);
-    return res.data;
-  }
-
-  async test6(): Promise<string> {
-    const res = await this.api.document.fileExternalPreview({
-      documentUuid: '1cf35d1e-1b50-46c6-b6b2-f323435bf2ab',
-    });
-    if (res.error) throw new Error(res.error);
-    return res.data;
-  }
-
-  async test7(): Promise<string> {
-    const res = await this.api.document.searchDocuments({
-      filters: [
-        { type: 'Tipologia di flusso', value: 'U' },
-        { type: 'Tipo soggetto', value: 'PF' },
-      ],
-    });
-    if (res.error) throw new Error(res.error);
-    return res.data;
-  }
-  async ngOnInit() {
-    try {
-      // this.message = await this.test();
-      // this.message = await this.test2();
-      // this.message = await this.test3();
-      // this.message = await this.test4();
-      // this.message = await this.test5();
-      // this.message = await this.test6();
-      this.message = await this.test7();
-    } catch (e) {
-      this.message = (e as Error).message;
-    } finally {
-      this.cdr.detectChanges();
-    }
-  }
-}
+export class App {}

@@ -36,6 +36,8 @@ export class SearchQueryBuilder {
       params.push(this.filters.length);
     }
 
+    this.filters = [];
+
     return { query: query, params: params };
   }
 }

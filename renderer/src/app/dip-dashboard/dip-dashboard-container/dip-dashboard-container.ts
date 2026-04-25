@@ -184,7 +184,6 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
 
       const supportedInternalFormats = ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif'];
 
-
       if (targetExtension && !supportedInternalFormats.includes(targetExtension)) {
         await this.electronIpc.fileExternalPreview({ documentUuid, fileUuid });
         this.clearPreview();

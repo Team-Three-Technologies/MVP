@@ -183,7 +183,10 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     return documents;
   }
 
-  public async findAllByDocumentClassUuidAndVersion(documentClassUuid: string, documentClassVersion: string): Promise<Document[]> {
+  public async findAllByDocumentClassUuidAndVersion(
+    documentClassUuid: string,
+    documentClassVersion: string,
+  ): Promise<Document[]> {
     const rows = this.dbProvider.instance
       .prepare(
         `

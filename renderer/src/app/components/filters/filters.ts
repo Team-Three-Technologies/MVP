@@ -13,7 +13,6 @@ import { SearchFilterDTO } from '@shared/request/search.request.dto';
 export class Filters {
   @Output() searchRequested = new EventEmitter<SearchFilterDTO[]>();
 
-
   // I filtri (hash) sono testo libero; i filtri (algoritmo) sono dropdown con dipendenza
   readonly filtriDropdown = new Set([
     'Modalità di formazione',
@@ -64,7 +63,7 @@ export class Filters {
       'Protocollo ordinario/Protocollo emergenza',
       'Repertorio/Registro',
     ],
-    'Ruolo': [
+    Ruolo: [
       'Assegnatario',
       'Autore',
       'Destinatario',
@@ -96,28 +95,21 @@ export class Filters {
   private readonly dipendenze: Record<string, (filtri: SearchFilterDTO[]) => boolean> = {
     'Tipologia fascicolo': (f) =>
       f.some((x) => x.type === 'Tipo aggregazione' && x.value === 'Fascicolo'),
-    Cognome: (f) =>
-      f.some((x) => x.type === 'Tipo soggetto' && ['AS', 'PF'].includes(x.value)),
-    Nome: (f) =>
-      f.some((x) => x.type === 'Tipo soggetto' && ['AS', 'PF'].includes(x.value)),
+    Cognome: (f) => f.some((x) => x.type === 'Tipo soggetto' && ['AS', 'PF'].includes(x.value)),
+    Nome: (f) => f.some((x) => x.type === 'Tipo soggetto' && ['AS', 'PF'].includes(x.value)),
     'Codice Fiscale': (f) =>
       f.some((x) => x.type === 'Tipo soggetto' && ['AS', 'PF', 'PG'].includes(x.value)),
-    'Partita IVA': (f) =>
-      f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PG'),
-    'Codice IPA': (f) =>
-      f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
-    'Codice IPA AOO': (f) =>
-      f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
-    'Codice IPA UOR': (f) =>
-      f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
+    'Partita IVA': (f) => f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PG'),
+    'Codice IPA': (f) => f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
+    'Codice IPA AOO': (f) => f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
+    'Codice IPA UOR': (f) => f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
     'Denominazione amministrazione': (f) =>
       f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
     'Denominazione amministrazione AOO': (f) =>
       f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
     'Denominazione amministrazione UOR': (f) =>
       f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
-    'Denominazione ufficio': (f) =>
-      f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
+    'Denominazione ufficio': (f) => f.some((x) => x.type === 'Tipo soggetto' && x.value === 'PAI'),
     'Denominazione sistema': (f) =>
       f.some((x) => x.type === 'Ruolo' && x.value === 'Produttore') &&
       f.some((x) => x.type === 'Tipo soggetto' && x.value === 'SW'),
@@ -128,7 +120,6 @@ export class Filters {
     'Impronta crittografica allegato (algoritmo)': (f) =>
       f.some((x) => x.type === 'Impronta crittografica allegato (hash)'),
   };
-
 
   private readonly tuttiFiltri: string[] = [
     'Identificativo documento (UUID)',
@@ -191,7 +182,6 @@ export class Filters {
 
   filtriAttivi: SearchFilterDTO[] = [];
 
-
   opzioniDisponibili(currentIndex: number): string[] {
     const tipiAltreRighe = new Set(
       this.filtriAttivi.filter((_, i) => i !== currentIndex).map((f) => f.type),
@@ -203,7 +193,6 @@ export class Filters {
       return true;
     });
   }
-
 
   addFilters(): void {
     const disponibili = this.opzioniDisponibili(this.filtriAttivi.length);
@@ -239,7 +228,6 @@ export class Filters {
     this.searchRequested.emit(filtriValidi);
     console.log('Ricerca richiesta con filtri:', filtriValidi);
   }
-
 
   isDropdownFilter(type: string): boolean {
     return this.filtriDropdown.has(type);

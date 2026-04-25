@@ -103,6 +103,122 @@ describe('DocumentHandler', () => {
     );
   });
 
+  it('searchDocument() restituisce IpcResponse con data = SearchRequestDTO e error = null se SearchDocumentsFromMetadataUseCase.execute() termina correttamente', async () => {
+    container.register(TOKENS.SearchDocumentsFromMetadataUseCase, {
+      useValue: {
+        execute: vi.fn().mockResolvedValue({
+          uuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+          creationDate: new Date('17-07-2026'),
+          documentNumber: 5,
+          aipNumber: 3,
+          documentsList: [
+            {
+              documentUuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+              documentName: 'DocumentoDiProva',
+              documentAttachments: [
+                {
+                  uuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                  name: 'AllegatoDiProva',
+                },
+              ],
+            },
+          ],
+        }),
+      },
+    });
+
+    const handler = container.resolve(DocumentHandler);
+    const result = await handler.searchDocuments({
+      filters: [{ type: 'Tipo soggetto', value: 'PG' }],
+    });
+
+    expect(result.data).toStrictEqual({
+      uuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+      creationDate: new Date('17-07-2026'),
+      documentNumber: 5,
+      aipNumber: 3,
+      documentsList: [
+        {
+          documentUuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+          documentName: 'DocumentoDiProva',
+          documentAttachments: [
+            {
+              uuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+              name: 'AllegatoDiProva',
+            },
+          ],
+        },
+      ],
+    });
+    expect(result.error).toBe(null);
+  });
+
+  it('searchDocument() restituisce IpcResponse con data = null e error = string se SearchDocumentsFromMetadataUseCase.execute() lancia errore', async () => {
+    container.register(TOKENS.SearchDocumentsFromMetadataUseCase, {
+      useValue: {
+        execute: vi.fn().mockThrow(new Error('Errore')),
+      },
+    });
+
+    const handler = container.resolve(DocumentHandler);
+    const result = await handler.searchDocuments({
+      filters: [{ type: 'Tipo soggetto', value: 'PG' }],
+    });
+
+    expect(result.data).toBe(null);
+    expect(result.error).toEqual('Errore');
+  });
+
+  it('searchDocument() restituisce IpcResponse con data = SearchRequestDTO e error = null se SearchDocumentsFromMetadataUseCase.execute() termina correttamente', async () => {
+    container.register(TOKENS.SearchDocumentsFromMetadataUseCase, {
+      useValue: {
+        execute: vi.fn().mockResolvedValue({
+          uuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+          creationDate: new Date('17-07-2026'),
+          documentNumber: 5,
+          aipNumber: 3,
+          documentsList: [
+            {
+              documentUuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+              documentName: 'DocumentoDiProva',
+              documentAttachments: [
+                {
+                  uuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                  name: 'AllegatoDiProva',
+                },
+              ],
+            },
+          ],
+        }),
+      },
+    });
+
+    const handler = container.resolve(DocumentHandler);
+    const result = await handler.searchDocuments({
+      filters: [{ type: 'Tipo soggetto', value: 'PG' }],
+    });
+
+    expect(result.data).toStrictEqual({
+      uuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+      creationDate: new Date('17-07-2026'),
+      documentNumber: 5,
+      aipNumber: 3,
+      documentsList: [
+        {
+          documentUuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+          documentName: 'DocumentoDiProva',
+          documentAttachments: [
+            {
+              uuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+              name: 'AllegatoDiProva',
+            },
+          ],
+        },
+      ],
+    });
+    expect(result.error).toBe(null);
+  });
+
   it('exportFile() restituisce IpcResponse con data = ExportFileResponseDTO e error = null se ExportFileUseCase.execute() termina correttamente', async () => {
     container.register(TOKENS.ExportFileUseCase, {
       useValue: {

@@ -1,6 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DocumentEssentialsDTO, DocumentEssentialsAttachmentDTO } from '@shared/response/dip-content.response.dto';
+import {
+  DocumentEssentialsDTO,
+  DocumentEssentialsAttachmentDTO,
+} from '@shared/response/dip-content.response.dto';
 
 @Component({
   selector: 'app-document-list',
@@ -16,7 +19,10 @@ export class DocumentList {
   @Input() integrityMap: Map<string, boolean> = new Map();
 
   @Output() documentSelected = new EventEmitter<string>();
-  @Output() attachmentSelected = new EventEmitter<{ documentUuid: string; attachmentUuid: string }>();
+  @Output() attachmentSelected = new EventEmitter<{
+    documentUuid: string;
+    attachmentUuid: string;
+  }>();
   @Output() itemPreview = new EventEmitter<{ documentUuid: string; attachmentUuid?: string }>();
 
   getIntegrityStatus(uuid: string): 'ok' | 'ko' | 'unknown' {
@@ -34,10 +40,10 @@ export class DocumentList {
     event: Event,
   ) {
     event.stopPropagation();
-    
+
     this.attachmentSelected.emit({
       documentUuid: doc.documentUuid,
-      attachmentUuid: allegato.uuid
+      attachmentUuid: allegato.uuid,
     });
   }
 
@@ -48,7 +54,11 @@ export class DocumentList {
     });
   }
 
-  onViewAttachmentClick(doc: DocumentEssentialsDTO, allegato: DocumentEssentialsAttachmentDTO, event: Event) {
+  onViewAttachmentClick(
+    doc: DocumentEssentialsDTO,
+    allegato: DocumentEssentialsAttachmentDTO,
+    event: Event,
+  ) {
     event.stopPropagation();
     this.itemPreview.emit({
       documentUuid: doc.documentUuid,

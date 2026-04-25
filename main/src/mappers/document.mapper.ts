@@ -49,13 +49,6 @@ export class DocumentMapper {
       parsedDocument.documentMetadata.Document.ArchimemoData.DocumentInformation
         .PreservationProcessUUID;
 
-    return new Document(
-      uuid,
-      documentPath,
-      main,
-      attachments,
-      metadata,
-      conservationProcessUuid,
-    );
+    return new Document(uuid, documentPath, main, attachments, metadata, conservationProcessUuid);
   }
 }

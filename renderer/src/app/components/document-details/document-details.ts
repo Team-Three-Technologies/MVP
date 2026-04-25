@@ -17,7 +17,7 @@ export class DocumentDetails {
   @Input() allegato: AttachmentResponseDTO | null = null;
   @Input() isLoading: boolean = false;
 
-  @Output() export = new EventEmitter<{ documentUuid: string, fileUuid?: string }>();
+  @Output() export = new EventEmitter<{ documentUuid: string; fileUuid?: string }>();
 
   onExport(documentUuid: string, fileUuid?: string) {
     this.export.emit({ documentUuid, fileUuid });
