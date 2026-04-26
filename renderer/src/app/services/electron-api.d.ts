@@ -5,7 +5,6 @@ import { AutoImportDipResponseDTO } from '@shared/response/auto-import-dip.respo
 import { DipContentResponseDTO } from '@shared/response/dip-content.response.dto';
 import { DocumentDetailsResponseDTO } from '@shared/response/document-details.response.dto';
 import { SearchRequestDTO } from '@shared/request/search.request.dto';
-import { DipIntegrityResponseDTO } from '@shared/response/dip-integrity.response.dto';
 import { SearchResponseDTO } from '@shared/response/search.response.dto';
 import { FileInternalPreviewResponseDTO } from '@shared/response/file-internal-preview.response.dto';
 import { ExportFileResponseDTO } from '@shared/response/export-file.response';
@@ -17,7 +16,7 @@ declare global {
       dip: {
         autoImport(): Promise<IpcResponse<AutoImportDipResponseDTO>>;
         content(dipRequestDto: DipRequestDTO): Promise<IpcResponse<DipContentResponseDTO>>;
-        checkIntegrity(dipRequestDto: DipRequestDTO): Promise<void>;
+        checkIntegrity(dipRequestDto: DipRequestDTO): void;
       };
       document: {
         details(

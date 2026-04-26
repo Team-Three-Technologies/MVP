@@ -50,15 +50,18 @@ export class ElectronIpc {
     }
   }
 
-  // public async checkIntegrity(dipRequestDto: DipRequestDTO): Promise<DipIntegrityResponseDTO> {
-  //   try {
-  //     const response = await this.api.dip.checkIntegrity(dipRequestDto);
-  //     return this.unwrapIpcResponse(response, 'Invalid response while checking DIP integrity');
-  //   } catch (error) {
-  //     console.error('Error checking DIP integrity:', error);
-  //     throw error;
-  //   }
-  // }
+  public checkIntegrity(dipRequestDto: DipRequestDTO): void {
+    try {
+      this.api.dip.checkIntegrity(dipRequestDto);
+    } catch (error) {
+      console.error('Error starting integrity check:', error);
+      throw error;
+    }
+  }
+
+  public on(channel: string, callback: (data: any) => void): () => void {
+    return this.api.on(channel, callback);
+  }
 
   public async getDocumentDetails(
     documentRequestDto: DocumentRequestDTO,

@@ -15,6 +15,8 @@ import {
 } from '@shared/response/dip-content.response.dto';
 import { DocumentIntegrityResponseDTO } from '@shared/response/document-integrity.response.dto';
 import { ElectronIpc } from '../../services/electron-ipc';
+import { IPC_CHANNELS } from '@shared/ipc-channels';
+import { IpcResponse } from '@shared/ipc-response';
 
 @Component({
   selector: 'app-dip-dashboard-container',
@@ -24,6 +26,7 @@ import { ElectronIpc } from '../../services/electron-ipc';
 })
 export class DipDashboardContainer implements OnInit, OnDestroy {
   private readonly electronIpc = inject(ElectronIpc);
+  private _integritySubscriptions: (() => void)[] = [];
 
   private _selectedDocumentState = signal<DocumentDetailsResponseDTO | null>(null);
   public selectedDocument = this._selectedDocumentState.asReadonly();
@@ -81,6 +84,7 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.clearSelection();
+    this._clearIntegritySubscriptions();
   }
 
   public async onItemPreview(item: {
@@ -103,32 +107,55 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
       const dipInfo = await this.electronIpc.content({ dipUuid });
       this._dipInfo.set(dipInfo);
       this._documentList.set(dipInfo.documentsList);
-      // await this.loadIntegrity(dipUuid);
+      this.loadIntegrity(dipUuid);
     } catch (error) {
       console.error('Error loading dip info:', error);
       this.errorMessage.set('Failed to load dip info. Please try again.');
     }
   }
 
-  // private async loadIntegrity(dipUuid: string): Promise<void> {
-  //   try {
-  //     const integrity = await this.electronIpc.checkIntegrity({ dipUuid });
-  //     this._integrityMap.set(this._buildIntegrityMap(integrity));
-  //   } catch (error) {
-  //     console.error('Error checking integrity:', error);
-  //   }
-  // }
+  private loadIntegrity(dipUuid: string): void {
+    this._clearIntegritySubscriptions();
+    this._integrityMap.set(new Map());
 
-  // private _buildIntegrityMap(integrity: DipIntegrityResponseDTO): Map<string, boolean> {
-  //   const map = new Map<string, boolean>();
-  //   for (const doc of integrity.documents) {
-  //     map.set(doc.integrity.uuid, doc.integrity.status);
-  //     for (const att of doc.attachments) {
-  //       map.set(att.uuid, att.status);
-  //     }
-  //   }
-  //   return map;
-  // }
+    this.electronIpc.checkIntegrity({ dipUuid });
+
+    this._integritySubscriptions = [
+    this.electronIpc.on(
+      IPC_CHANNELS.DIP_CHECK_INTEGRITY_RESULT,
+      (response: IpcResponse<DocumentIntegrityResponseDTO>) => {
+        if (response.data) this._updateIntegrityMap(response.data);
+      },
+    ),
+    this.electronIpc.on(
+      IPC_CHANNELS.DIP_CHECK_INTEGRITY_DONE,
+      () => this._clearIntegritySubscriptions(),
+    ),
+    this.electronIpc.on(
+      IPC_CHANNELS.DIP_CHECK_INTEGRITY_ERROR,
+      (response: IpcResponse<void>) => {
+        console.error('Integrity check error:', response.error);
+        this._clearIntegritySubscriptions();
+      },
+    ),
+  ];
+  }
+
+  private _updateIntegrityMap(data: DocumentIntegrityResponseDTO): void {
+    this._integrityMap.update((map) => {
+      const newMap = new Map(map);
+      newMap.set(data.integrity.uuid, data.integrity.status);
+      for (const att of data.attachments) {
+        newMap.set(att.uuid, att.status);
+      }
+      return newMap;
+    });
+  }
+
+  private _clearIntegritySubscriptions(): void {
+    this._integritySubscriptions.forEach((unsub) => unsub());
+    this._integritySubscriptions = [];
+  }
 
   private async selectDocument(id: string): Promise<void> {
     this._isDetailsLoading.set(true);
