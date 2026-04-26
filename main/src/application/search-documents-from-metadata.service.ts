@@ -19,6 +19,7 @@ export class SearchDocumentsFromMetadataService implements SearchDocumentsFromMe
   public async execute(filters: { type: string; value: string }[]): Promise<SearchResponseDTO> {
     const documents = await this.documentRepository.findAllByMetadata(
       filters.map((f) => new MetadataFilter(f.type, f.value)),
+      false,
     );
 
     const docEssentialsList: DocumentEssentialsDTO[] = [];

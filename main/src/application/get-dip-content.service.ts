@@ -26,7 +26,7 @@ export class GetDipContentService implements GetDipContentUseCase {
 
     const documentEssentials: DocumentEssentialsDTO[] = [];
 
-    const docs = await this.documentRepository.findAllByDipUuid(dip.getProcessUuid());
+    const docs = await this.documentRepository.findAllByDipUuid(dip.getProcessUuid(), false);
     for (const doc of docs) {
       const attachments: { uuid: string; name: string }[] = [];
       for (const attach of doc.getAttachments()) {

@@ -1,6 +1,12 @@
-export interface DocumentRow {
+export interface DocumentUuidRow {
+  uuid_documento: string;
+}
+
+export interface DocumentWithMainFileRow {
   uuid: string;
   percorso: string;
   uuid_processo_conservazione: string;
-  uuid_file_principale: string;
+  file_uuid: string;
+  file_percorso: string;
+  file_dimensione: string;
 }

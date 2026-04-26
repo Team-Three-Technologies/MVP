@@ -23,7 +23,7 @@ export class ExportFileService implements ExportFileUseCase {
     documentUuid: string,
     fileUuid: string | undefined,
   ): Promise<ExportFileResponseDTO> {
-    const document = await this.documentRepository.findByUuid(documentUuid);
+    const document = await this.documentRepository.findByUuid(documentUuid, false);
     if (!document) {
       throw new Error(`Non esiste un documento con questo UUID: ${documentUuid}`);
     }

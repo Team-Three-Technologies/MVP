@@ -79,7 +79,10 @@ export class Filters {
       { label: 'Produttore', value: 'Produttore' },
       { label: 'RGD', value: 'RGD' },
       { label: 'RSP', value: 'RSP' },
-      { label: 'Soggetto che effettua la registrazione', value: 'Soggetto che effettua la registrazione' },
+      {
+        label: 'Soggetto che effettua la registrazione',
+        value: 'Soggetto che effettua la registrazione',
+      },
       { label: 'Altro', value: 'Altro' },
     ],
     'Tipo soggetto': [
@@ -248,7 +251,9 @@ export class Filters {
     const filtro = this.filtriAttivi[index];
     if (!filtro) return;
     filtro.type = newType;
-    filtro.value = this.filtriDropdown.has(newType) ? this.opzioniPerDropdown[newType][0].value : '';
+    filtro.value = this.filtriDropdown.has(newType)
+      ? this.opzioniPerDropdown[newType][0].value
+      : '';
     this._rimuoviDipendentiInvalidi();
   }
 

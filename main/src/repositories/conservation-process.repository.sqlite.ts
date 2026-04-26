@@ -3,7 +3,6 @@ import { ConservationProcessRepository } from './conservation-process.repository
 import { TOKENS } from '../infrastructure/di/tokens';
 import { DatabaseProvider } from '../infrastructure/database/database.provider';
 import { ConservationProcess } from '../domain/conservation-process.model';
-import { ConservationProcessRow } from './conservation-process.row';
 
 @injectable()
 export class SQLiteConservationProcessRepository implements ConservationProcessRepository {

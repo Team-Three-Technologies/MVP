@@ -13,7 +13,7 @@ import {
   DipContentResponseDTO,
   DocumentEssentialsDTO,
 } from '@shared/response/dip-content.response.dto';
-import { DipIntegrityResponseDTO } from '@shared/response/dip-integrity.response.dto';
+import { DocumentIntegrityResponseDTO } from '@shared/response/document-integrity.response.dto';
 import { ElectronIpc } from '../../services/electron-ipc';
 
 @Component({
@@ -103,32 +103,32 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
       const dipInfo = await this.electronIpc.content({ dipUuid });
       this._dipInfo.set(dipInfo);
       this._documentList.set(dipInfo.documentsList);
-      await this.loadIntegrity(dipUuid);
+      // await this.loadIntegrity(dipUuid);
     } catch (error) {
       console.error('Error loading dip info:', error);
       this.errorMessage.set('Failed to load dip info. Please try again.');
     }
   }
 
-  private async loadIntegrity(dipUuid: string): Promise<void> {
-    try {
-      const integrity = await this.electronIpc.checkIntegrity({ dipUuid });
-      this._integrityMap.set(this._buildIntegrityMap(integrity));
-    } catch (error) {
-      console.error('Error checking integrity:', error);
-    }
-  }
+  // private async loadIntegrity(dipUuid: string): Promise<void> {
+  //   try {
+  //     const integrity = await this.electronIpc.checkIntegrity({ dipUuid });
+  //     this._integrityMap.set(this._buildIntegrityMap(integrity));
+  //   } catch (error) {
+  //     console.error('Error checking integrity:', error);
+  //   }
+  // }
 
-  private _buildIntegrityMap(integrity: DipIntegrityResponseDTO): Map<string, boolean> {
-    const map = new Map<string, boolean>();
-    for (const doc of integrity.documents) {
-      map.set(doc.integrity.uuid, doc.integrity.status);
-      for (const att of doc.attachments) {
-        map.set(att.uuid, att.status);
-      }
-    }
-    return map;
-  }
+  // private _buildIntegrityMap(integrity: DipIntegrityResponseDTO): Map<string, boolean> {
+  //   const map = new Map<string, boolean>();
+  //   for (const doc of integrity.documents) {
+  //     map.set(doc.integrity.uuid, doc.integrity.status);
+  //     for (const att of doc.attachments) {
+  //       map.set(att.uuid, att.status);
+  //     }
+  //   }
+  //   return map;
+  // }
 
   private async selectDocument(id: string): Promise<void> {
     this._isDetailsLoading.set(true);

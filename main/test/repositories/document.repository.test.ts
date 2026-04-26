@@ -1,269 +1,174 @@
 import { container } from 'tsyringe';
-import { beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TOKENS } from '../../src/infrastructure/di/tokens';
 
 import { SQLiteDocumentRepository } from '../../src/repositories/document.repository.sqlite';
-import { Document  } from '../../src/domain/document.model';
-import { File  } from '../../src/domain/file.model';
-import { Metadata  } from '../../src/domain/metadata.model';
+import { Document } from '../../src/domain/document.model';
+import { File } from '../../src/domain/file.model';
+import { Metadata } from '../../src/domain/metadata.model';
 import { MetadataTypeEnum } from '../../src/domain/metadata-type.enum';
 import { MetadataFilter } from '../../src/domain/metadata-filter.model';
 
-describe('Test SQLiteDocumentRepository', ()=>{
-    beforeEach(()=>{
-        container.clearInstances();
-        container.register(TOKENS.DatabaseProvider, { useValue: {} });
-        container.register(TOKENS.SearchQueryBuilder, { useValue: {} });
+describe('SQLiteDocumentRepository', () => {
+  beforeEach(() => {
+    container.clearInstances();
+  });
+
+  function createMockDb() {
+    const run = vi.fn();
+    const all = vi.fn();
+
+    const prepare = vi.fn(() => ({
+      run,
+      all,
+    }));
+
+    const transaction = vi.fn((fn) => fn);
+
+    return {
+      instance: {
+        prepare,
+        transaction,
+      },
+      mocks: { run, all, prepare, transaction },
+    };
+  }
+
+  it('saveMany() salva correttamente i documenti', async () => {
+    const { instance } = createMockDb();
+
+    container.register(TOKENS.DatabaseProvider, {
+      useValue: { instance },
     });
 
-    it('save(document), se avviene con successo restituisce la document passata', async ()=>{
-
-        const mockContainer ={
-            prepare : vi.fn().mockReturnValue({
-                run:vi.fn()}),
-        };
-        const mockDatabaseProvider={
-            instance: mockContainer,
-        };
-        container.register(TOKENS.DatabaseProvider, {useValue: mockDatabaseProvider});
-        container.register(TOKENS.SearchQueryBuilder,{
-            useValue:{
-                withFilter: vi.fn(),
-            }
-        });
-
-        const doc = container.resolve(SQLiteDocumentRepository);
-
-        const result = await doc
-            .save(new Document(
-                'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                'path',
-                new File('','',''),
-                [new File('','','')],
-                [new Metadata('','',MetadataTypeEnum.DATE)],
-                ''
-            ));
-
-        expect(result).toBeInstanceOf(Document);
-
+    container.register(TOKENS.SearchQueryBuilder, {
+      useValue: {},
     });
 
-    it('findMainFileByDocumentUuid(string)', async ()=>{
+    const repo = container.resolve(SQLiteDocumentRepository);
 
-        const mockContainer ={
-            prepare : vi.fn().mockReturnValue({
-                get:vi.fn().mockReturnValue({uuid:"",path:"",size:""})}),
-        };
-        const mockDatabaseProvider={
-            instance: mockContainer,
-        };
-        container.register(TOKENS.DatabaseProvider, {useValue: mockDatabaseProvider});
-        container.register(TOKENS.SearchQueryBuilder,{
-            useValue:{
-                withFilter: vi.fn(),
-            }
-        });
+    const document = new Document(
+      'doc-1',
+      'path',
+      new File('file-1', 'path', '100 bytes'),
+      [new File('file-2', 'path2', '200 bytes')],
+      [new Metadata('name', 'value', MetadataTypeEnum.DATE)],
+      'proc-1',
+    );
 
-        const doc = container.resolve(SQLiteDocumentRepository);
+    await repo.saveMany([document]);
 
-        const result = await doc.findMainFileByDocumentUuid("");
+    expect(instance.prepare).toHaveBeenCalled();
+  });
 
-        expect(result).toBeInstanceOf(File);
+  it('findByUuid ritorna un Document', async () => {
+    const { instance, mocks } = createMockDb();
+
+    mocks.all
+      .mockReturnValueOnce([
+        {
+          uuid: 'doc-1',
+          percorso: 'path',
+          uuid_processo_conservazione: 'proc',
+          file_uuid: 'file-1',
+          file_percorso: 'path',
+          file_dimensione: '100 bytes',
+        },
+      ])
+      .mockReturnValueOnce([])
+      .mockReturnValueOnce([]);
+
+    container.register(TOKENS.DatabaseProvider, {
+      useValue: { instance },
     });
 
-    it('findAttachmentsByDocumentUuid(string)', async ()=>{
-
-        const mockContainer ={
-            prepare : vi.fn().mockReturnValue({
-                all:vi.fn().mockReturnValue([new File('','',''), new File('','','')])}),
-        };
-        const mockDatabaseProvider={
-            instance: mockContainer,
-        };
-        container.register(TOKENS.DatabaseProvider, {useValue: mockDatabaseProvider});
-        container.register(TOKENS.SearchQueryBuilder,{
-            useValue:{
-                withFilter: vi.fn(),
-            }
-        });
-
-        const doc = container.resolve(SQLiteDocumentRepository);
-
-        const result = await doc.findAttachmentsByDocumentUuid("");
-
-        expect(Array.isArray(result)).toBe(true);
-        for(const r of result) 
-            expect(r).toBeInstanceOf(File);
+    container.register(TOKENS.SearchQueryBuilder, {
+      useValue: {},
     });
 
-    it('findMetadataByDocumentUuid(string)', async ()=>{
+    const repo = container.resolve(SQLiteDocumentRepository);
 
-        const mockContainer ={
-            prepare : vi.fn().mockReturnValue({
-                all:vi.fn().mockReturnValue(
-                    [
-                        new Metadata('','',MetadataTypeEnum.DATE),
-                        new Metadata('','',MetadataTypeEnum.DATE)
-                    ])
-            }),
-        };
-        const mockDatabaseProvider={
-            instance: mockContainer,
-        };
-        container.register(TOKENS.DatabaseProvider, {useValue: mockDatabaseProvider});
-        container.register(TOKENS.SearchQueryBuilder,{
-            useValue:{
-                withFilter: vi.fn(),
-            }
-        });
+    const result = await repo.findByUuid('doc-1', true);
 
-        const doc = container.resolve(SQLiteDocumentRepository);
+    expect(result).toBeInstanceOf(Document);
+  });
 
-        const result = await doc.findMetadataByDocumentUuid("");
+  it('findAllByDipUuid ritorna array di Document', async () => {
+    const { instance, mocks } = createMockDb();
 
-        expect(Array.isArray(result)).toBe(true);
-        for(const r of result) 
-            expect(r).toBeInstanceOf(Metadata);
+    mocks.all
+      .mockReturnValueOnce([{ uuid_documento: 'doc-1' }])
+      .mockReturnValueOnce([
+        {
+          uuid: 'doc-1',
+          percorso: 'path',
+          uuid_processo_conservazione: 'proc',
+          file_uuid: 'file-1',
+          file_percorso: 'path',
+          file_dimensione: '100 bytes',
+        },
+      ])
+      .mockReturnValueOnce([])
+      .mockReturnValueOnce([]);
+
+    container.register(TOKENS.DatabaseProvider, {
+      useValue: { instance },
     });
 
-    it('findByUuid(string)', async ()=>{
-
-        const mockContainer ={
-            prepare : vi.fn().mockReturnValue({
-                get:vi.fn().mockReturnValue(new Document('','',new File('','',''),[],[],'')),
-                all:vi.fn().mockReturnValue([new File('','',''), new File('','','')])
-            }),
-        };
-        const mockDatabaseProvider={
-            instance: mockContainer,
-        };
-        container.register(TOKENS.DatabaseProvider, {useValue: mockDatabaseProvider});
-        container.register(TOKENS.SearchQueryBuilder,{
-            useValue:{
-                withFilter: vi.fn(),
-            }
-        });
-
-        const doc = container.resolve(SQLiteDocumentRepository);
-
-        const result = await doc.findByUuid("");
-
-        expect(result).toBeInstanceOf(Document);
+    container.register(TOKENS.SearchQueryBuilder, {
+      useValue: {},
     });
 
-    it('findAllByDipUuid(string)', async ()=>{
+    const repo = container.resolve(SQLiteDocumentRepository);
 
-        const mockContainer ={
-            prepare : vi.fn().mockReturnValue({
-                all:vi.fn()
-                    .mockReturnValueOnce(
-                        [
-                            new Document('','',new File('','',''),[],[],'')
-                        ]
-                    )
-                    .mockReturnValueOnce(
-                        [
-                            new File('','',''),
-                            new File('','','')
-                        ]
-                    )
-                    .mockReturnValueOnce(
-                        [
-                            new Metadata('','',MetadataTypeEnum.DATE),
-                            new Metadata('','',MetadataTypeEnum.DATE)
-                        ]
-                    ),
-                get:vi.fn().mockReturnValue({uuid:"",path:"",size:""})
-            }),
-        };
-        const mockDatabaseProvider={
-            instance: mockContainer,
-        };
-        container.register(TOKENS.DatabaseProvider, {useValue: mockDatabaseProvider});
-        container.register(TOKENS.SearchQueryBuilder,{
-            useValue:{
-                withFilter: vi.fn(),
-            }
-        });
+    const result = await repo.findAllByDipUuid('dip-1', true);
 
-        const doc = container.resolve(SQLiteDocumentRepository);
+    expect(Array.isArray(result)).toBe(true);
+    expect(result[0]).toBeInstanceOf(Document);
+  });
 
-        const result = await doc.findAllByDipUuid("");
+  it('findAllByMetadata funziona e gestisce array vuoto', async () => {
+    const { instance, mocks } = createMockDb();
 
-        expect(Array.isArray(result)).toBe(true);
-        for(const r of result) 
-            expect(r).toBeInstanceOf(Document);
+    const searchQueryBuilderMock = {
+      withFilter: vi.fn(),
+      buildQuery: vi.fn().mockReturnValue({
+        query: 'SELECT ...',
+        params: [],
+      }),
+    };
+
+    mocks.all
+      .mockReturnValueOnce([{ uuid_documento: 'doc-1' }])
+      .mockReturnValueOnce([
+        {
+          uuid: 'doc-1',
+          percorso: 'path',
+          uuid_processo_conservazione: 'proc',
+          file_uuid: 'file-1',
+          file_percorso: 'path',
+          file_dimensione: '100 bytes',
+        },
+      ])
+      .mockReturnValueOnce([])
+      .mockReturnValueOnce([]);
+
+    container.register(TOKENS.DatabaseProvider, {
+      useValue: { instance },
     });
 
-    it('findFileByUuid(string)', async ()=>{
-
-        const mockContainer ={
-            prepare : vi.fn().mockReturnValue({
-                get:vi.fn()
-                    .mockReturnValueOnce({uuid:'',path:'',size:''})
-            }),
-        };
-        const mockDatabaseProvider={
-            instance: mockContainer,
-        };
-        container.register(TOKENS.DatabaseProvider, {useValue: mockDatabaseProvider});
-        container.register(TOKENS.SearchQueryBuilder,{
-            useValue:{
-                withFilter: vi.fn(),
-            }
-        });
-
-        const doc = container.resolve(SQLiteDocumentRepository);
-
-        const resultComplete = await doc.findFileByUuid("");
-        const resultNull = await doc.findFileByUuid("");
-
-        expect(resultComplete).toBeInstanceOf(File);
-        expect(resultNull).toBeNull();
+    container.register(TOKENS.SearchQueryBuilder, {
+      useValue: searchQueryBuilderMock,
     });
 
-    it('findAllByMetadata(string)', async ()=>{
+    const repo = container.resolve(SQLiteDocumentRepository);
 
-        const mockContainer ={
-            prepare : vi.fn().mockReturnValue({
-                all:vi.fn()
-                    .mockReturnValueOnce([''])
-                    .mockReturnValueOnce(
-                        [
-                            new Document('','',new File('','',''),[],[],'')
-                        ]
-                    )
-                    .mockReturnValueOnce(
-                        [
-                            new Metadata('','',MetadataTypeEnum.DATE),
-                            new Metadata('','',MetadataTypeEnum.DATE)
-                        ]
-                    )
-                    ,
-                get:vi.fn().mockReturnValue(new Document('','',new File('','',''),[],[],'')),
-            }),
-        };
-        const mockDatabaseProvider={
-            instance: mockContainer,
-        };
-        container.register(TOKENS.DatabaseProvider, {useValue: mockDatabaseProvider});
-        container.register(TOKENS.SearchQueryBuilder,{
-            useValue:{
-                withFilter: vi.fn(),
-                buildQuery: vi.fn().mockReturnValue({query:'',params:[]}),
-            }
-        });
+    const result = await repo.findAllByMetadata([new MetadataFilter('Formato', '.pdf')], true);
 
-        const doc = container.resolve(SQLiteDocumentRepository);
+    const resultEmpty = await repo.findAllByMetadata([], true);
 
-        const result = await doc.findAllByMetadata([new MetadataFilter('Formato','.pdf')]);
-        const resultEmpty = await doc.findAllByMetadata([]);
-
-        expect(Array.isArray(resultEmpty)).toBe(true);
-        expect(resultEmpty.length).toBe(0);
-
-        expect(Array.isArray(result)).toBe(true);
-        for(const r of result) 
-            expect(r).toBeInstanceOf(Document);
-    });
-})
+    expect(resultEmpty).toEqual([]);
+    expect(Array.isArray(result)).toBe(true);
+    expect(result[0]).toBeInstanceOf(Document);
+  });
+});
