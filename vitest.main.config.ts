@@ -9,7 +9,8 @@ export default defineConfig({
     setupFiles: ['reflect-metadata'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'lcov']
+      reporter: ['text', 'json', 'lcov'],
+      exclude: ['**/*.interface.ts', '**/*.use-case.ts']
     }
   },
   plugins: [

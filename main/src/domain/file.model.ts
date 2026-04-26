@@ -46,6 +46,6 @@ export class File {
   private getBasename(): string {
     const normalized = this.path.replace(/\\/g, '/');
     const parts = normalized.split('/');
-    return parts[parts.length - 1] ?? '';
+    return parts[parts.length - 1] ;
   }
 }
