@@ -42,13 +42,6 @@ export class GetDipContentService implements GetDipContentUseCase {
         documentAttachments: attachments,
       });
     }
-        console.log({
-      uuid: dip.getProcessUuid(),
-      creationDate: dip.getCreationDate(),
-      documentNumber: dip.getDocumentsCount(),
-      aipNumber: dip.getAipCount(),
-      documentsList: documentEssentials,
-    });
 
     return {
       uuid: dip.getProcessUuid(),

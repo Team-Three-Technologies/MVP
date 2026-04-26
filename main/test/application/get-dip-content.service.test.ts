@@ -2,12 +2,6 @@ import { container } from 'tsyringe';
 import { beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 import { TOKENS } from '../../src/infrastructure/di/tokens';
 import { GetDipContentService } from '../../src/application/get-dip-content.service';
-import { DipRepository } from '../../src/repositories/dip.repository.interface';
-import { DocumentRepository } from '../../src/repositories/document.repository.interface';
-import {
-  DipContentResponseDTO,
-  DocumentEssentialsDTO,
-} from '../../../shared/response/dip-content.response.dto';
 import { Dip } from '../../src/domain/dip.model';
 import { Document } from '../../src/domain/document.model';
 import { File } from '../../src/domain/file.model';
