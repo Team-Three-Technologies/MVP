@@ -1,12 +1,13 @@
 import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '../infrastructure/di/tokens';
+import { IpcMainEvent } from 'electron';
+import { IPC_CHANNELS } from '../../../shared/ipc-channels';
 import { AutoImportDipUseCase } from '../application/auto-import-dip.use-case';
 import { GetDipContentUseCase } from '../application/get-dip-content.use-case';
 import { CheckDipIntegrityUseCase } from '../application/check-dip-integrity.use-case';
 import { AutoImportDipResponseDTO } from '../../../shared/response/auto-import-dip.response.dto';
 import { DipRequestDTO } from '../../../shared/request/dip.request.dto';
 import { DipContentResponseDTO } from '../../../shared/response/dip-content.response.dto';
-import { DipIntegrityResponseDTO } from '../../../shared/response/dip-integrity.response.dto';
 import { IpcResponse } from '../../../shared/ipc-response';
 import { ok, fail } from './ipc-response.utils';
 
@@ -41,14 +42,14 @@ export class DipHandler {
     }
   }
 
-  public async checkDipIntegrity(
-    dipRequestDto: DipRequestDTO,
-  ): Promise<IpcResponse<DipIntegrityResponseDTO>> {
+  public async checkDipIntegrity(event: IpcMainEvent, dipRequestDto: DipRequestDTO): Promise<void> {
     try {
-      const response = await this.checkDipIntegrityUseCase.execute(dipRequestDto.dipUuid);
-      return ok(response);
+      for await (const result of this.checkDipIntegrityUseCase.execute(dipRequestDto.dipUuid)) {
+        event.sender.send(IPC_CHANNELS.DIP_CHECK_INTEGRITY_RESULT, ok(result));
+      }
+      event.sender.send(IPC_CHANNELS.DIP_CHECK_INTEGRITY_DONE);
     } catch (e) {
-      return fail((e as Error).message);
+      event.sender.send(IPC_CHANNELS.DIP_CHECK_INTEGRITY_ERROR, fail((e as Error).message));
     }
   }
 }

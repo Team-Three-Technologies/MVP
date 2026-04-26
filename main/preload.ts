@@ -3,10 +3,14 @@ import { DipRequestDTO } from '../shared/request/dip.request.dto';
 import { DocumentRequestDTO } from '../shared/request/document.request.dto';
 import { FileRequestDTO } from '../shared/request/file.request.dto';
 import { SearchRequestDTO } from '../shared/request/search.request.dto';
+
 const IPC_CHANNELS = {
   DIP_AUTO_IMPORT: 'dip:auto-import',
   DIP_CONTENT: 'dip:content',
   DIP_CHECK_INTEGRITY: 'dip:check-integrity',
+  DIP_CHECK_INTEGRITY_RESULT: 'dip:integrity-result',
+  DIP_CHECK_INTEGRITY_DONE: 'dip:integrity-done',
+  DIP_CHECK_INTEGRITY_ERROR: 'dip:integrity-error',
   DOCUMENT_DETAILS: 'document:details',
   DOCUMENT_METADATA_SEARCH: 'document:metadata-search',
   DOCUMENT_FILE_INTERNAL_PREVIEW: 'document:file-internal-preview',
@@ -19,7 +23,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   dip: { // invoca evento (si trova in ipc-channels.ts)
     autoImport: () => ipcRenderer.invoke(IPC_CHANNELS.DIP_AUTO_IMPORT),
     content: (dipRequestDto: DipRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_CONTENT, dipRequestDto),
-    checkIntegrity: (dipRequestDto: DipRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DIP_CHECK_INTEGRITY, dipRequestDto),
+    checkIntegrity: (dipRequestDto: DipRequestDTO) => ipcRenderer.send(IPC_CHANNELS.DIP_CHECK_INTEGRITY, dipRequestDto),
   },
   document: {
     details: (documentRequestDto: DocumentRequestDTO) => ipcRenderer.invoke(IPC_CHANNELS.DOCUMENT_DETAILS, documentRequestDto),

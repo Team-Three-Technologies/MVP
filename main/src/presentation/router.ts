@@ -2,7 +2,7 @@ import { container } from 'tsyringe';
 import { ipcMain } from 'electron';
 import { DipHandler } from './dip.handler';
 import { DocumentHandler } from './document.handler';
-import { IPC_CHANNELS } from '../../ipc-channels';
+import { IPC_CHANNELS } from '../../../shared/ipc-channels';
 import { DipRequestDTO } from '../../../shared/request/dip.request.dto';
 import { DocumentRequestDTO } from '../../../shared/request/document.request.dto';
 import { FileRequestDTO } from '../../../shared/request/file.request.dto';
@@ -16,8 +16,8 @@ export function registerAllHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.DIP_CONTENT, (_, dipRequestDto: DipRequestDTO) =>
     dipHandler.getDipContent(dipRequestDto),
   );
-  ipcMain.handle(IPC_CHANNELS.DIP_CHECK_INTEGRITY, (_, dipRequestDto: DipRequestDTO) =>
-    dipHandler.checkDipIntegrity(dipRequestDto),
+  ipcMain.on(IPC_CHANNELS.DIP_CHECK_INTEGRITY, (event, dipRequestDto: DipRequestDTO) =>
+    dipHandler.checkDipIntegrity(event, dipRequestDto),
   );
 
   ipcMain.handle(IPC_CHANNELS.DOCUMENT_DETAILS, (_, documentRequestDto: DocumentRequestDTO) =>

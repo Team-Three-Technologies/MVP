@@ -3,11 +3,7 @@ export interface FileIntegrityDTO {
   status: boolean;
 }
 
-export interface DocumentIntegrityDTO {
+export interface DocumentIntegrityResponseDTO {
   integrity: FileIntegrityDTO;
   attachments: FileIntegrityDTO[];
-}
-
-export interface DipIntegrityResponseDTO {
-  documents: DocumentIntegrityDTO[];
 }

@@ -7,7 +7,7 @@ import { FileRequestDTO } from '@shared/request/file.request.dto';
 import { AutoImportDipResponseDTO } from '@shared/response/auto-import-dip.response.dto';
 import { DipContentResponseDTO } from '@shared/response/dip-content.response.dto';
 import { DocumentDetailsResponseDTO } from '@shared/response/document-details.response.dto';
-import { DipIntegrityResponseDTO } from '@shared/response/dip-integrity.response.dto';
+import { DocumentIntegrityResponseDTO } from '@shared/response/document-integrity.response.dto';
 import { SearchResponseDTO } from '@shared/response/search.response.dto';
 import { FileInternalPreviewResponseDTO } from '@shared/response/file-internal-preview.response.dto';
 import { ExportFileResponseDTO } from '@shared/response/export-file.response';
@@ -50,15 +50,15 @@ export class ElectronIpc {
     }
   }
 
-  public async checkIntegrity(dipRequestDto: DipRequestDTO): Promise<DipIntegrityResponseDTO> {
-    try {
-      const response = await this.api.dip.checkIntegrity(dipRequestDto);
-      return this.unwrapIpcResponse(response, 'Invalid response while checking DIP integrity');
-    } catch (error) {
-      console.error('Error checking DIP integrity:', error);
-      throw error;
-    }
-  }
+  // public async checkIntegrity(dipRequestDto: DipRequestDTO): Promise<DipIntegrityResponseDTO> {
+  //   try {
+  //     const response = await this.api.dip.checkIntegrity(dipRequestDto);
+  //     return this.unwrapIpcResponse(response, 'Invalid response while checking DIP integrity');
+  //   } catch (error) {
+  //     console.error('Error checking DIP integrity:', error);
+  //     throw error;
+  //   }
+  // }
 
   public async getDocumentDetails(
     documentRequestDto: DocumentRequestDTO,

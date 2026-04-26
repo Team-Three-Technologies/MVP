@@ -3,7 +3,6 @@ import { DocumentClassRepository } from './document-class.repository.interface';
 import { TOKENS } from '../infrastructure/di/tokens';
 import { DatabaseProvider } from '../infrastructure/database/database.provider';
 import { DocumentClass } from '../domain/document-class.model';
-import { DocumentClassRow } from './document-class.row';
 
 @injectable()
 export class SQLiteDocumentClassRepository implements DocumentClassRepository {
@@ -31,5 +30,4 @@ export class SQLiteDocumentClassRepository implements DocumentClassRepository {
 
     return documentClass;
   }
-
 }

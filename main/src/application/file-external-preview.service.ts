@@ -15,7 +15,7 @@ export class FileExternalPreviewService implements FileExternalPreviewUseCase {
   ) {}
 
   public async execute(documentUuid: string, fileUuid: string | undefined): Promise<void> {
-    const document = await this.documentRepository.findByUuid(documentUuid);
+    const document = await this.documentRepository.findByUuid(documentUuid, false);
     if (!document) {
       throw new Error(`Non esiste un documento con questo UUID: ${documentUuid}`);
     }

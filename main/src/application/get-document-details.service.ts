@@ -12,7 +12,7 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
   ) {}
 
   public async execute(documentUuid: string): Promise<DocumentDetailsResponseDTO> {
-    const document = await this.documentRepository.findByUuid(documentUuid);
+    const document = await this.documentRepository.findByUuid(documentUuid, true);
 
     if (!document) {
       throw new Error(`Non esiste un documento con questo UUID: ${documentUuid}`);

@@ -242,7 +242,9 @@ export class Filters {
     const filtro = this.filtriAttivi[index];
     if (!filtro) return;
     filtro.type = newType;
-    filtro.value = this.filtriDropdown.has(newType) ? this.opzioniPerDropdown[newType][0].value : '';
+    filtro.value = this.filtriDropdown.has(newType)
+      ? this.opzioniPerDropdown[newType][0].value
+      : '';
     this._rimuoviDipendentiInvalidi();
   }
 

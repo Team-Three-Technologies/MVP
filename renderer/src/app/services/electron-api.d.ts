@@ -17,7 +17,7 @@ declare global {
       dip: {
         autoImport(): Promise<IpcResponse<AutoImportDipResponseDTO>>;
         content(dipRequestDto: DipRequestDTO): Promise<IpcResponse<DipContentResponseDTO>>;
-        checkIntegrity(dipRequestDto: DipRequestDTO): Promise<IpcResponse<DipIntegrityResponseDTO>>;
+        checkIntegrity(dipRequestDto: DipRequestDTO): Promise<void>;
       };
       document: {
         details(
