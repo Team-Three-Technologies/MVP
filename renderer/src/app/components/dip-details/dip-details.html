@@ -25,17 +25,6 @@
       <span class="info-label">Numero AIP:</span>
       <span class="info-value">{{ dipInfo.aipNumber || 'N/D' }}</span>
     </div>
-
-    <!-- <div class="info-row">
-      <span class="info-label">Stato:</span>
-      <span class="info-value status-with-icon">
-        @if (dipInfo.status) {
-        <span class="status-icon" [class.verified]="isDipVerified(dipInfo.status)"
-          [class.not-verified]="!isDipVerified(dipInfo.status)" aria-hidden="true"></span>
-        }
-        <span>{{ dipInfo.status || 'N/D' }}</span>
-      </span>
-    </div> -->
   </div>
   } @else {
   <div class="card-body empty-state">

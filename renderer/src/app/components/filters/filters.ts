@@ -13,7 +13,6 @@ import { SearchFilterDTO } from '@shared/request/search.request.dto';
 export class Filters {
   @Output() searchRequested = new EventEmitter<SearchFilterDTO[]>();
 
-  // I filtri (hash) sono testo libero; i filtri (algoritmo) sono dropdown con dipendenza
   readonly filtriDropdown = new Set([
     'Modalità di formazione',
     'Tipologia di flusso',
@@ -48,17 +47,15 @@ export class Filters {
   private readonly filtriPartitaIva = new Set(['Partita IVA']);
   private readonly filtriCodiceFiscale = new Set(['Codice Fiscale']);
 
-  // ── Valori predefiniti per i dropdown (UC08, UC10, UC11, UC16, UC17, UC49, UC50, UC52, UC55) ──
-
   readonly opzioniPerDropdown: Record<string, { label: string; value: string }[]> = {
     'Modalità di formazione': [
-      { label: 'Creazione tramite strumenti software conformi', value: 'A' },
-      { label: 'Acquisizione da via telematica o supporto informatico', value: 'B' },
+      { label: 'Creazione tramite strumenti software conformi', value: 'creazione tramite strumenti software conformi a quanto disposto dall\'articolo 3 del presente decreto' },
+      { label: 'Acquisizione da via telematica o supporto informatico', value: 'acquisizione di un documento informatico per via telematica o su supporto informatico' },
       {
         label: 'Memorizzazione da transazioni/processi informatici o moduli online',
-        value: 'C',
+        value: 'memorizzazione di informazioni risultanti da transazioni o processi informatici o dalla presentazione telematica di moduli o formulari',
       },
-      { label: 'Generazione automatica da banche dati', value: 'D' },
+      { label: 'Generazione automatica da banche dati', value: 'generazione o raggruppamento anche in via automatica di un insieme di dati o registrazioni, provenienti da una o più banche dati, anche appartenenti a più soggetti interoperanti, secondo una struttura logica predeterminata e memorizzata in forma statica' },
     ],
     'Tipologia di flusso': [
       { label: 'U (In uscita)', value: 'U' },
@@ -66,9 +63,9 @@ export class Filters {
       { label: 'I (Interno)', value: 'I' },
     ],
     'Tipo registro': [
-      { label: 'Nessuno', value: 'NESSUNO' },
-      { label: 'Protocollo ordinario/Protocollo emergenza', value: 'PR' },
-      { label: 'Repertorio/Registro', value: 'RG' },
+      { label: 'Nessuno', value: 'Nessuno' },
+      { label: 'Protocollo ordinario/Protocollo emergenza', value: 'Protocollo ordinario\\Protocollo emergenza' },
+      { label: 'Repertorio/Registro', value: 'Repertorio\\Registro' },
     ],
     Ruolo: [
       { label: 'Assegnatario', value: 'Assegnatario' },
@@ -79,10 +76,7 @@ export class Filters {
       { label: 'Produttore', value: 'Produttore' },
       { label: 'RGD', value: 'RGD' },
       { label: 'RSP', value: 'RSP' },
-      {
-        label: 'Soggetto che effettua la registrazione',
-        value: 'Soggetto che effettua la registrazione',
-      },
+      { label: 'Soggetto che effettua la registrazione', value: 'Soggetto Che Effettua La Registrazione' },
       { label: 'Altro', value: 'Altro' },
     ],
     'Tipo soggetto': [
@@ -127,7 +121,6 @@ export class Filters {
     ],
   };
 
-  // ── Dipendenze logiche (UC18–UC31, UC52) ──────────────────────
 
   private readonly dipendenze: Record<string, (filtri: SearchFilterDTO[]) => boolean> = {
     'Tipologia fascicolo': (f) =>
@@ -150,10 +143,8 @@ export class Filters {
     'Denominazione sistema': (f) =>
       f.some((x) => x.type === 'Ruolo' && x.value === 'Produttore') &&
       f.some((x) => x.type === 'Tipo soggetto' && x.value === 'SW'),
-    // UC06 — (algoritmo) disponibile solo se il filtro (hash) corrispondente è presente
     'Impronta crittografica documento (algoritmo)': (f) =>
       f.some((x) => x.type === 'Impronta crittografica documento (hash)'),
-    // UC35 — idem per allegato
     'Impronta crittografica allegato (algoritmo)': (f) =>
       f.some((x) => x.type === 'Impronta crittografica allegato (hash)'),
   };
@@ -194,7 +185,7 @@ export class Filters {
     'Identificativo allegato (UUID)',
     'Descrizione allegato',
     'Indice di classificazione',
-    'Descrizione dell’indice di classificazione',
+    'Descrizione dell\'indice di classificazione',
     'Piano di classificazione',
     'Riservato',
     'Formato',
