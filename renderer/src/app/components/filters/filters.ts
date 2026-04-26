@@ -50,44 +50,78 @@ export class Filters {
 
   // ── Valori predefiniti per i dropdown (UC08, UC10, UC11, UC16, UC17, UC49, UC50, UC52, UC55) ──
 
-  readonly opzioniPerDropdown: Record<string, string[]> = {
+  readonly opzioniPerDropdown: Record<string, { label: string; value: string }[]> = {
     'Modalità di formazione': [
-      'Creazione tramite strumenti software conformi',
-      'Acquisizione da via telematica o supporto informatico',
-      'Memorizzazione da transazioni/processi informatici o moduli online',
-      'Generazione automatica da banche dati',
+      { label: 'Creazione tramite strumenti software conformi', value: 'A' },
+      { label: 'Acquisizione da via telematica o supporto informatico', value: 'B' },
+      {
+        label: 'Memorizzazione da transazioni/processi informatici o moduli online',
+        value: 'C',
+      },
+      { label: 'Generazione automatica da banche dati', value: 'D' },
     ],
-    'Tipologia di flusso': ['U (In uscita)', 'E (In entrata)', 'I (Interno)'],
+    'Tipologia di flusso': [
+      { label: 'U (In uscita)', value: 'U' },
+      { label: 'E (In entrata)', value: 'E' },
+      { label: 'I (Interno)', value: 'I' },
+    ],
     'Tipo registro': [
-      'Nessuno',
-      'Protocollo ordinario/Protocollo emergenza',
-      'Repertorio/Registro',
+      { label: 'Nessuno', value: 'NESSUNO' },
+      { label: 'Protocollo ordinario/Protocollo emergenza', value: 'PR' },
+      { label: 'Repertorio/Registro', value: 'RG' },
     ],
     Ruolo: [
-      'Assegnatario',
-      'Autore',
-      'Destinatario',
-      'Mittente',
-      'Operatore',
-      'Produttore',
-      'RGD',
-      'RSP',
-      'Soggetto che effettua la registrazione',
-      'Altro',
+      { label: 'Assegnatario', value: 'Assegnatario' },
+      { label: 'Autore', value: 'Autore' },
+      { label: 'Destinatario', value: 'Destinatario' },
+      { label: 'Mittente', value: 'Mittente' },
+      { label: 'Operatore', value: 'Operatore' },
+      { label: 'Produttore', value: 'Produttore' },
+      { label: 'RGD', value: 'RGD' },
+      { label: 'RSP', value: 'RSP' },
+      { label: 'Soggetto che effettua la registrazione', value: 'Soggetto che effettua la registrazione' },
+      { label: 'Altro', value: 'Altro' },
     ],
-    'Tipo soggetto': ['AS', 'PAE', 'PAI', 'PF', 'PG', 'SW'],
-    'Tipo aggregazione': ['Fascicolo', 'Serie documentale', 'Serie di fascicoli'],
+    'Tipo soggetto': [
+      { label: 'AS', value: 'AS' },
+      { label: 'PAE', value: 'PAE' },
+      { label: 'PAI', value: 'PAI' },
+      { label: 'PF', value: 'PF' },
+      { label: 'PG', value: 'PG' },
+      { label: 'SW', value: 'SW' },
+    ],
+    'Tipo aggregazione': [
+      { label: 'Fascicolo', value: 'Fascicolo' },
+      { label: 'Serie documentale', value: 'Serie documentale' },
+      { label: 'Serie di fascicoli', value: 'Serie di fascicoli' },
+    ],
     'Tipologia fascicolo': [
-      'Affare',
-      'Attività',
-      'Persona fisica',
-      'Persona giuridica',
-      'Procedimento amministrativo',
+      { label: 'Affare', value: 'Affare' },
+      { label: 'Attività', value: 'Attività' },
+      { label: 'Persona fisica', value: 'Persona fisica' },
+      { label: 'Persona giuridica', value: 'Persona giuridica' },
+      { label: 'Procedimento amministrativo', value: 'Procedimento amministrativo' },
     ],
-    'Tipo modifica': ['Annullamento', 'Annotazione', 'Integrazione', 'Rettifica'],
-    'Conformità copie immagine su supporto informatico': ['Conforme', 'Non conforme'],
-    'Impronta crittografica documento (algoritmo)': ['SHA-256', 'SHA-384', 'SHA-512'],
-    'Impronta crittografica allegato (algoritmo)': ['SHA-256', 'SHA-384', 'SHA-512'],
+    'Tipo modifica': [
+      { label: 'Annullamento', value: 'Annullamento' },
+      { label: 'Annotazione', value: 'Annotazione' },
+      { label: 'Integrazione', value: 'Integrazione' },
+      { label: 'Rettifica', value: 'Rettifica' },
+    ],
+    'Conformità copie immagine su supporto informatico': [
+      { label: 'Conforme', value: 'true' },
+      { label: 'Non conforme', value: 'false' },
+    ],
+    'Impronta crittografica documento (algoritmo)': [
+      { label: 'SHA-256', value: 'SHA-256' },
+      { label: 'SHA-384', value: 'SHA-384' },
+      { label: 'SHA-512', value: 'SHA-512' },
+    ],
+    'Impronta crittografica allegato (algoritmo)': [
+      { label: 'SHA-256', value: 'SHA-256' },
+      { label: 'SHA-384', value: 'SHA-384' },
+      { label: 'SHA-512', value: 'SHA-512' },
+    ],
   };
 
   // ── Dipendenze logiche (UC18–UC31, UC52) ──────────────────────
@@ -200,20 +234,21 @@ export class Filters {
     const tipo = disponibili[0];
     this.filtriAttivi.push({
       type: tipo,
-      value: this.filtriDropdown.has(tipo) ? this.opzioniPerDropdown[tipo][0] : '',
+      value: this.filtriDropdown.has(tipo) ? this.opzioniPerDropdown[tipo][0].value : '',
     });
   }
 
   removeFilters(index: number): void {
     this.filtriAttivi.splice(index, 1);
     this._rimuoviDipendentiInvalidi();
+    this.startSearch();
   }
 
   onFilterTypeChange(index: number, newType: string): void {
     const filtro = this.filtriAttivi[index];
     if (!filtro) return;
     filtro.type = newType;
-    filtro.value = this.filtriDropdown.has(newType) ? this.opzioniPerDropdown[newType][0] : '';
+    filtro.value = this.filtriDropdown.has(newType) ? this.opzioniPerDropdown[newType][0].value : '';
     this._rimuoviDipendentiInvalidi();
   }
 
@@ -241,7 +276,7 @@ export class Filters {
   isTimeFilter(type: string): boolean {
     return this.filtriOra.has(type);
   }
-  getDropdownOptions(type: string): string[] {
+  getDropdownOptions(type: string): { label: string; value: string }[] {
     return this.opzioniPerDropdown[type] ?? [];
   }
 
@@ -262,7 +297,7 @@ export class Filters {
       return value === 'true' || value === 'false';
     }
     if (this.filtriDropdown.has(filterType)) {
-      return (this.opzioniPerDropdown[filterType] ?? []).includes(value);
+      return (this.opzioniPerDropdown[filterType] ?? []).some((opt) => opt.value === value);
     }
     if (this.filtriPartitaIva.has(filterType)) {
       return /^\d{11}$/.test(value);

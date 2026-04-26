@@ -20,8 +20,8 @@
         (ngModelChange)="onFilterValueChange()"
         class="input-base input-testo"
       >
-        @for (opzione of getDropdownOptions(filtro.type); track opzione) {
-        <option [value]="opzione">{{ opzione }}</option>
+        @for (opzione of getDropdownOptions(filtro.type); track opzione.value) {
+        <option [value]="opzione.value">{{ opzione.label }}</option>
         }
       </select>
 

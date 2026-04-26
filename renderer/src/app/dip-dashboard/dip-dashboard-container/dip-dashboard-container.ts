@@ -214,6 +214,13 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
     this.errorMessage.set(null);
 
     try {
+      if (filters.length === 0) {
+        const dip = this.dipInfo();
+        if (dip) {
+          this._documentList.set(dip.documentsList);
+        }
+        return;
+      }
       const response = await this.electronIpc.searchDocuments({ filters });
       this._documentList.set(response.results);
     } catch (error) {
