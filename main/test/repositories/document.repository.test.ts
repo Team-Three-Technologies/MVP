@@ -34,7 +34,7 @@ describe('SQLiteDocumentRepository', () => {
     };
   }
 
-  it('saveMany() salva correttamente i documenti', async () => {
+  it('saveMany salva e ritorna i documenti', async () => {
     const { instance } = createMockDb();
 
     container.register(TOKENS.DatabaseProvider, {
@@ -47,16 +47,22 @@ describe('SQLiteDocumentRepository', () => {
 
     const repo = container.resolve(SQLiteDocumentRepository);
 
-    const document = new Document(
-      'doc-1',
-      'path',
-      new File('file-1', 'path', '100 bytes'),
-      [new File('file-2', 'path2', '200 bytes')],
-      [new Metadata('name', 'value', MetadataTypeEnum.DATE)],
-      'proc-1',
-    );
+    const documents = [
+      new Document(
+        'doc-1',
+        'path',
+        new File('file-1', 'path', '100 bytes'),
+        [new File('file-2', 'path2', '200 bytes')],
+        [new Metadata('name', 'value', MetadataTypeEnum.DATE)],
+        'proc-1',
+      ),
+    ];
 
-    await repo.saveMany([document]);
+    const result = await repo.saveMany(documents);
+
+    expect(Array.isArray(result)).toBe(true);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toBeInstanceOf(Document);
 
     expect(instance.prepare).toHaveBeenCalled();
   });

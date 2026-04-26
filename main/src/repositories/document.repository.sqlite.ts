@@ -47,7 +47,7 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     `);
   }
 
-  public async saveMany(documents: Document[]): Promise<void> {
+  public async saveMany(documents: Document[]): Promise<Document[]> {
     const tx = this.dbProvider.instance.transaction((docs: Document[]) => {
       for (const document of docs) {
         const main = document.getMain();
@@ -86,6 +86,7 @@ export class SQLiteDocumentRepository implements DocumentRepository {
     });
 
     tx(documents);
+    return documents;
   }
 
   private hydrateDocs(uuids: string[], withMetadata: boolean): Document[] {
