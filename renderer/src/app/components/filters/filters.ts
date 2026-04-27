@@ -54,13 +54,13 @@ export class Filters {
 
   readonly opzioniPerDropdown: Record<string, { label: string; value: string }[]> = {
     'Modalità di formazione': [
-      { label: 'Creazione tramite strumenti software conformi', value: 'creazione tramite strumenti software conformi a quanto disposto dall\'articolo 3 del presente decreto' },
+      { label: 'Creazione tramite strumenti software conformi', value: 'creazione tramite strumenti software conformi a quanto disposto dall articolo 3 del presente decreto' },
       { label: 'Acquisizione da via telematica o supporto informatico', value: 'acquisizione di un documento informatico per via telematica o su supporto informatico' },
       {
         label: 'Memorizzazione da transazioni/processi informatici o moduli online',
         value: 'memorizzazione di informazioni risultanti da transazioni o processi informatici o dalla presentazione telematica di moduli o formulari',
       },
-      { label: 'Generazione automatica da banche dati', value: 'generazione o raggruppamento anche in via automatica di un insieme di dati o registrazioni, provenienti da una o più banche dati, anche appartenenti a più soggetti interoperanti, secondo una struttura logica predeterminata e memorizzata in forma statica' },
+      { label: 'Generazione automatica da banche dati', value: 'generazione o raggruppamento anche in via automatica di un insieme di dati o registrazioni provenienti da una o più banche dati anche appartenenti a più soggetti interoperanti secondo una struttura logica predeterminata e memorizzata in forma statica' },
     ],
     'Tipologia di flusso': [
       { label: 'U (In uscita)', value: 'U' },
@@ -69,8 +69,8 @@ export class Filters {
     ],
     'Tipo registro': [
       { label: 'Nessuno', value: 'Nessuno' },
-      { label: 'Protocollo ordinario/Protocollo emergenza', value: 'Protocollo ordinario\\Protocollo emergenza' },
-      { label: 'Repertorio/Registro', value: 'Repertorio\\Registro' },
+      { label: 'Protocollo ordinario/Protocollo emergenza', value: 'Protocollo ordinario Protocollo emergenza' },
+      { label: 'Repertorio/Registro', value: 'Repertorio Registro' },
     ],
     Ruolo: [
       { label: 'Assegnatario', value: 'Assegnatario' },
@@ -190,7 +190,7 @@ export class Filters {
     'Identificativo allegato (UUID)',
     'Descrizione allegato',
     'Indice di classificazione',
-    'Descrizione dell\'indice di classificazione',
+    'Descrizione dell vindice di classificazione',
     'Piano di classificazione',
     'Riservato',
     'Formato',

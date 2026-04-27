@@ -27,7 +27,6 @@ export interface DocumentDetailsResponseDTO {
   documentType: string; 
   documentNumber: string; 
   registryCode: string; 
-  objectDescription: string;
   aggregationType: string; 
   subjects: SubjectDTO[]; 
 }

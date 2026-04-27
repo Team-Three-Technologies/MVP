@@ -30,6 +30,19 @@ export class SQLiteDipRepository implements DipRepository {
     return dip;
   }
 
+  public async deleteByUuid(uuid: string): Promise<void> {
+    this.dbProvider.instance
+      .prepare(
+        `
+        DELETE FROM archivi_dip
+        WHERE uuid_processo = ?; 
+      `,
+      )
+      .run(uuid);
+
+    return;
+  }
+
   public async findByUuid(uuid: string): Promise<Dip | null> {
     const row = this.dbProvider.instance
       .prepare(

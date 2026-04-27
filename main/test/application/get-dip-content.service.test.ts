@@ -25,7 +25,7 @@ describe('GetDipContentService', () => {
       useValue: {},
     });
     const getDipContent = container.resolve(GetDipContentService);
-    expect(getDipContent.execute('')).rejects.toThrow(`Non esiste un DiP con questo UUID: `);
+    await expect(getDipContent.execute('')).rejects.toThrow(`Non esiste un DiP con questo UUID: `);
   });
 
   it('Test con tutto ok', async () => {

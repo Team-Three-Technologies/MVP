@@ -13,6 +13,7 @@ describe('FileExternalPreviewService', () => {
     container.clearInstances();
     container.register(TOKENS.DocumentRepository, { useValue: {} });
     container.register(TOKENS.ShellProvider, { useValue: {} });
+        container.register(TOKENS.FileSystemProvider, { useValue: {} });
   });
 
   it('Test con sia documento che allegato presente', () => {
@@ -41,7 +42,7 @@ describe('FileExternalPreviewService', () => {
     const preview = container.resolve(FileExternalPreviewService);
     expectTypeOf(preview.execute('uuid', 'uuid')).toBeString;
   });
-  it('Test con documento non presente', () => {
+  it('Test con documento non presente', async () => {
     container.register(TOKENS.DocumentRepository, {
       useValue: {
         findByUuid: vi.fn(),
@@ -53,12 +54,12 @@ describe('FileExternalPreviewService', () => {
       },
     });
     const preview = container.resolve(FileExternalPreviewService);
-    expect(preview.execute('uuid', 'uuid')).rejects.toThrow(
+    await expect(preview.execute('uuid', 'uuid')).rejects.toThrow(
       `Non esiste un documento con questo UUID: uuid`,
     );
   });
 
-  it('Test con allegato non trovato', () => {
+  it('Test con allegato non trovato', async () => {
     container.register(TOKENS.DocumentRepository, {
       useValue: {
         findByUuid: vi
@@ -82,7 +83,7 @@ describe('FileExternalPreviewService', () => {
     });
 
     const preview = container.resolve(FileExternalPreviewService);
-    expect(preview.execute('uuid', 'uuid')).rejects.toThrow(
+    await expect(preview.execute('uuid', 'uuid')).rejects.toThrow(
       `Non esiste un file con UUID: uuid associato al documento con UUID: uuid`,
     );
   });
@@ -111,7 +112,7 @@ describe('FileExternalPreviewService', () => {
     const preview = container.resolve(FileExternalPreviewService);
     expectTypeOf(preview.execute('uuid', '')).toBeString;
   });
-  it('Test con shell che fallisce', () => {
+  it('Test con shell che fallisce', async () => {
     container.register(TOKENS.DocumentRepository, {
       useValue: {
         findByUuid: vi
@@ -134,6 +135,6 @@ describe('FileExternalPreviewService', () => {
       },
     });
     const preview = container.resolve(FileExternalPreviewService);
-    expect(preview.execute('uuid', '')).rejects.toThrow('errore');
+    await expect(preview.execute('uuid', '')).rejects.toThrow('errore');
   });
 });

@@ -9,7 +9,7 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
   constructor(
     @inject(TOKENS.DocumentRepository)
     private readonly documentRepository: DocumentRepository,
-  ) {}
+  ) { }
 
   public async execute(documentUuid: string): Promise<DocumentDetailsResponseDTO> {
     const document = await this.documentRepository.findByUuid(documentUuid, true);
@@ -24,19 +24,18 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
       extension: document.getMain().getExtension(),
       registrationType:
         document.getMetadataValueByRegex(
-          /DocumentoInformatico\.DatiDiRegistrazione\.TipoRegistro\.\w+\.TipoRegistro/,
+          /[a-zA-Z]+\.DatiDiRegistrazione\.TipoRegistro\.\w+\.TipoRegistro/,
         ) ?? '',
       registrationDate:
         document.getMetadataValueByRegex(
-          /DocumentoInformatico\.DatiDiRegistrazione\.TipoRegistro\.\w+\.Data\w+/,
+          /[a-zA-Z]+\.DatiDiRegistrazione\.TipoRegistro\.\w+\.Data\w+/,
         ) ?? '',
       registrationTime:
         document.getMetadataValueByRegex(
-          /DocumentoInformatico\.DatiDiRegistrazione\.TipoRegistro\.\w+\.Ora\w+/,
+          /[a-zA-Z]+\.DatiDiRegistrazione\.TipoRegistro\.\w+\.Ora\w+/,
         ) ?? '',
-      content:
-        document.getMetadataValueByName('DocumentoInformatico.ChiaveDescrittiva.Oggetto') ?? '',
-      version: document.getMetadataValueByName('DocumentoInformatico.VersioneDelDocumento') ?? '',
+      content: document.getMetadataValueByRegex(/[a-zA-Z]+\.ChiaveDescrittiva\.Oggetto$/) ?? '',
+      version: document.getMetadataValueByRegex(/[a-zA-Z]+\.VersioneDelDocumento$/) ?? '',
       filesCount: Number(
         document.getMetadataValueByName('ArchimemoData.DocumentInformation.FilesCount'),
       ),
@@ -49,6 +48,11 @@ export class GetDocumentDetailsService implements GetDocumentDetailsUseCase {
           extension: att.getExtension(),
         };
       }),
+      documentType: document.getMetadataValueByRegex(/[a-zA-Z]+\.TipologiaDocumentale$/) ?? '',
+      documentNumber: document.getMetadataValueByRegex(/[a-zA-Z]+\.DatiDiRegistrazione\.TipoRegistro\.\S+\.Numero[a-zA-Z]*Documento$/) ?? '',
+      registryCode: document.getMetadataValueByRegex(/[a-zA-Z]+\.DatiDiRegistrazione\.TipoRegistro\.\S+\.CodiceRegistro$/) ?? '',
+      aggregationType: document.getMetadataValueByRegex(/[a-zA-Z]+\.Agg\.TipoAgg\.\d+\.TipoAggregazione$/) ?? '',
+      subjects: []
     };
 
     return dto;

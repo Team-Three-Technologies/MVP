@@ -60,7 +60,7 @@
     </div>
     <div class="info-row">
       <span class="info-label">Oggetto:</span>
-      <span class="info-value">{{ document.objectDescription }}</span>
+      <span class="info-value">{{ document.content }}</span>
     </div>
     <div class="info-row">
       <span class="info-label">Tipo aggregazione:</span>
@@ -68,7 +68,7 @@
     </div>
 
     <div class="soggetti-section">
-      <span class="info-label">Soggetti Coinvolti:</span>
+      <span class="info-label">Soggetti coinvolti:</span>
       @if (document.subjects && document.subjects.length > 0) {
       <ul class="soggetti-list">
         @for (subject of document.subjects; track subject.uuid) {

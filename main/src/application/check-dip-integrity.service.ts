@@ -45,30 +45,34 @@ export class CheckDipIntegrityService implements CheckDipIntegrityUseCase {
     // TODO: controllare che abbia documenti
 
     for (const doc of documents) {
-      const trace = doc.getMetadataValueByName(
-        'DocumentoInformatico.IdDoc.ImprontaCrittograficaDelDocumento.Impronta',
+      const trace = doc.getMetadataValueByRegex(
+        /[a-zA-Z]+\.IdDoc\.ImprontaCrittograficaDelDocumento\.Impronta$/,
       );
-      const algorithm = doc.getMetadataValueByName(
-        'DocumentoInformatico.IdDoc.ImprontaCrittograficaDelDocumento.Algoritmo',
+      const algorithm = doc.getMetadataValueByRegex(
+        /[a-zA-Z]+\.IdDoc.\ImprontaCrittograficaDelDocumento\.Algoritmo$/,
       );
 
       const attachmentsByUuid = new Map(doc.getAttachments().map((att) => [att.getUuid(), att]));
 
       const attachmentsPromises = [];
       for (let i = 0; i < doc.getAttachments().length; i++) {
-        const attUuid = doc.getMetadataValueByName(
-          `DocumentoInformatico.Allegati.IndiceAllegati.${i}.IdDoc.Identificativo`,
+        const attUuid = doc.getMetadataValueByRegex(
+          new RegExp(`[a-zA-Z]+\\.Allegati\\.IndiceAllegati\\.${i}\\.IdDoc\\.Identificativo$`),
         );
         if (!attUuid) continue;
 
         const att = attachmentsByUuid.get(attUuid);
         if (!att) continue;
 
-        const attTrace = doc.getMetadataValueByName(
-          `DocumentoInformatico.Allegati.IndiceAllegati.${i}.IdDoc.ImprontaCrittograficaDelDocumento.Impronta`,
+        const attTrace = doc.getMetadataValueByRegex(
+          new RegExp(
+            `[a-zA-Z]+\\.Allegati\\.IndiceAllegati\\.${i}\\.IdDoc\\.ImprontaCrittograficaDelDocumento.Impronta$`,
+          ),
         );
-        const attAlgorithm = doc.getMetadataValueByName(
-          `DocumentoInformatico.Allegati.IndiceAllegati.${i}.IdDoc.ImprontaCrittograficaDelDocumento.Algoritmo`,
+        const attAlgorithm = doc.getMetadataValueByRegex(
+          new RegExp(
+            `[a-zA-Z]+\\.Allegati\\.IndiceAllegati\\.${i}\\.IdDoc\\.ImprontaCrittograficaDelDocumento.Algoritmo$`,
+          ),
         );
 
         if (!attTrace || !attAlgorithm) continue;

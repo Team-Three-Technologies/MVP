@@ -16,11 +16,11 @@ describe('GetDocumentDetailsService', () => {
   it('Documento non presente', async () => {
     container.register(TOKENS.DocumentRepository, {
       useValue: {
-        findByUuid: vi.fn().mockReturnValue(null)
+        findByUuid: vi.fn().mockReturnValue(null),
       },
     });
     const getDocDetails = container.resolve(GetDocumentDetailsService);
-    expect(getDocDetails.execute('')).rejects.toThrow(`Non esiste un documento con questo UUID: `);
+    await expect(getDocDetails.execute('')).rejects.toThrow(`Non esiste un documento con questo UUID: `);
   });
 
   it('Test con tutti i metadati vuoti', async () => {
@@ -55,6 +55,11 @@ describe('GetDocumentDetailsService', () => {
       totalSize: expect.any(String),
       attachmentsCount: expect.any(Number),
       attachments: expect.any(Array),
+      documentType: expect.any(String),
+      documentNumber: expect.any(String),
+      registryCode:  expect.any(String),
+      aggregationType:  expect.any(String),
+      subjects: expect.any(Array)
     });
 
     result.attachments.forEach((att) => {

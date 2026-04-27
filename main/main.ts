@@ -8,6 +8,8 @@ import { TOKENS } from './src/infrastructure/di/tokens';
 import { DatabaseProvider } from './src/infrastructure/database/database.provider';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { net } from 'electron';
+import { DeleteDipUseCase } from './src/application/delete-dip.use-case';
+import { getCurrentDipUuid } from './src/infrastructure/current-dip.store';
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -56,6 +58,16 @@ function createWindow(): void {
     win.loadFile(path.join(app.getAppPath(), 'dist/renderer/browser/index.html'));
   }
 }
+
+app.on('will-quit', async (event) => {
+  const uuid = getCurrentDipUuid();
+  if (!uuid) return;
+
+  event.preventDefault();
+
+  const deleteDipService = container.resolve<DeleteDipUseCase>(TOKENS.DeleteDipUseCase);
+  deleteDipService.execute(uuid).finally(() => app.exit());
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();

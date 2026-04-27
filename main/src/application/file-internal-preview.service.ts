@@ -3,6 +3,7 @@ import { TOKENS } from '../infrastructure/di/tokens';
 import { FileInternalPreviewUseCase } from './file-internal-preview.use-case';
 import { FileInternalPreviewResponseDTO } from '../../../shared/response/file-internal-preview.response.dto';
 import { DocumentRepository } from '../repositories/document.repository.interface';
+import { FileSystemProvider } from '../infrastructure/fs/file-system.provider.interface';
 import * as path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -11,6 +12,8 @@ export class FileInternalPreviewService implements FileInternalPreviewUseCase {
   constructor(
     @inject(TOKENS.DocumentRepository)
     private readonly documentRepository: DocumentRepository,
+    @inject(TOKENS.FileSystemProvider)
+    private readonly fileSystemProvider: FileSystemProvider,
   ) {}
 
   public async execute(
@@ -35,7 +38,9 @@ export class FileInternalPreviewService implements FileInternalPreviewUseCase {
       fullPath = path.join(document.getPath(), attachment.getPath());
     }
 
-    const fileUrl = pathToFileURL(fullPath).href.replace('file://', 'localfile://');
+    const safePath =
+      fullPath.length <= 260 ? fullPath : await this.fileSystemProvider.createTempFile(fullPath);
+    const fileUrl = pathToFileURL(safePath).href.replace('file://', 'localfile://');
     return { fileUrl };
   }
 }

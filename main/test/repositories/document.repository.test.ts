@@ -35,7 +35,7 @@ describe('SQLiteDocumentRepository', () => {
   }
 
   it('saveMany salva e ritorna i documenti', async () => {
-    const { instance } = createMockDb();
+    const { instance, mocks } = createMockDb();
 
     container.register(TOKENS.DatabaseProvider, {
       useValue: { instance },
@@ -60,11 +60,11 @@ describe('SQLiteDocumentRepository', () => {
 
     const result = await repo.saveMany(documents);
 
-    expect(Array.isArray(result)).toBe(true);
     expect(result).toHaveLength(1);
     expect(result[0]).toBeInstanceOf(Document);
 
-    expect(instance.prepare).toHaveBeenCalled();
+    expect(instance.prepare).toHaveBeenCalledTimes(4);
+    expect(mocks.run).toHaveBeenCalled();
   });
 
   it('findByUuid ritorna un Document', async () => {
@@ -99,6 +99,28 @@ describe('SQLiteDocumentRepository', () => {
     expect(result).toBeInstanceOf(Document);
   });
 
+  it('findByUuid ritorna null se non esiste', async () => {
+    const { instance, mocks } = createMockDb();
+
+    mocks.all.mockReturnValueOnce([]);
+    mocks.all.mockReturnValueOnce([]);
+    mocks.all.mockReturnValueOnce([]);
+
+    container.register(TOKENS.DatabaseProvider, {
+      useValue: { instance },
+    });
+
+    container.register(TOKENS.SearchQueryBuilder, {
+      useValue: {},
+    });
+
+    const repo = container.resolve(SQLiteDocumentRepository);
+
+    const result = await repo.findByUuid('missing', true);
+
+    expect(result).toBeNull();
+  });
+
   it('findAllByDipUuid ritorna array di Document', async () => {
     const { instance, mocks } = createMockDb();
 
@@ -129,11 +151,31 @@ describe('SQLiteDocumentRepository', () => {
 
     const result = await repo.findAllByDipUuid('dip-1', true);
 
-    expect(Array.isArray(result)).toBe(true);
+    expect(result).toHaveLength(1);
     expect(result[0]).toBeInstanceOf(Document);
   });
 
-  it('findAllByMetadata funziona e gestisce array vuoto', async () => {
+  it('findAllByDipUuid ritorna array vuoto se nessun documento', async () => {
+    const { instance, mocks } = createMockDb();
+
+    mocks.all.mockReturnValueOnce([]);
+
+    container.register(TOKENS.DatabaseProvider, {
+      useValue: { instance },
+    });
+
+    container.register(TOKENS.SearchQueryBuilder, {
+      useValue: {},
+    });
+
+    const repo = container.resolve(SQLiteDocumentRepository);
+
+    const result = await repo.findAllByDipUuid('dip-1', true);
+
+    expect(result).toEqual([]);
+  });
+
+  it('findAllByMetadata funziona con filtri', async () => {
     const { instance, mocks } = createMockDb();
 
     const searchQueryBuilderMock = {
@@ -169,12 +211,37 @@ describe('SQLiteDocumentRepository', () => {
 
     const repo = container.resolve(SQLiteDocumentRepository);
 
-    const result = await repo.findAllByMetadata([new MetadataFilter('Formato', '.pdf')], true);
+    const result = await repo.findAllByMetadata(
+      [new MetadataFilter('Formato', '.pdf')],
+      true,
+    );
 
-    const resultEmpty = await repo.findAllByMetadata([], true);
-
-    expect(resultEmpty).toEqual([]);
+    expect(searchQueryBuilderMock.withFilter).toHaveBeenCalled();
     expect(Array.isArray(result)).toBe(true);
     expect(result[0]).toBeInstanceOf(Document);
+  });
+
+  it('findAllByMetadata ritorna array vuoto se filtri vuoti', async () => {
+    const { instance } = createMockDb();
+
+    container.register(TOKENS.DatabaseProvider, {
+      useValue: { instance },
+    });
+
+    const searchQueryBuilderMock = {
+      withFilter: vi.fn(),
+      buildQuery: vi.fn(),
+    };
+
+    container.register(TOKENS.SearchQueryBuilder, {
+      useValue: searchQueryBuilderMock,
+    });
+
+    const repo = container.resolve(SQLiteDocumentRepository);
+
+    const result = await repo.findAllByMetadata([], true);
+
+    expect(result).toEqual([]);
+    expect(searchQueryBuilderMock.withFilter).not.toHaveBeenCalled();
   });
 });

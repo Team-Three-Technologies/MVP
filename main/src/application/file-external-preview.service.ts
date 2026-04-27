@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '../infrastructure/di/tokens';
 import { FileExternalPreviewUseCase } from './file-external-preview.use-case';
 import { DocumentRepository } from '../repositories/document.repository.interface';
+import { FileSystemProvider } from '../infrastructure/fs/file-system.provider.interface';
 import { ShellProvider } from '../infrastructure/shell/shell.provider.interface';
 import path from 'path';
 
@@ -10,6 +11,8 @@ export class FileExternalPreviewService implements FileExternalPreviewUseCase {
   constructor(
     @inject(TOKENS.DocumentRepository)
     private readonly documentRepository: DocumentRepository,
+    @inject(TOKENS.FileSystemProvider)
+    private readonly fileSystemProvider: FileSystemProvider,
     @inject(TOKENS.ShellProvider)
     private readonly shellProvider: ShellProvider,
   ) {}
@@ -33,10 +36,8 @@ export class FileExternalPreviewService implements FileExternalPreviewUseCase {
       fullPath = path.join(document.getPath(), attachment.getPath());
     }
 
-    try {
-      await this.shellProvider.openFile(fullPath);
-    } catch (e) {
-      throw e;
-    }
+    const safePath =
+      fullPath.length <= 260 ? fullPath : await this.fileSystemProvider.createTempFile(fullPath);
+    await this.shellProvider.openFile(safePath);
   }
 }

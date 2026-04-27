@@ -15,6 +15,7 @@ import { DocumentClassMapper } from '../mappers/document-class.mapper';
 import { ConservationProcessMapper } from '../mappers/conservation-process.mapper';
 import { DocumentMapper } from '../mappers/document.mapper';
 import * as path from 'node:path';
+import { setCurrentDipUuid } from '../infrastructure/current-dip.store';
 
 @injectable()
 export class AutoImportDipService implements AutoImportDipUseCase {
@@ -49,8 +50,7 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     // 3MB: 'D:\\filip\\Downloads\\dip.20251111.0413d8ee-8e82-4331-864e-7f8098bcc419';
     // 1MB: 'D:\\filip\\Downloads\\dip.20251112.cd6f28d2-d4aa-4f5e-89fe-cfe92f1df403';
     // 176kB: 'D:\\filip\\Downloads\\dip.20251111.ec276d29-f80c-4693-b3c9-1cb650e23114';
-    const dir = '/Users/andreamasiero/Documents/UNIPD/SWE/dip.20251111.0413d8ee-8e82-4331-864e-7f8098bcc419'
-    //const dir = this.fileSystemProvider.getStartDir();
+    const dir = this.fileSystemProvider.getStartDir();
     const dipIndexPath = await this.fileSystemProvider.findFile(dir, FILE_NAME_PATTERNS.DIP_INDEX);
     //TODO: per il db da capire se svuotarlo alla fine, molto sensato imo
     // se non trova il dip index
@@ -106,6 +106,8 @@ export class AutoImportDipService implements AutoImportDipUseCase {
       await this.documentRepository.saveMany(batch);
     }
 
-    return { dipUuid: dip.getProcessUuid() };
+    const dipUuid = dip.getProcessUuid()
+    setCurrentDipUuid(dipUuid);
+    return { dipUuid: dipUuid };
   }
 }

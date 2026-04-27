@@ -2,6 +2,7 @@ export const TOKENS = {
   AutoImportDipUseCase: Symbol('AutoImportDipUseCase'),
   GetDipContentUseCase: Symbol('GetDipContentUseCase'),
   CheckDipIntegrityUseCase: Symbol('CheckDipIntegrityUseCase'),
+  DeleteDipUseCase: Symbol('DeleteDipUseCase'),
   GetDocumentDetailsUseCase: Symbol('GetDocumentDetailsUseCase'),
   SearchDocumentsFromMetadataUseCase: Symbol('SearchDocumentsFromMetadataUseCase'),
   ExportFileUseCase: Symbol('ExportFileUseCase'),

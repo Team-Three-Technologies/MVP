@@ -26,6 +26,7 @@ import { DipMapper } from '../../mappers/dip.mapper';
 import { AutoImportDipService } from '../../application/auto-import-dip.service';
 import { GetDipContentService } from '../../application/get-dip-content.service';
 import { CheckDipIntegrityService } from '../../application/check-dip-integrity.service';
+import { DeleteDipService } from '../../application/delete-dip.service';
 import { GetDocumentDetailsService } from '../../application/get-document-details.service';
 import { SearchDocumentsFromMetadataService } from '../../application/search-documents-from-metadata.service';
 import { ExportFileService } from '../../application/export-file.service';
@@ -193,6 +194,11 @@ export function registerDependencies(): void {
   container.register(
     TOKENS.GetDipContentUseCase,
     { useClass: GetDipContentService },
+    { lifecycle: Lifecycle.Singleton },
+  );
+  container.register(
+    TOKENS.DeleteDipUseCase,
+    { useClass: DeleteDipService },
     { lifecycle: Lifecycle.Singleton },
   );
   container.register(

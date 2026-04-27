@@ -31,6 +31,36 @@ describe('SQLiteDipRepository', () => {
     expect(result).toBeInstanceOf(Dip);
   });
 
+  it('deleteByUuid(string), elimina correttamente il dip', async () => {
+    const mockRun = vi.fn().mockReturnValue({ changes: 1 });
+
+    const mockStatement = {
+      run: mockRun,
+    };
+
+    const mockContainer = {
+      prepare: vi.fn().mockReturnValue(mockStatement),
+    };
+
+    container.register(TOKENS.DatabaseProvider, {
+      useValue: {
+        instance: mockContainer,
+      },
+    });
+
+    const dipRepo = container.resolve(SQLiteDipRepository);
+
+    await dipRepo.deleteByUuid('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+
+    expect(mockContainer.prepare).toHaveBeenCalledWith(
+      expect.stringContaining('DELETE FROM archivi_dip'),
+    );
+
+    expect(mockRun).toHaveBeenCalledWith(
+      'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+    );
+  });
+
   it('findByUuid(string), ritorna un dip con quel uuid', async () => {
     const mockStatement = {
       get: vi.fn().mockReturnValue({

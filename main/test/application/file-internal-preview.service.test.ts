@@ -11,6 +11,7 @@ describe('FileInternalPreviewService', () => {
   beforeEach(() => {
     container.clearInstances();
     container.register(TOKENS.DocumentRepository, { useValue: {} });
+    container.register(TOKENS.FileSystemProvider, { useValue: {} });
   });
 
   it('Test con sia documento che allegato presente', () => {
@@ -34,19 +35,19 @@ describe('FileInternalPreviewService', () => {
     const preview = container.resolve(FileInternalPreviewService);
     expectTypeOf(preview.execute('uuid', 'uuid')).toBeString;
   });
-  it('Test con documento non presente', () => {
+  it('Test con documento non presente', async () => {
     container.register(TOKENS.DocumentRepository, {
       useValue: {
         findByUuid: vi.fn(),
       },
     });
     const preview = container.resolve(FileInternalPreviewService);
-    expect(preview.execute('uuid', 'uuid')).rejects.toThrow(
+    await expect(preview.execute('uuid', 'uuid')).rejects.toThrow(
       `Non esiste un documento con questo UUID: uuid`,
     );
   });
 
-  it('Test con allegato non trovato', () => {
+  it('Test con allegato non trovato', async () => {
     container.register(TOKENS.DocumentRepository, {
       useValue: {
         findByUuid: vi
@@ -65,7 +66,7 @@ describe('FileInternalPreviewService', () => {
     });
 
     const preview = container.resolve(FileInternalPreviewService);
-    expect(preview.execute('uuid', 'uuid')).rejects.toThrow(
+    await expect(preview.execute('uuid', 'uuid')).rejects.toThrow(
       `Non esiste un file con UUID: uuid associato al documento con UUID: uuid`,
     );
   });

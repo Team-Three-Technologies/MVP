@@ -2,14 +2,14 @@
 -- METADATA_TIPO_FILTRO (versione ottimizzata per SQLite)
 -- ============================================================
 
-CREATE TABLE IF NOT EXISTS metadata_filter_match(
+CREATE TABLE IF NOT EXISTS metadata_filter_match (
     type TEXT NOT NULL,  -- corrisponde a SearchFilterDTO.type
     nome_pattern TEXT NOT NULL,  -- pattern da confrontare con metadata.nome (supporta LIKE)
     PRIMARY KEY (type, nome_pattern)
 );
 
 -- Documento
-INSERT INTO  metadata_filter_match(type, nome_pattern) VALUES
+INSERT INTO  metadata_filter_match (type, nome_pattern) VALUES
 ('Identificativo documento (UUID)', '%.IdDoc.Identificativo'),
 ('Identificativo documento (UUID)', '%.IdDoc.Segnatura'),
 ('Modalità di formazione', '%.ModalitaDiFormazione'),
@@ -95,3 +95,41 @@ INSERT INTO  metadata_filter_match(type, nome_pattern) VALUES
 ('Ora modifica', '%.TracciatureModificheDocumento.OraModifica'),
 ('Tempo di conservazione', '%.TempoDiConservazione'),
 ('Note', '%.Note');
+
+CREATE INDEX IF NOT EXISTS idx_processi_uuid_classe 
+ON processi_conservazione(uuid_classe_documentale, versione_classe_documentale);
+
+CREATE INDEX IF NOT EXISTS idx_classi_uuid_dip 
+ON classi_documentali(uuid_dip);
+
+CREATE INDEX IF NOT EXISTS idx_documenti_processo 
+ON documenti(uuid_processo_conservazione);
+
+CREATE INDEX IF NOT EXISTS idx_allegati_documento 
+ON allegati(uuid_documento);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS metadata_fts USING fts5 (
+  uuid_documento UNINDEXED,
+  nome,
+  valore,
+  content='metadata',
+  content_rowid='rowid',
+  tokenize='trigram'
+);
+
+CREATE TRIGGER IF NOT EXISTS metadata_fts_insert AFTER INSERT ON metadata BEGIN
+  INSERT INTO metadata_fts(rowid, uuid_documento, nome, valore)
+  VALUES (new.rowid, new.uuid_documento, new.nome, new.valore);
+END;
+
+CREATE TRIGGER IF NOT EXISTS metadata_fts_delete AFTER DELETE ON metadata BEGIN
+  INSERT INTO metadata_fts(metadata_fts, rowid, uuid_documento, nome, valore)
+  VALUES ('delete', old.rowid, old.uuid_documento, old.nome, old.valore);
+END;
+
+CREATE TRIGGER IF NOT EXISTS metadata_fts_update AFTER UPDATE ON metadata BEGIN
+  INSERT INTO metadata_fts(metadata_fts, rowid, uuid_documento, nome, valore)
+  VALUES ('delete', old.rowid, old.uuid_documento, old.nome, old.valore);
+  INSERT INTO metadata_fts(rowid, uuid_documento, nome, valore)
+  VALUES (new.rowid, new.uuid_documento, new.nome, new.valore);
+END;

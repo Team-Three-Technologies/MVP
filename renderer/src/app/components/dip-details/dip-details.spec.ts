@@ -39,6 +39,8 @@ describe('DipDetails', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.empty-state p')?.textContent).toContain('Nessun pacchetto caricato');
+    expect(compiled.querySelector('.empty-state p')?.textContent).toContain(
+      'Nessun pacchetto caricato',
+    );
   });
 });

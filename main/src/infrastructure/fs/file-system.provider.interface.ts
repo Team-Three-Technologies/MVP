@@ -9,4 +9,5 @@ export interface FileSystemProvider {
   readDir(path: string): Promise<string[]>;
   createReadStream(path: string): Readable;
   copyFile(sourcePath: string, destPath: string): Promise<void>;
+  createTempFile(sourcePath: string): Promise<string>;
 }

@@ -7,6 +7,7 @@ import { createReadStream, Dirent } from 'node:fs';
 import * as path from 'node:path';
 import { Buffer } from 'node:buffer';
 import { Readable } from 'node:stream';
+import { app } from 'electron';
 
 @injectable()
 export class LocalFileSystemProvider implements FileSystemProvider {
@@ -15,8 +16,14 @@ export class LocalFileSystemProvider implements FileSystemProvider {
     private readonly config: AppConfig,
   ) {}
 
+  private toLongPath(p: string): string {
+    if (process.platform !== 'win32') return p;
+    if (p.startsWith('\\\\?\\')) return p;
+    return '\\\\?\\' + path.resolve(p);
+  }
+
   public getStartDir(): string {
-    return this.config.appDir;
+    return this.toLongPath(this.config.appDir);
   }
 
   public async ensureDir(dir: string): Promise<string | null> {
@@ -53,5 +60,12 @@ export class LocalFileSystemProvider implements FileSystemProvider {
     } catch (e) {
       throw new Error('Copia file fallita');
     }
+  }
+
+  public async createTempFile(sourcePath: string): Promise<string> {
+    const name = path.basename(sourcePath);
+    const tmpPath = path.join(app.getPath('temp'), name);
+    await this.copyFile(sourcePath, tmpPath);
+    return tmpPath;
   }
 }
