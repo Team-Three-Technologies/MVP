@@ -14,6 +14,8 @@ describe('DipDashboardContainer', () => {
       searchDocuments: vi.fn(),
       exportFile: vi.fn(),
       checkIntegrity: vi.fn(),
+      fileInternalPreview: vi.fn(),
+      fileExternalPreview: vi.fn(),
       on: vi.fn().mockReturnValue(() => {}),
       autoImport: vi.fn().mockResolvedValue({ dipUuid: 'test-dip-uuid' }),
       content: vi.fn().mockResolvedValue({ documentsList: [] }),
@@ -84,7 +86,69 @@ describe('DipDashboardContainer', () => {
     integrityCallback!(mockResponse);
 
     expect(component.integrityMap().get('doc-123')).toBe(true);
-});
+  });
+
+  it('test preview interno documento', async() =>{
+    const mockDetails = {
+      uuid: 'doc-123',
+      name: 'test.pdf',
+      extension: 'pdf',
+      attachments: []
+    };
+
+    electronIpcMock.getDocumentDetails.mockResolvedValue(mockDetails);
+    electronIpcMock.fileInternalPreview.mockResolvedValue({ 
+    fileUrl: 'file:///Users/test-file.pdf' 
+  });
+    await component.onItemPreview({ documentUuid: 'doc-123'});
+    expect(electronIpcMock.fileInternalPreview).toHaveBeenCalledWith({ documentUuid: 'doc-123', fileUuid: undefined });
+    expect(component.documentFileUrl()).toBe('file:///Users/test-file.pdf');
+    expect(component.previewItemFormato()).toBe('pdf'); 
+  });
+
+  it('test preview esterno documento', async() =>{
+    const mockDetails = {
+      uuid: 'doc-err',
+      name: 'test.pdf',
+      extension: 'pdf',
+    };
+
+    electronIpcMock.fileExternalPreview.mockResolvedValue(mockDetails);
+    electronIpcMock.fileExternalPreview.mockResolvedValue({ 
+    fileUrl: 'file:///Users/test-file.pdf' 
+  });
+    await component.onItemPreview({ documentUuid: 'doc-err'});
+    expect(electronIpcMock.fileExternalPreview).toHaveBeenCalledWith({ documentUuid: 'doc-err', fileUuid: undefined });
+    expect(component.documentFileUrl()).toBeNull(); 
+  });
+
+  it('test select allegato', async() => {
+    const mockDetails = {
+      uuid: 'doc-123',
+      attachments:[{
+        uuid: 'att-123',
+        name: 'test.pdf',
+      },
+      {
+        uuid: 'att-124',
+        name: 'test.txt',
+      }
+    ]
+    };
+
+    electronIpcMock.getDocumentDetails.mockResolvedValue(mockDetails);
+    await component.onAttachmentSelected({ documentUuid: 'doc-123', attachmentUuid: 'att-123' });
+    expect(electronIpcMock.getDocumentDetails).toHaveBeenCalledWith({ documentUuid: 'doc-123' });
+    expect(component.selectedAllegato()?.uuid).toBe('att-123');
+  });
+
+  it('test ngOnDestroy', () => {
+    component.ngOnDestroy();
+    expect(component.selectedDocument()).toBeNull();
+    expect(component.selectedAllegato()).toBeNull();
+    expect(component.previewSelectedDocument()).toBeNull();
+  });
+
 
   it('dovrebbe gestire un errore dal backend correttamente', async() =>{
     electronIpcMock.getDocumentDetails.mockRejectedValue(new Error('Errore Backend'));

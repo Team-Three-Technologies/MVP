@@ -46,6 +46,42 @@
       <span class="info-label">Data e ora registrazione:</span>
       <span class="info-value">{{ document.registrationDate }} {{ document.registrationTime }}</span>
     </div>
+    <div class="info-row">
+      <span class="info-label">Tipologia documentale:</span>
+      <span class="info-value">{{ document.documentType }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Numero documento:</span>
+      <span class="info-value">{{ document.documentNumber }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Codice registro:</span>
+      <span class="info-value">{{ document.registryCode }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Oggetto:</span>
+      <span class="info-value">{{ document.objectDescription }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Tipo aggregazione:</span>
+      <span class="info-value">{{ document.aggregationType }}</span>
+    </div>
+
+    <div class="soggetti-section">
+      <span class="info-label">Soggetti Coinvolti:</span>
+      @if (document.subjects && document.subjects.length > 0) {
+      <ul class="soggetti-list">
+        @for (subject of document.subjects; track subject.uuid) {
+        <li class="soggetto-item">
+          <span class="soggetto-ruolo">{{ subject.role }}:</span>
+          <span class="soggetto-nome">{{ subject.name }} ({{ subject.type }})</span>
+        </li>
+        }
+      </ul>
+      } @else {
+      <p class="empty-soggetti">Nessun soggetto specificato.</p>
+      }
+    </div>
     <div class="allegati-section">
       <span class="info-label">Allegati ({{ document.attachmentsCount }}):</span>
       @if (document.attachments.length > 0) {

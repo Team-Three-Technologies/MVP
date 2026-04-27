@@ -46,6 +46,11 @@ export class Filters {
 
   private readonly filtriPartitaIva = new Set(['Partita IVA']);
   private readonly filtriCodiceFiscale = new Set(['Codice Fiscale']);
+  private readonly ruoliPersoneFisiche = [
+    'Altro', 'Assegnatario', 'Autore', 'Destinatario', 'Mittente', 'Operatore',
+    'Responsabile del Servizio Protocollo', 'Responsabile della Gestione Documentale',
+    'Soggetto che effettua la registrazione'
+  ];
 
   readonly opzioniPerDropdown: Record<string, { label: string; value: string }[]> = {
     'Modalità di formazione': [
