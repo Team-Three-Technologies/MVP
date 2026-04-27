@@ -1,9 +1,9 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { DocumentList } from '../../components/document-list/document-list';
-import { DocumentPreview } from '../../components/document-preview/document-preview';
-import { Filters } from '../../components/filters/filters';
-import { DipDetails } from '../../components/dip-details/dip-details';
-import { DocumentDetails } from '../../components/document-details/document-details';
+import { DocumentList } from '../components/document-list/document-list';
+import { DocumentPreview } from '../components/document-preview/document-preview';
+import { Filters } from '../components/filters/filters';
+import { DipDetails } from '../components/dip-details/dip-details';
+import { DocumentDetails } from '../components/document-details/document-details';
 import { SearchFilterDTO } from '@shared/request/search.request.dto';
 import {
   AttachmentResponseDTO,
@@ -14,7 +14,7 @@ import {
   DocumentEssentialsDTO,
 } from '@shared/response/dip-content.response.dto';
 import { DocumentIntegrityResponseDTO } from '@shared/response/document-integrity.response.dto';
-import { ElectronIpc } from '../../services/electron-ipc';
+import { ElectronIpc } from '../services/electron-ipc';
 import { IPC_CHANNELS } from '@shared/ipc-channels';
 import { IpcResponse } from '@shared/ipc-response';
 

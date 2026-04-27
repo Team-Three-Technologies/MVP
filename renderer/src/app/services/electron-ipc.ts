@@ -7,7 +7,6 @@ import { FileRequestDTO } from '@shared/request/file.request.dto';
 import { AutoImportDipResponseDTO } from '@shared/response/auto-import-dip.response.dto';
 import { DipContentResponseDTO } from '@shared/response/dip-content.response.dto';
 import { DocumentDetailsResponseDTO } from '@shared/response/document-details.response.dto';
-import { DocumentIntegrityResponseDTO } from '@shared/response/document-integrity.response.dto';
 import { SearchResponseDTO } from '@shared/response/search.response.dto';
 import { FileInternalPreviewResponseDTO } from '@shared/response/file-internal-preview.response.dto';
 import { ExportFileResponseDTO } from '@shared/response/export-file.response';
