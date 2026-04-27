@@ -178,6 +178,7 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
     this._selectedAllegatoState.set(null);
     try {
       const details = await this.electronIpc.getDocumentDetails({ documentUuid });
+      this._selectedDocumentState.set(details);
       const allegato = details.attachments.find((a) => a.uuid === allegatoUuid);
       if (allegato) {
         this._selectedAllegatoState.set(allegato);

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DipDashboardContainer } from './dip-dashboard/dip-dashboard-container/dip-dashboard-container';
+import { DipDashboardContainer } from './dip-dashboard-container/dip-dashboard-container';
 
 @Component({
   selector: 'app-root',

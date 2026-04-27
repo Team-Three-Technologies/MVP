@@ -299,7 +299,7 @@ export class Filters {
       return /^\d{11}$/.test(value);
     }
     if (this.filtriCodiceFiscale.has(filterType)) {
-      return /^[A-Za-z0-9]{16}$/.test(value);
+      return /^([A-Za-z0-9]{16}|\d{11})$/.test(value);
     }
     return true;
   }
