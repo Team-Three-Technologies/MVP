@@ -14,13 +14,13 @@ describe('DipDetails', () => {
     fixture = TestBed.createComponent(DipDetails);
   });
 
-  it('renders the empty state when no package is available', () => {
+  it('mostra lo stato vuoto quando non ci sono pacchetti disponibili', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Nessun pacchetto caricato');
   });
 
-  it('renders package data when dip info is provided', () => {
+  it('mostra i dati del pacchetto quando vengono fornite le info del DIP', () => {
     const dipInfo: DipContentResponseDTO = {
       uuid: 'dip-1',
       creationDate: new Date('2026-04-28T12:34:00Z'),
@@ -42,7 +42,7 @@ describe('DipDetails', () => {
     expect(text).toContain('28/04/2026');
   });
 
-  it('falls back to N/D for missing values', () => {
+  it('usa N/D come fallback per i valori mancanti', () => {
     fixture.componentRef.setInput('dipInfo', {
       uuid: '',
       creationDate: null,

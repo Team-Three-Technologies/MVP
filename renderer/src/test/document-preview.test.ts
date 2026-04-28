@@ -19,7 +19,7 @@ describe('DocumentPreview', () => {
     component = fixture.componentInstance;
   });
 
-  it('shows the empty state when no document is selected', () => {
+  it('mostra lo stato vuoto quando non è selezionato alcun documento', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain(
@@ -27,14 +27,14 @@ describe('DocumentPreview', () => {
     );
   });
 
-  it('shows the loading state when preview generation is pending', () => {
+  it('mostra lo stato di caricamento quando l\'anteprima è in generazione', () => {
     fixture.componentRef.setInput('isLoadingPreview', true);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Caricamento anteprima in corso...');
   });
 
-  it('renders pdf, image and unsupported previews and resets the safe url when cleared', () => {
+  it('mostra anteprime PDF, immagini e formati non supportati, e resetta l\'URL sicuro quando pulito', () => {
     fixture.componentRef.setInput('document', document);
     fixture.componentRef.setInput('documentFileUrl', 'https://example.com/documento.pdf');
     fixture.componentRef.setInput('itemFormato', 'pdf');

@@ -54,14 +54,14 @@ describe('DocumentDetails', () => {
     component = fixture.componentInstance;
   });
 
-  it('shows the loading state when requested', () => {
+  it('mostra lo stato di caricamento quando richiesto', () => {
     fixture.componentRef.setInput('isLoading', true);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Caricamento dettagli...');
   });
 
-  it('shows the empty state when nothing is selected', () => {
+  it('mostra lo stato vuoto quando non è selezionato nulla', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain(
@@ -69,7 +69,7 @@ describe('DocumentDetails', () => {
     );
   });
 
-  it('renders document details, subjects and attachments', () => {
+  it('mostra i dettagli del documento, i soggetti e gli allegati', () => {
     const emitted: Array<{ documentUuid: string; fileUuid?: string }> = [];
     component.export.subscribe((value) => emitted.push(value));
 
@@ -90,7 +90,7 @@ describe('DocumentDetails', () => {
     expect(emitted).toEqual([{ documentUuid: 'doc-1' }]);
   });
 
-  it('renders empty relation messages when subjects and attachments are missing', () => {
+  it('mostra messaggi di relazione vuota quando mancano soggetti e allegati', () => {
     fixture.componentRef.setInput('document', {
       ...document,
       subjects: [],
@@ -104,7 +104,7 @@ describe('DocumentDetails', () => {
     expect(text).toContain('Nessun allegato presente.');
   });
 
-  it('renders attachment details and exports the selected file', () => {
+  it('mostra i dettagli dell\'allegato ed esporta il file selezionato', () => {
     const emitted: Array<{ documentUuid: string; fileUuid?: string }> = [];
     component.export.subscribe((value) => emitted.push(value));
 

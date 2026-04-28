@@ -34,27 +34,27 @@ describe('DocumentList', () => {
     component = fixture.componentInstance;
   });
 
-  it('shows the loading state when requested', () => {
+  it('mostra lo stato di caricamento quando richiesto', () => {
     fixture.componentRef.setInput('isLoading', true);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Caricamento in corso...');
   });
 
-  it('shows the error state when a message is provided', () => {
+  it('mostra lo stato di errore quando viene fornito un messaggio', () => {
     fixture.componentRef.setInput('errorMessage', 'Errore di caricamento');
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Errore di caricamento');
   });
 
-  it('shows the empty state when no documents are available', () => {
+  it('mostra lo stato vuoto quando non ci sono documenti disponibili', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Nessun documento trovato.');
   });
 
-  it('renders documents, attachments and emits selection events', () => {
+  it('mostra documenti, allegati ed emette eventi di selezione', () => {
     const selectedDocuments: string[] = [];
     const selectedAttachments: Array<{ documentUuid: string; attachmentUuid: string }> = [];
     const previewRequests: Array<{ documentUuid: string; attachmentUuid?: string }> = [];

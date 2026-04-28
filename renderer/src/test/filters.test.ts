@@ -16,7 +16,7 @@ describe('Filters', () => {
     component = fixture.componentInstance;
   });
 
-  it('renders the different input controls for the supported filter types', () => {
+  it('mostra i diversi controlli di input per i tipi di filtro supportati', () => {
     component.filtriAttivi = [
       {
         type: 'Modalità di formazione',
@@ -69,7 +69,7 @@ describe('Filters', () => {
     expect(component.filtriAttivi[4].value).toBe('43');
   });
 
-  it('adds filters through the button and removes dependent filters when values change', () => {
+  it('aggiunge filtri tramite il pulsante e rimuove i filtri dipendenti quando i valori cambiano', () => {
     fixture.detectChanges();
 
     (fixture.nativeElement.querySelector('.btn-aggiungi') as HTMLButtonElement).click();
@@ -105,7 +105,7 @@ describe('Filters', () => {
     );
   });
 
-  it('emits only valid filters when a search is started', () => {
+  it('emette solo filtri validi quando viene avviata una ricerca', () => {
     const emitted: SearchFilterDTO[][] = [];
     component.searchRequested.subscribe((value) => emitted.push(value));
 
@@ -147,7 +147,7 @@ describe('Filters', () => {
     expect((component as any).isValidForType('Numero documento', '   ')).toBe(true);
   });
 
-  it('removes rows through the delete button and starts a new search', () => {
+  it('rimuove le righe tramite il pulsante elimina e avvia una nuova ricerca', () => {
     const emitted: SearchFilterDTO[][] = [];
     component.searchRequested.subscribe((value) => emitted.push(value));
 

@@ -152,7 +152,7 @@ describe('DipDashboard', () => {
     expect(component.selectedAllegato()?.uuid).toBe('att-123');
   });
 
-  it('test ngOnDestroy', () => {
+  it('test distruzione componente (ngOnDestroy)', () => {
     component.ngOnDestroy();
     expect(component.selectedDocument()).toBeNull();
     expect(component.selectedAllegato()).toBeNull();
@@ -168,7 +168,7 @@ describe('DipDashboard', () => {
     expect(component.errorMessage()).toBe('Failed to load document details.');
   });
 
-  it('renders the selected document details in the template', async () => {
+  it('mostra i dettagli del documento selezionato nel template', async () => {
     const mockDetails = {
       uuid: 'doc-321',
       name: 'Documento dettagliato',
