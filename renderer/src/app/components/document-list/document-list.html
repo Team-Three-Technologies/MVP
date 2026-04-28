@@ -15,7 +15,12 @@
         <button class="btn-link" type="button" (click)="onRowClick(doc.documentUuid)"
           [class.integrity-ok]="getIntegrityStatus(doc.documentUuid) === 'ok'"
           [class.integrity-ko]="getIntegrityStatus(doc.documentUuid) === 'ko'">
-          {{ doc.documentName }}
+          <span class="document-name-text">{{ doc.documentName }}</span>
+          @if (getIntegrityStatus(doc.documentUuid) === 'ok') {
+            <span class="status-icon ok" title="Integro">✔</span>
+          } @else if (getIntegrityStatus(doc.documentUuid) === 'ko') {
+            <span class="status-icon ko" title="Non integro">✖</span>
+          }
         </button>
 
         <button class="btn-icon btn-visualizza" type="button" (click)="onViewDocumentClick(doc, $event)"
@@ -35,7 +40,12 @@
           <button class="btn-link btn-allegato" type="button" (click)="onAttachmentClick(doc, allegato, $event)"
             [class.integrity-ok]="getIntegrityStatus(allegato.uuid) === 'ok'"
             [class.integrity-ko]="getIntegrityStatus(allegato.uuid) === 'ko'">
-            {{ allegato.name }}
+            <span class="document-name-text">{{ allegato.name }}</span>
+            @if (getIntegrityStatus(allegato.uuid) === 'ok') {
+              <span class="status-icon ok" title="Integro">✔</span>
+            } @else if (getIntegrityStatus(allegato.uuid) === 'ko') {
+              <span class="status-icon ko" title="Non integro">✖</span>
+            }
           </button>
           <button class="btn-icon btn-visualizza-allegato" type="button" (click)="onViewAttachmentClick(doc, allegato, $event)"
             aria-label="Visualizza allegato" title="Visualizza allegato">
