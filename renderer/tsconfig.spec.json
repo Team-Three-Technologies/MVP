@@ -5,6 +5,7 @@
     "types": [
       "vitest/globals"
     ],
+    "rootDir": "..",
     "rootDirs": [
       "./src",
       "../shared"
@@ -12,7 +13,7 @@
   },
   "include": [
     "src/**/*.d.ts",
-    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
     "../shared/**/*.ts"
-  ]
+, "src/test/filters.test.ts", "src/test/document-preview.test.ts", "src/test/document-details.test.ts", "src/test/document-list.test.ts", "src/test/dip-details.test.ts"  ]
 }

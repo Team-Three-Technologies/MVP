@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": [],
+    "rootDir": "..",
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["../shared/*"]
@@ -11,8 +12,8 @@
   "include": [
     "src/**/*.ts",
     "../shared/**/*.ts"
-  ],
+, "src/test/filters.test.ts", "src/test/document-preview.test.ts", "src/test/document-details.test.ts", "src/test/document-list.test.ts", "src/test/dip-details.test.ts"  ],
   "exclude": [
-    "src/**/*.spec.ts"
+    "src/**/*.test.ts"
   ]
 }
