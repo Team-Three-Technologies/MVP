@@ -1,13 +1,15 @@
 .document-details-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   font-family: sans-serif;
-  margin-bottom: 20px;
   width: 100%;
-  max-width: 700px;
+  box-sizing: border-box;
 }
 
 .card-header {
@@ -24,6 +26,9 @@
 
 .card-body {
   padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .info-row {
