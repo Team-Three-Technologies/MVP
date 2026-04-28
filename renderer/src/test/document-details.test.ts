@@ -37,7 +37,7 @@ describe('DocumentDetails', () => {
     aggregationType: 'Fascicolo',
     subjects: [
       {
-        uuid: 'sub-1',
+        id: 1,
         role: 'Autore',
         name: 'Mario Rossi',
         type: 'PF',
