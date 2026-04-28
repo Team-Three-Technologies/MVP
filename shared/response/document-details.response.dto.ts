@@ -5,10 +5,10 @@ export interface AttachmentResponseDTO {
 }
 
 export interface SubjectDTO {
-  uuid: string;
-  role: string; 
-  name: string; 
-  type: string; 
+  id: number;
+  role: string;
+  name: string;
+  type: string;
 }
 
 export interface DocumentDetailsResponseDTO {
@@ -24,9 +24,9 @@ export interface DocumentDetailsResponseDTO {
   totalSize: string;
   attachmentsCount: number;
   attachments: AttachmentResponseDTO[];
-  documentType: string; 
-  documentNumber: string; 
-  registryCode: string; 
-  aggregationType: string; 
-  subjects: SubjectDTO[]; 
+  documentType: string;
+  documentNumber: string;
+  registryCode: string;
+  aggregationType: string;
+  subjects: SubjectDTO[];
 }

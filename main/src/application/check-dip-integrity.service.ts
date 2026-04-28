@@ -40,9 +40,7 @@ export class CheckDipIntegrityService implements CheckDipIntegrityUseCase {
   }
 
   public async *execute(dipUuid: string): AsyncGenerator<DocumentIntegrityResponseDTO> {
-    // TODO: controllare che il DiP esista
     const documents = await this.documentRepository.findAllByDipUuid(dipUuid, true);
-    // TODO: controllare che abbia documenti
 
     for (const doc of documents) {
       const trace = doc.getMetadataValueByRegex(

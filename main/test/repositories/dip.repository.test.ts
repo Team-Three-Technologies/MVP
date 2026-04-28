@@ -56,9 +56,7 @@ describe('SQLiteDipRepository', () => {
       expect.stringContaining('DELETE FROM archivi_dip'),
     );
 
-    expect(mockRun).toHaveBeenCalledWith(
-      'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-    );
+    expect(mockRun).toHaveBeenCalledWith('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
   });
 
   it('findByUuid(string), ritorna un dip con quel uuid', async () => {

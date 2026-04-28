@@ -13,7 +13,7 @@ describe('FileExternalPreviewService', () => {
     container.clearInstances();
     container.register(TOKENS.DocumentRepository, { useValue: {} });
     container.register(TOKENS.ShellProvider, { useValue: {} });
-        container.register(TOKENS.FileSystemProvider, { useValue: {} });
+    container.register(TOKENS.FileSystemProvider, { useValue: {} });
   });
 
   it('Test con sia documento che allegato presente', () => {

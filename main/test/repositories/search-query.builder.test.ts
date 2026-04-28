@@ -33,11 +33,7 @@ describe('SearchQueryBuilder', () => {
       const { query, params } = builder.buildQuery();
 
       expect(queryRegex.test(query)).toBe(true);
-      expect(params).toEqual([
-        'Formato', '%ab%',
-        'Tipo', '%cd%',
-        2,
-      ]);
+      expect(params).toEqual(['Formato', '%ab%', 'Tipo', '%cd%', 2]);
     });
   });
 
@@ -56,11 +52,7 @@ describe('SearchQueryBuilder', () => {
       const { query, params } = builder.buildQuery();
 
       expect(queryRegex.test(query)).toBe(true);
-      expect(params).toEqual([
-        'Formato', 'pdf',
-        'Note', 'testo',
-        2,
-      ]);
+      expect(params).toEqual(['Formato', 'pdf', 'Note', 'testo', 2]);
     });
   });
 
@@ -82,5 +74,13 @@ describe('SearchQueryBuilder', () => {
 
       expect(result.params).toEqual([0]);
     });
+  });
+
+  it('ritorna query invalida (senza clausole) via LIKE branch', () => {
+    const builder = new SearchQueryBuilder();
+    const { query, params } = builder.buildQuery();
+ // conferma: entra nel branch LIKE
+    expect(query).toContain('WHERE');
+    expect(params).toEqual([0]);
   });
 });

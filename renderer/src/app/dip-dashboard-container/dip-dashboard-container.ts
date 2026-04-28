@@ -121,24 +121,20 @@ export class DipDashboardContainer implements OnInit, OnDestroy {
     this.electronIpc.checkIntegrity({ dipUuid });
 
     this._integritySubscriptions = [
-    this.electronIpc.on(
-      IPC_CHANNELS.DIP_CHECK_INTEGRITY_RESULT,
-      (response: IpcResponse<DocumentIntegrityResponseDTO>) => {
-        if (response.data) this._updateIntegrityMap(response.data);
-      },
-    ),
-    this.electronIpc.on(
-      IPC_CHANNELS.DIP_CHECK_INTEGRITY_DONE,
-      () => this._clearIntegritySubscriptions(),
-    ),
-    this.electronIpc.on(
-      IPC_CHANNELS.DIP_CHECK_INTEGRITY_ERROR,
-      (response: IpcResponse<void>) => {
+      this.electronIpc.on(
+        IPC_CHANNELS.DIP_CHECK_INTEGRITY_RESULT,
+        (response: IpcResponse<DocumentIntegrityResponseDTO>) => {
+          if (response.data) this._updateIntegrityMap(response.data);
+        },
+      ),
+      this.electronIpc.on(IPC_CHANNELS.DIP_CHECK_INTEGRITY_DONE, () =>
+        this._clearIntegritySubscriptions(),
+      ),
+      this.electronIpc.on(IPC_CHANNELS.DIP_CHECK_INTEGRITY_ERROR, (response: IpcResponse<void>) => {
         console.error('Integrity check error:', response.error);
         this._clearIntegritySubscriptions();
-      },
-    ),
-  ];
+      }),
+    ];
   }
 
   private _updateIntegrityMap(data: DocumentIntegrityResponseDTO): void {

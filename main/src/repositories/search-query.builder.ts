@@ -13,7 +13,7 @@ export class SearchQueryBuilder {
   }
 
   public buildQuery(): SearchQueryBuilderResult {
-    const useFts = this.filters.every((f) => f.getValue().length >= 3);
+    const useFts = this.filters.length > 0 && this.filters.every((f) => f.getValue().length >= 3);
 
     const conditions: string[] = [];
     const params: (string | number)[] = [];

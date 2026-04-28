@@ -71,9 +71,9 @@
       <span class="info-label">Soggetti coinvolti:</span>
       @if (document.subjects && document.subjects.length > 0) {
       <ul class="soggetti-list">
-        @for (subject of document.subjects; track subject.uuid) {
+        @for (subject of document.subjects; track subject.id) {
         <li class="soggetto-item">
-          <span class="soggetto-ruolo">{{ subject.role }}:</span>
+          <span class="soggetto-ruolo">{{ subject.role }}: </span>
           <span class="soggetto-nome">{{ subject.name }} ({{ subject.type }})</span>
         </li>
         }

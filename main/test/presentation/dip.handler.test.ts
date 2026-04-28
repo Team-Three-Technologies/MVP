@@ -52,9 +52,7 @@ describe('DipHandler', () => {
     it('errore (#2)', async () => {
       container.register(TOKENS.AutoImportDipUseCase, {
         useValue: {
-          execute: vi
-            .fn()
-            .mockRejectedValue(new Error('DiP già importato in precedenza')),
+          execute: vi.fn().mockRejectedValue(new Error('DiP già importato in precedenza')),
         },
       });
 
@@ -138,9 +136,7 @@ describe('DipHandler', () => {
           execute: vi
             .fn()
             .mockRejectedValue(
-              new Error(
-                'Non esiste un DiP con questo UUID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-              ),
+              new Error('Non esiste un DiP con questo UUID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'),
             ),
         },
       });
@@ -206,9 +202,7 @@ describe('DipHandler', () => {
         }),
       );
 
-      expect(mockSend).toHaveBeenCalledWith(
-        IPC_CHANNELS.DIP_CHECK_INTEGRITY_DONE,
-      );
+      expect(mockSend).toHaveBeenCalledWith(IPC_CHANNELS.DIP_CHECK_INTEGRITY_DONE);
     });
 
     it('invia ERROR se fallisce', async () => {

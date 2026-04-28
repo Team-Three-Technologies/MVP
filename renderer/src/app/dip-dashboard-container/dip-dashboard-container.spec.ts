@@ -22,7 +22,7 @@ describe('DipDashboardContainer', () => {
     };
     await TestBed.configureTestingModule({
       imports: [DipDashboardContainer],
-      providers:[{provide:ElectronIpc, useValue:electronIpcMock}],
+      providers: [{ provide: ElectronIpc, useValue: electronIpcMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DipDashboardContainer);
@@ -30,40 +30,43 @@ describe('DipDashboardContainer', () => {
     fixture.detectChanges();
   });
 
-  it('test dettagli documento', async() => {
+  it('test dettagli documento', async () => {
     const mockDetails = {
       uuid: 'doc-123',
       name: 'Documento test',
-      attachments: []
+      attachments: [],
     };
     electronIpcMock.getDocumentDetails.mockResolvedValue(mockDetails);
 
     await component.onDocumentSelected('doc-123');
 
-    expect(electronIpcMock.getDocumentDetails).toHaveBeenCalledWith({documentUuid: 'doc-123'});
+    expect(electronIpcMock.getDocumentDetails).toHaveBeenCalledWith({ documentUuid: 'doc-123' });
     expect(component.selectedDocument()).toEqual(mockDetails);
     expect(component.errorMessage()).toBeNull();
   });
 
-  it('test ricerca documenti', async() => {
+  it('test ricerca documenti', async () => {
     const mockSearchResults = { results: [{ uuid: 'search-1', name: 'Trovato' }] };
     electronIpcMock.searchDocuments.mockResolvedValue(mockSearchResults);
-    
+
     await component.onSearch([{ key: 'title', value: 'Trovato' } as any]);
-    
+
     expect(component.documentList().length).toBe(1);
     expect((component.documentList()[0] as any).name).toBe('Trovato');
   });
 
-  it('test export documento', async() => {
+  it('test export documento', async () => {
     electronIpcMock.exportFile.mockResolvedValue({ success: true });
-    
+
     await component.onExport({ documentUuid: 'doc-123' });
-    
-    expect(electronIpcMock.exportFile).toHaveBeenCalledWith({ documentUuid: 'doc-123', fileUuid: undefined });
+
+    expect(electronIpcMock.exportFile).toHaveBeenCalledWith({
+      documentUuid: 'doc-123',
+      fileUuid: undefined,
+    });
   });
 
-  it('test Loading integrità', async() => {
+  it('test Loading integrità', async () => {
     let integrityCallback: Function;
     electronIpcMock.on.mockImplementation((channel: string, callback: Function) => {
       if (channel === IPC_CHANNELS.DIP_CHECK_INTEGRITY_RESULT) {
@@ -88,25 +91,28 @@ describe('DipDashboardContainer', () => {
     expect(component.integrityMap().get('doc-123')).toBe(true);
   });
 
-  it('test preview interno documento', async() =>{
+  it('test preview interno documento', async () => {
     const mockDetails = {
       uuid: 'doc-123',
       name: 'test.pdf',
       extension: 'pdf',
-      attachments: []
+      attachments: [],
     };
 
     electronIpcMock.getDocumentDetails.mockResolvedValue(mockDetails);
-    electronIpcMock.fileInternalPreview.mockResolvedValue({ 
-    fileUrl: 'file:///Users/test-file.pdf' 
-  });
-    await component.onItemPreview({ documentUuid: 'doc-123'});
-    expect(electronIpcMock.fileInternalPreview).toHaveBeenCalledWith({ documentUuid: 'doc-123', fileUuid: undefined });
+    electronIpcMock.fileInternalPreview.mockResolvedValue({
+      fileUrl: 'file:///Users/test-file.pdf',
+    });
+    await component.onItemPreview({ documentUuid: 'doc-123' });
+    expect(electronIpcMock.fileInternalPreview).toHaveBeenCalledWith({
+      documentUuid: 'doc-123',
+      fileUuid: undefined,
+    });
     expect(component.documentFileUrl()).toBe('file:///Users/test-file.pdf');
-    expect(component.previewItemFormato()).toBe('pdf'); 
+    expect(component.previewItemFormato()).toBe('pdf');
   });
 
-  it('test preview esterno documento', async() =>{
+  it('test preview esterno documento', async () => {
     const mockDetails = {
       uuid: 'doc-err',
       name: 'test.pdf',
@@ -114,26 +120,30 @@ describe('DipDashboardContainer', () => {
     };
 
     electronIpcMock.fileExternalPreview.mockResolvedValue(mockDetails);
-    electronIpcMock.fileExternalPreview.mockResolvedValue({ 
-    fileUrl: 'file:///Users/test-file.pdf' 
-  });
-    await component.onItemPreview({ documentUuid: 'doc-err'});
-    expect(electronIpcMock.fileExternalPreview).toHaveBeenCalledWith({ documentUuid: 'doc-err', fileUuid: undefined });
-    expect(component.documentFileUrl()).toBeNull(); 
+    electronIpcMock.fileExternalPreview.mockResolvedValue({
+      fileUrl: 'file:///Users/test-file.pdf',
+    });
+    await component.onItemPreview({ documentUuid: 'doc-err' });
+    expect(electronIpcMock.fileExternalPreview).toHaveBeenCalledWith({
+      documentUuid: 'doc-err',
+      fileUuid: undefined,
+    });
+    expect(component.documentFileUrl()).toBeNull();
   });
 
-  it('test select allegato', async() => {
+  it('test select allegato', async () => {
     const mockDetails = {
       uuid: 'doc-123',
-      attachments:[{
-        uuid: 'att-123',
-        name: 'test.pdf',
-      },
-      {
-        uuid: 'att-124',
-        name: 'test.txt',
-      }
-    ]
+      attachments: [
+        {
+          uuid: 'att-123',
+          name: 'test.pdf',
+        },
+        {
+          uuid: 'att-124',
+          name: 'test.txt',
+        },
+      ],
     };
 
     electronIpcMock.getDocumentDetails.mockResolvedValue(mockDetails);
@@ -149,8 +159,7 @@ describe('DipDashboardContainer', () => {
     expect(component.previewSelectedDocument()).toBeNull();
   });
 
-
-  it('dovrebbe gestire un errore dal backend correttamente', async() =>{
+  it('dovrebbe gestire un errore dal backend correttamente', async () => {
     electronIpcMock.getDocumentDetails.mockRejectedValue(new Error('Errore Backend'));
 
     await component.onDocumentSelected('doc-123');

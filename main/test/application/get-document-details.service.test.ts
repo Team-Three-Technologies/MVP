@@ -20,7 +20,9 @@ describe('GetDocumentDetailsService', () => {
       },
     });
     const getDocDetails = container.resolve(GetDocumentDetailsService);
-    await expect(getDocDetails.execute('')).rejects.toThrow(`Non esiste un documento con questo UUID: `);
+    await expect(getDocDetails.execute('')).rejects.toThrow(
+      `Non esiste un documento con questo UUID: `,
+    );
   });
 
   it('Test con tutti i metadati vuoti', async () => {
@@ -57,9 +59,9 @@ describe('GetDocumentDetailsService', () => {
       attachments: expect.any(Array),
       documentType: expect.any(String),
       documentNumber: expect.any(String),
-      registryCode:  expect.any(String),
-      aggregationType:  expect.any(String),
-      subjects: expect.any(Array)
+      registryCode: expect.any(String),
+      aggregationType: expect.any(String),
+      subjects: expect.any(Array),
     });
 
     result.attachments.forEach((att) => {

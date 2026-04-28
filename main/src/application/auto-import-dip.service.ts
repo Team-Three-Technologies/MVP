@@ -52,7 +52,6 @@ export class AutoImportDipService implements AutoImportDipUseCase {
     // 176kB: 'D:\\filip\\Downloads\\dip.20251111.ec276d29-f80c-4693-b3c9-1cb650e23114';
     const dir = this.fileSystemProvider.getStartDir();
     const dipIndexPath = await this.fileSystemProvider.findFile(dir, FILE_NAME_PATTERNS.DIP_INDEX);
-    //TODO: per il db da capire se svuotarlo alla fine, molto sensato imo
     // se non trova il dip index
     if (!dipIndexPath) {
       throw new Error('DiPIndex mancante');
@@ -106,7 +105,7 @@ export class AutoImportDipService implements AutoImportDipUseCase {
       await this.documentRepository.saveMany(batch);
     }
 
-    const dipUuid = dip.getProcessUuid()
+    const dipUuid = dip.getProcessUuid();
     setCurrentDipUuid(dipUuid);
     return { dipUuid: dipUuid };
   }

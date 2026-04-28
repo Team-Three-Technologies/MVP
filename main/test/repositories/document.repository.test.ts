@@ -211,10 +211,7 @@ describe('SQLiteDocumentRepository', () => {
 
     const repo = container.resolve(SQLiteDocumentRepository);
 
-    const result = await repo.findAllByMetadata(
-      [new MetadataFilter('Formato', '.pdf')],
-      true,
-    );
+    const result = await repo.findAllByMetadata([new MetadataFilter('Formato', '.pdf')], true);
 
     expect(searchQueryBuilderMock.withFilter).toHaveBeenCalled();
     expect(Array.isArray(result)).toBe(true);
@@ -243,5 +240,96 @@ describe('SQLiteDocumentRepository', () => {
 
     expect(result).toEqual([]);
     expect(searchQueryBuilderMock.withFilter).not.toHaveBeenCalled();
+  });
+
+  it('findByUuid con withMetadata=false non carica i metadata', async () => {
+    const { instance, mocks } = createMockDb();
+
+    mocks.all
+      .mockReturnValueOnce([
+        {
+          uuid: 'doc-1',
+          percorso: 'path',
+          uuid_processo_conservazione: 'proc',
+          file_uuid: 'file-1',
+          file_percorso: 'path',
+          file_dimensione: '100 bytes',
+        },
+      ])
+      .mockReturnValueOnce([]); // attachments
+
+    // metadata NON viene chiamato: prepare viene invocato solo 2 volte in hydrateDocs
+
+    container.register(TOKENS.DatabaseProvider, { useValue: { instance } });
+    container.register(TOKENS.SearchQueryBuilder, { useValue: {} });
+
+    const repo = container.resolve(SQLiteDocumentRepository);
+    const result = await repo.findByUuid('doc-1', false);
+
+    expect(result).toBeInstanceOf(Document);
+    expect(result?.getMetadata()).toEqual([]);
+  });
+
+  it('findByUuid popola allegati e metadata quando presenti', async () => {
+    const { instance, mocks } = createMockDb();
+
+    mocks.all
+      .mockReturnValueOnce([
+        {
+          uuid: 'doc-1',
+          percorso: 'path',
+          uuid_processo_conservazione: 'proc',
+          file_uuid: 'file-1',
+          file_percorso: 'path',
+          file_dimensione: '100 bytes',
+        },
+      ])
+      // allegati: due righe per lo stesso documento (copre il ?? [] e il push)
+      .mockReturnValueOnce([
+        { uuid_documento: 'doc-1', uuid: 'att-1', percorso: 'att-path-1', dimensione: '10 bytes' },
+        { uuid_documento: 'doc-1', uuid: 'att-2', percorso: 'att-path-2', dimensione: '20 bytes' },
+      ])
+      // metadata: due righe per lo stesso documento (copre il ?? [] e il push)
+      .mockReturnValueOnce([
+        { uuid_documento: 'doc-1', nome: 'Formato', valore: 'pdf', tipo: MetadataTypeEnum.STRING },
+        { uuid_documento: 'doc-1', nome: 'Anno', valore: '2024', tipo: MetadataTypeEnum.DATE },
+      ]);
+
+    container.register(TOKENS.DatabaseProvider, { useValue: { instance } });
+    container.register(TOKENS.SearchQueryBuilder, { useValue: {} });
+
+    const repo = container.resolve(SQLiteDocumentRepository);
+    const result = await repo.findByUuid('doc-1', true);
+
+    expect(result).toBeInstanceOf(Document);
+    expect(result?.getAttachments()).toHaveLength(2);
+    expect(result?.getMetadata()).toHaveLength(2);
+  });
+
+  it('findAllByDipUuid con withMetadata=false non carica i metadata', async () => {
+    const { instance, mocks } = createMockDb();
+
+    mocks.all
+      .mockReturnValueOnce([{ uuid_documento: 'doc-1' }]) // uuid query
+      .mockReturnValueOnce([
+        {
+          uuid: 'doc-1',
+          percorso: 'path',
+          uuid_processo_conservazione: 'proc',
+          file_uuid: 'file-1',
+          file_percorso: 'path',
+          file_dimensione: '100 bytes',
+        },
+      ])
+      .mockReturnValueOnce([]); // attachments
+
+    container.register(TOKENS.DatabaseProvider, { useValue: { instance } });
+    container.register(TOKENS.SearchQueryBuilder, { useValue: {} });
+
+    const repo = container.resolve(SQLiteDocumentRepository);
+    const result = await repo.findAllByDipUuid('dip-1', false);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].getMetadata()).toEqual([]);
   });
 });

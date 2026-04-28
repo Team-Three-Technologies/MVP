@@ -47,20 +47,39 @@ export class Filters {
   private readonly filtriPartitaIva = new Set(['Partita IVA']);
   private readonly filtriCodiceFiscale = new Set(['Codice Fiscale']);
   private readonly ruoliPersoneFisiche = [
-    'Altro', 'Assegnatario', 'Autore', 'Destinatario', 'Mittente', 'Operatore',
-    'Responsabile del Servizio Protocollo', 'Responsabile della Gestione Documentale',
-    'Soggetto che effettua la registrazione'
+    'Altro',
+    'Assegnatario',
+    'Autore',
+    'Destinatario',
+    'Mittente',
+    'Operatore',
+    'Responsabile del Servizio Protocollo',
+    'Responsabile della Gestione Documentale',
+    'Soggetto che effettua la registrazione',
   ];
 
   readonly opzioniPerDropdown: Record<string, { label: string; value: string }[]> = {
     'Modalità di formazione': [
-      { label: 'Creazione tramite strumenti software conformi', value: 'creazione tramite strumenti software conformi a quanto disposto dall articolo 3 del presente decreto' },
-      { label: 'Acquisizione da via telematica o supporto informatico', value: 'acquisizione di un documento informatico per via telematica o su supporto informatico' },
+      {
+        label: 'Creazione tramite strumenti software conformi',
+        value:
+          'creazione tramite strumenti software conformi a quanto disposto dall articolo 3 del presente decreto',
+      },
+      {
+        label: 'Acquisizione da via telematica o supporto informatico',
+        value:
+          'acquisizione di un documento informatico per via telematica o su supporto informatico',
+      },
       {
         label: 'Memorizzazione da transazioni/processi informatici o moduli online',
-        value: 'memorizzazione di informazioni risultanti da transazioni o processi informatici o dalla presentazione telematica di moduli o formulari',
+        value:
+          'memorizzazione di informazioni risultanti da transazioni o processi informatici o dalla presentazione telematica di moduli o formulari',
       },
-      { label: 'Generazione automatica da banche dati', value: 'generazione o raggruppamento anche in via automatica di un insieme di dati o registrazioni provenienti da una o più banche dati anche appartenenti a più soggetti interoperanti secondo una struttura logica predeterminata e memorizzata in forma statica' },
+      {
+        label: 'Generazione automatica da banche dati',
+        value:
+          'generazione o raggruppamento anche in via automatica di un insieme di dati o registrazioni provenienti da una o più banche dati anche appartenenti a più soggetti interoperanti secondo una struttura logica predeterminata e memorizzata in forma statica',
+      },
     ],
     'Tipologia di flusso': [
       { label: 'U (In uscita)', value: 'U' },
@@ -69,7 +88,10 @@ export class Filters {
     ],
     'Tipo registro': [
       { label: 'Nessuno', value: 'Nessuno' },
-      { label: 'Protocollo ordinario/Protocollo emergenza', value: 'Protocollo ordinario Protocollo emergenza' },
+      {
+        label: 'Protocollo ordinario/Protocollo emergenza',
+        value: 'Protocollo ordinario Protocollo emergenza',
+      },
       { label: 'Repertorio/Registro', value: 'Repertorio Registro' },
     ],
     Ruolo: [
@@ -81,7 +103,10 @@ export class Filters {
       { label: 'Produttore', value: 'Produttore' },
       { label: 'RGD', value: 'RGD' },
       { label: 'RSP', value: 'RSP' },
-      { label: 'Soggetto che effettua la registrazione', value: 'Soggetto Che Effettua La Registrazione' },
+      {
+        label: 'Soggetto che effettua la registrazione',
+        value: 'Soggetto Che Effettua La Registrazione',
+      },
       { label: 'Altro', value: 'Altro' },
     ],
     'Tipo soggetto': [
@@ -125,7 +150,6 @@ export class Filters {
       { label: 'SHA-512', value: 'SHA-512' },
     ],
   };
-
 
   private readonly dipendenze: Record<string, (filtri: SearchFilterDTO[]) => boolean> = {
     'Tipologia fascicolo': (f) =>
