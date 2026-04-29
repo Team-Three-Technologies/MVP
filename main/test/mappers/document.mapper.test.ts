@@ -125,7 +125,11 @@ describe('DocumentMapper', () => {
   it('dovrebbe produrre size vuote per gli allegati senza FileInformation corrispondente', () => {
     const parsed = buildParsed();
     parsed.documentMetadata.Document.ArchimemoData.FileInformation = [
-      { '@_isPrimary': true, FileUUID: 'doc-main-uuid', FileSize: { '#text': '1', '@_unit': 'KB' } },
+      {
+        '@_isPrimary': true,
+        FileUUID: 'doc-main-uuid',
+        FileSize: { '#text': '1', '@_unit': 'KB' },
+      },
     ];
     const result = mapper.toDomain(parsed);
     const attachments = result.getAttachments();

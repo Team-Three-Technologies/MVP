@@ -6,44 +6,28 @@ describe('MetadataPathPolicy', () => {
     const policy = new MetadataPathPolicy();
 
     it('include i path che corrispondono ad allowRegex (TotalSize #text/@_unit)', () => {
-      expect(
-        policy.include('ArchimemoData.DocumentInformation.TotalSize.#text'),
-      ).toBe(true);
-      expect(
-        policy.include('ArchimemoData.DocumentInformation.TotalSize.@_unit'),
-      ).toBe(true);
+      expect(policy.include('ArchimemoData.DocumentInformation.TotalSize.#text')).toBe(true);
+      expect(policy.include('ArchimemoData.DocumentInformation.TotalSize.@_unit')).toBe(true);
     });
 
     it('include i path FileSize di FileInformation tramite allowRegex', () => {
-      expect(
-        policy.include('ArchimemoData.FileInformation.0.FileSize.#text'),
-      ).toBe(true);
-      expect(
-        policy.include('ArchimemoData.FileInformation.12.FileSize.@_unit'),
-      ).toBe(true);
+      expect(policy.include('ArchimemoData.FileInformation.0.FileSize.#text')).toBe(true);
+      expect(policy.include('ArchimemoData.FileInformation.12.FileSize.@_unit')).toBe(true);
     });
 
     it('include i path MoreData tramite allowRegex', () => {
       expect(policy.include('ArchimemoData.MoreData.0.#text')).toBe(true);
       expect(policy.include('ArchimemoData.MoreData.3.@_name')).toBe(true);
-      expect(
-        policy.include('ArchimemoData.DocumentInformation.MoreData.1.#text'),
-      ).toBe(true);
-      expect(
-        policy.include('ArchimemoData.FileInformation.0.MoreData.2.@_name'),
-      ).toBe(true);
+      expect(policy.include('ArchimemoData.DocumentInformation.MoreData.1.#text')).toBe(true);
+      expect(policy.include('ArchimemoData.FileInformation.0.MoreData.2.@_name')).toBe(true);
     });
 
     it('include gli attributi consentiti di FileInformation tramite allowRegex', () => {
-      expect(
-        policy.include('ArchimemoData.FileInformation.0.@_isPrimary'),
-      ).toBe(true);
-      expect(
-        policy.include('ArchimemoData.FileInformation.1.@_customerHasDeclaredHash'),
-      ).toBe(true);
-      expect(
-        policy.include('ArchimemoData.FileInformation.2.@_originalFileName'),
-      ).toBe(true);
+      expect(policy.include('ArchimemoData.FileInformation.0.@_isPrimary')).toBe(true);
+      expect(policy.include('ArchimemoData.FileInformation.1.@_customerHasDeclaredHash')).toBe(
+        true,
+      );
+      expect(policy.include('ArchimemoData.FileInformation.2.@_originalFileName')).toBe(true);
     });
 
     it('esclude i path che contengono attributi @_ tramite denyRegex', () => {

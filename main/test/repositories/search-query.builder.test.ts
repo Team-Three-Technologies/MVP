@@ -79,7 +79,7 @@ describe('SearchQueryBuilder', () => {
   it('ritorna query invalida (senza clausole) via LIKE branch', () => {
     const builder = new SearchQueryBuilder();
     const { query, params } = builder.buildQuery();
- // conferma: entra nel branch LIKE
+    // conferma: entra nel branch LIKE
     expect(query).toContain('WHERE');
     expect(params).toEqual([0]);
   });

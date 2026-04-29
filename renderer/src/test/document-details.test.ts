@@ -104,7 +104,7 @@ describe('DocumentDetails', () => {
     expect(text).toContain('Nessun allegato presente.');
   });
 
-  it('mostra i dettagli dell\'allegato ed esporta il file selezionato', () => {
+  it("mostra i dettagli dell'allegato ed esporta il file selezionato", () => {
     const emitted: Array<{ documentUuid: string; fileUuid?: string }> = [];
     component.export.subscribe((value) => emitted.push(value));
 

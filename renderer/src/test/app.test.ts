@@ -9,7 +9,7 @@ describe('App', () => {
     }).compileComponents();
   });
 
-  it('dovrebbe creare l\'applicazione', () => {
+  it("dovrebbe creare l'applicazione", () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();

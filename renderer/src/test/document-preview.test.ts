@@ -27,14 +27,14 @@ describe('DocumentPreview', () => {
     );
   });
 
-  it('mostra lo stato di caricamento quando l\'anteprima è in generazione', () => {
+  it("mostra lo stato di caricamento quando l'anteprima è in generazione", () => {
     fixture.componentRef.setInput('isLoadingPreview', true);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Caricamento anteprima in corso...');
   });
 
-  it('mostra anteprime PDF, immagini e formati non supportati, e resetta l\'URL sicuro quando pulito', () => {
+  it("mostra anteprime PDF, immagini e formati non supportati, e resetta l'URL sicuro quando pulito", () => {
     fixture.componentRef.setInput('document', document);
     fixture.componentRef.setInput('documentFileUrl', 'https://example.com/documento.pdf');
     fixture.componentRef.setInput('itemFormato', 'pdf');

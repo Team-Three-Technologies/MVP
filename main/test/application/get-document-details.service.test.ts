@@ -62,7 +62,10 @@ describe('GetDocumentDetailsService', () => {
       const doc = buildDocument(
         [
           { name: 'NS.DatiDiRegistrazione.TipoRegistro.PROT.TipoRegistro', value: 'Protocollo' },
-          { name: 'NS.DatiDiRegistrazione.TipoRegistro.PROT.DataRegistrazione', value: '2024-01-15' },
+          {
+            name: 'NS.DatiDiRegistrazione.TipoRegistro.PROT.DataRegistrazione',
+            value: '2024-01-15',
+          },
           { name: 'NS.DatiDiRegistrazione.TipoRegistro.PROT.OraRegistrazione', value: '10:30' },
           { name: 'NS.ChiaveDescrittiva.Oggetto', value: 'Oggetto del documento' },
           { name: 'NS.VersioneDelDocumento', value: '1.0' },
@@ -150,7 +153,7 @@ describe('GetDocumentDetailsService', () => {
       expect(r.totalSize).toBe('null null');
     });
 
-    it('totalSize è corretto se solo l\'unità manca', async () => {
+    it("totalSize è corretto se solo l'unità manca", async () => {
       const doc = buildDocument([
         { name: 'ArchimemoData.DocumentInformation.TotalSize.#text', value: '512' },
       ]);
@@ -167,7 +170,11 @@ describe('GetDocumentDetailsService', () => {
       registerRepoWithDocument(doc);
       const service = container.resolve(GetDocumentDetailsService);
       const r = await service.execute('x');
-      expect(r.attachments[0]).toEqual({ uuid: 'a1', path: '/p/file-senza-estensione', extension: '' });
+      expect(r.attachments[0]).toEqual({
+        uuid: 'a1',
+        path: '/p/file-senza-estensione',
+        extension: '',
+      });
     });
 
     it('name del documento è stringa vuota se il file principale non ha estensione', async () => {
@@ -496,7 +503,7 @@ describe('GetDocumentDetailsService', () => {
       expect(r.subjects[1]).toMatchObject({ id: 1, role: 'R10', name: 'Dieci X' });
     });
 
-    it('assegna id progressivi (0-based) indipendentemente dall\'indice nel metadato', async () => {
+    it("assegna id progressivi (0-based) indipendentemente dall'indice nel metadato", async () => {
       const doc = buildDocument([
         { name: 'NS.Soggetti.Ruolo.5.Dati.TipoSoggetto', value: 'SW' },
         { name: 'NS.Soggetti.Ruolo.5.Dati.TipoRuolo', value: 'R5' },
@@ -550,8 +557,18 @@ describe('GetDocumentDetailsService', () => {
       const r = await service.execute('x');
 
       expect(r.subjects).toHaveLength(3);
-      expect(r.subjects[0]).toMatchObject({ id: 0, role: 'Mittente', name: 'Rossi Mario', type: 'PF' });
-      expect(r.subjects[1]).toMatchObject({ id: 1, role: 'Destinatario', name: 'ACME', type: 'PG' });
+      expect(r.subjects[0]).toMatchObject({
+        id: 0,
+        role: 'Mittente',
+        name: 'Rossi Mario',
+        type: 'PF',
+      });
+      expect(r.subjects[1]).toMatchObject({
+        id: 1,
+        role: 'Destinatario',
+        name: 'ACME',
+        type: 'PG',
+      });
       expect(r.subjects[2]).toMatchObject({ id: 2, role: 'Sistema', name: 'ProtSys', type: 'SW' });
     });
   });

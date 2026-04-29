@@ -10,7 +10,6 @@ import { AppConfig } from '../../src/infrastructure/app.config';
 import Database from 'better-sqlite3';
 import { FileSystemProvider } from '../../src/infrastructure/fs/file-system.provider.interface';
 
-
 // --- Migration reali usate come fixture ---
 const MIGRATION_001 = `CREATE TABLE IF NOT EXISTS archivi_dip (
     uuid_processo TEXT PRIMARY KEY,
@@ -168,9 +167,7 @@ describe('DatabaseProvider', () => {
       fsMock.readDir.mockResolvedValueOnce(['001_init.sql', '002_filters_mapper.sql']);
       fsMock.readFile.mockResolvedValueOnce(Buffer.from(MIGRATION_002, 'utf8'));
 
-      getMock
-        .mockReturnValueOnce({ name: '001_init.sql' })
-        .mockReturnValueOnce(undefined);
+      getMock.mockReturnValueOnce({ name: '001_init.sql' }).mockReturnValueOnce(undefined);
 
       await provider.init();
 
