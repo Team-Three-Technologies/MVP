@@ -27,6 +27,7 @@
     "test:renderer:cov": "cd renderer && npm run test:cov",
     "test": "npm run test:main && npm run test:renderer",
     "test:cov": "npm run test:main:cov && npm run test:renderer:cov",
+    "test:e2e": "playwright test",
     "package": "npm run build && electron-builder",
     "postinstall": "electron-builder install-app-deps",
     "format:main": "prettier --write \"main/src/**/*.ts\" \"main/test/**/*.ts\" \"shared/**/*.ts\"",

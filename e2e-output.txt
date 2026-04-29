@@ -1,0 +1,129 @@
+
+Running 12 tests using 1 worker
+
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15517) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58315/8babaf72-b37f-4a76-a204-1d2cb4c577c7
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓   1 [electron] › e2e/ipc/autoImport.spec.ts:30:5 › IPC - autoImport:import › ritorna errore se il DiPIndex non viene trovato nella cartella (1.2s)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+
+[ELECTRON STDOUT] UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15524) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58321/7587a60a-88cd-4b4c-a33d-f9174f2922a8
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓   2 [electron] › e2e/ipc/autoImport.spec.ts:48:7 › IPC - autoImport:import › restituisce il contenuto del DIP con i documenti corretti (488ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15537) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58326/58afe960-0174-4b82-910f-1042eb11e775
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓   3 [electron] › e2e/ipc/autoImport.spec.ts:58:9 › IPC - autoImport:import › ritorna errore se il DIP è già stato importato (496ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15547) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58330/6b6bdd80-5305-4565-b00a-860e703946c8
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓   4 [electron] › e2e/ipc/dip.spec.ts:29:7 › IPC - dip:content › restituisce il contenuto del DIP con i documenti corretti (458ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15556) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58334/5b2730f6-da68-450e-ad91-cece2a7fd829
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓   5 [electron] › e2e/ipc/dip.spec.ts:48:7 › IPC - dip:content › ritorna errore se il DIP non esiste (416ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15561) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58339/687bb798-dc7a-47a2-8bc7-3b0d0b199163
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓   6 [electron] › e2e/ipc/document.spec.ts:29:7 › IPC - document:metadata › restituisce i dettagli del documento senza allegati (429ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15573) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58343/db413cbc-cf5e-4e10-8d36-122e97e16d63
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓   7 [electron] › e2e/ipc/document.spec.ts:44:7 › IPC - document:metadata › restituisce i dettagli del documento con allegati (411ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+
+[ELECTRON STDOUT] UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15578) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58348/28a694fc-4d57-4ac3-a413-99f1f29efffe
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓   8 [electron] › e2e/ipc/document.spec.ts:63:7 › IPC - document:metadata › ritorna errore se il documento non esiste (441ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15585) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58352/776bceac-c91c-4ca8-be13-be3557376c92
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓   9 [electron] › e2e/ipc/integrity.spec.ts:29:7 › IPC - dip:check-integrity › emette un risultato per ogni documento e completa (449ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+
+[ELECTRON STDOUT] UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15590) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58357/581c741b-d96c-4f3d-863a-d091db567180
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓  10 [electron] › e2e/ipc/integrity.spec.ts:76:6 › IPC - dip:check-integrity › completa senza risultati se il DIP non esiste (439ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15595) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58361/1b2fa30b-614a-4c8b-98bb-6fdd35d0c405
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓  11 [electron] › e2e/ipc/search.spec.ts:29:7 › IPC - search:metadata › restituisce la struttura base del documento cercato (test minimale) (432ms)
+[ELECTRON STDOUT] AppPath: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main
+
+[ELECTRON STDOUT] UserData: /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data
+
+[ELECTRON STDERR] (node:15600) electron: Failed to load URL: file:///Users/andreamasiero/Documents/UNIPD/SWE/MVP/dist/main/main/dist/renderer/browser/index.html with error: ERR_FILE_NOT_FOUND
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+
+[ELECTRON STDERR] Debugger ending on ws://127.0.0.1:58366/8a39af99-74c9-4675-ab52-85481fb252df
+For help, see: https://nodejs.org/en/docs/inspector
+
+  ✓  12 [electron] › e2e/ipc/search.spec.ts:46:7 › IPC - search:metadata › restituisce un array vuoto se non ci sono risultati (446ms)
+
+  12 passed (6.6s)

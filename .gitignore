@@ -28,3 +28,5 @@ Thumbs.db
 
 # Coverage
 coverage/
+# E2E test data
+e2e/test-user-data/
