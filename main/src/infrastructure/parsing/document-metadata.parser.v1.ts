@@ -39,36 +39,6 @@ export class DocumentMetadataParserV1 implements DocumentMetadataParser {
       throw new Error(`Elemento Document mancante`);
     }
 
-    // this.assertRequiredStructure(raw);
-
     return raw;
-  }
-
-  private assertRequiredStructure(root: any): void {
-    const doc = root.Document;
-
-    if (!doc.DocumentoInformatico) {
-      throw new Error('"DocumentoInformatico" mancante');
-    }
-
-    if (!doc.ArchimemoData) {
-      throw new Error('"ArchimemoData" mancante');
-    }
-
-    if (!doc.ArchimemoData['@_adValidFrom']) {
-      throw new Error('Attributo obbligatorio "ArchimemoData@adValidFrom" mancante');
-    }
-
-    if (!doc.DocumentoInformatico.IdDoc?.Identificativo) {
-      throw new Error('"DocumentoInformatico/IdDoc/Identificativo" mancante');
-    }
-
-    if (!doc.DocumentoInformatico.Soggetti?.Ruolo?.length) {
-      throw new Error('"DocumentoInformatico/Soggetti/Ruolo" mancante o vuoto');
-    }
-
-    if (!doc.ArchimemoData.DocumentInformation?.DocumentUUID) {
-      throw new Error('"ArchimemoData/DocumentInformation/DocumentUUID" mancante');
-    }
   }
 }

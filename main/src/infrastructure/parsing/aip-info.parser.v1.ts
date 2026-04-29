@@ -39,6 +39,4 @@ export class AipInfoParserV1 implements AipInfoParser {
 
     return raw;
   }
-
-  // TODO: assertRequiredStructure se ha senso
 }
