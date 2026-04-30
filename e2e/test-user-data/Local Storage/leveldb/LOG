@@ -1,3 +1,3 @@
-2026/04/30-20:18:53.123 cbfdd7 Reusing MANIFEST /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data/Local Storage/leveldb/MANIFEST-000001
-2026/04/30-20:18:53.125 cbfdd7 Recovering log #3
-2026/04/30-20:18:53.125 cbfdd7 Reusing old log /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data/Local Storage/leveldb/000003.log 
+2026/04/30-20:20:39.414 cc172b Reusing MANIFEST /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data/Local Storage/leveldb/MANIFEST-000001
+2026/04/30-20:20:39.416 cc172b Recovering log #3
+2026/04/30-20:20:39.416 cc172b Reusing old log /Users/andreamasiero/Documents/UNIPD/SWE/MVP/e2e/test-user-data/Local Storage/leveldb/000003.log 
