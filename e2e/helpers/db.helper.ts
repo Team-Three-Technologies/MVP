@@ -2,21 +2,14 @@ import { ElectronApplication } from '@playwright/test';
 import * as path from 'path';
 import * as seed from '../fixtures/seed';
 
-// Percorsi assoluti per evitare ambiguità tra processi
 export const DB_PATH = path.resolve('./e2e/test-user-data/documents/app.db');
 const NODE_MODULES_PATH = path.resolve('./node_modules');
 
-/**
- * Esegue il seed del database all'interno del processo Electron Main.
- * Questo evita conflitti di versioni di moduli nativi (better-sqlite3).
- */
 export async function seedTestDatabase(app: ElectronApplication): Promise<void> {
   await app.evaluate(async (_, { dbPath, nodeModulesPath, constants }) => {
-    // Utilizziamo il require del processo main di Electron
     const Database = (process as any).mainModule.require(nodeModulesPath + '/better-sqlite3');
     const db = new Database(dbPath);
     
-    // 1. Inserimento dati (Schema reale 001_init.sql)
     db.prepare(`INSERT INTO archivi_dip (uuid_processo, data_creazione, numero_documenti, numero_aip) VALUES (?, ?, ?, ?)`).run(
       constants.TEST_DIP_UUID, new Date().toISOString(), 2, 1
     );
@@ -64,9 +57,6 @@ export async function seedTestDatabase(app: ElectronApplication): Promise<void> 
   });
 }
 
-/**
- * Pulisce tutte le tabelle del database all'interno del processo Electron Main.
- */
 export async function clearTestDatabase(app: ElectronApplication): Promise<void> {
   await app.evaluate(async (_, { dbPath, nodeModulesPath }) => {
     const Database = (process as any).mainModule.require(nodeModulesPath + '/better-sqlite3');

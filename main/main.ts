@@ -25,9 +25,7 @@ protocol.registerSchemesAsPrivileged([
 
 app.whenReady().then(async () => {
   protocol.handle('localfile', (request) => {
-    const filePath = fileURLToPath(
-      request.url.replace('localfile://', 'file://')
-    );
+    const filePath = fileURLToPath(request.url.replace('localfile://', 'file://'));
     return net.fetch(pathToFileURL(filePath).href);
   });
   registerDependencies();
@@ -43,7 +41,7 @@ function createWindow(): void {
     height: 800,
     webPreferences: {
       plugins: true,
-      preload: path.join(__dirname, 'preload.js'), 
+      preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
@@ -52,9 +50,11 @@ function createWindow(): void {
 
   const isDev = process.env['NODE_ENV'] === 'development';
 
-  if (isDev) {  // modalità dev
+  if (isDev) {
+    // modalità dev
     win.loadURL('http://localhost:4200');
-  } else {      // distribuzione
+  } else {
+    // distribuzione
     win.loadFile(path.join(app.getAppPath(), 'dist/renderer/browser/index.html'));
   }
 }

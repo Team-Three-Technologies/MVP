@@ -14,31 +14,26 @@ export const TEST_DOCUMENT_UUID_2 = 'test-doc-uuid-3457';
 export function seedDatabase(dbPath: string): void {
   const db = new Database(dbPath);
   
-  // 1. Inserisci in archivi_dip
   db.prepare(`
     INSERT INTO archivi_dip (uuid_processo, data_creazione, numero_documenti, numero_aip)
     VALUES (?, ?, ?, ?)
   `).run(TEST_DIP_UUID, new Date().toISOString(), 2, 1);
 
-  // 2. Inserisci in classi_documentali (collega dip a processi)
   db.prepare(`
     INSERT INTO classi_documentali (uuid, nome, versione, valida_da, uuid_dip)
     VALUES (?, ?, ?, ?, ?)
   `).run(TEST_CLASS_UUID, 'Classe Test', TEST_CLASS_VERSION, '2024-01-01', TEST_DIP_UUID);
 
-  // 3. Inserisci in processi_conservazione
   db.prepare(`
     INSERT INTO processi_conservazione (uuid, data_creazione, dimensione_totale, numero_sip, numero_documenti, numero_file_documenti, uuid_classe_documentale, versione_classe_documentale)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `).run(TEST_PROCESS_UUID, new Date().toISOString(), '2048 KB', 1, 2, 3, TEST_CLASS_UUID, TEST_CLASS_VERSION);
 
-  // 4. Inserisci i Files
   const insertFile = db.prepare(`INSERT INTO files (uuid, percorso, dimensione) VALUES (?, ?, ?)`);
   insertFile.run(TEST_FILE_UUID, 'test/path/main_file_1.pdf', '512 KB');
   insertFile.run(TEST_FILE_UUID_2, 'test/path/main_file_2.pdf', '1024 KB');
   insertFile.run(TEST_FILE_ATTACHMENT_UUID, 'test/path/attachment_1.pdf', '256 KB');
 
-  // 5. Inserisci i Documenti
   const insertDocumento = db.prepare(`
     INSERT INTO documenti (uuid, percorso, uuid_processo_conservazione, uuid_file_principale)
     VALUES (?, ?, ?, ?)
@@ -46,7 +41,6 @@ export function seedDatabase(dbPath: string): void {
   insertDocumento.run(TEST_DOCUMENT_UUID, 'test/path/document_1', TEST_PROCESS_UUID, TEST_FILE_UUID);
   insertDocumento.run(TEST_DOCUMENT_UUID_2, 'test/path/document_2', TEST_PROCESS_UUID, TEST_FILE_UUID_2);
 
-  // 6. Inserisci Allegato per il secondo documento
   db.prepare(`
     INSERT INTO allegati (uuid_documento, uuid_file)
     VALUES (?, ?)

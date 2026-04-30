@@ -1,6 +1,5 @@
 import { _electron as electron, ElectronApplication } from 'playwright';
 
-// avvia l'app e restituisce { app, page }
 export async function startApp() {
   const app = await electron.launch({
     args: [
@@ -24,7 +23,6 @@ export async function runInMain(
 ): Promise<void> {
   await app.evaluate(fn);
 }
-// chiude l'app
 export async function stopApp(app: ElectronApplication) {
   await app.close();
 }
