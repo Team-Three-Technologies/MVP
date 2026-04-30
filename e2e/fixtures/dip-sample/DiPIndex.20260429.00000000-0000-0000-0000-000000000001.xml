@@ -1,0 +1,24 @@
+<DiPIndex>
+  <PackageInfo>
+    <ProcessUUID>00000000-0000-0000-0000-000000000001</ProcessUUID>
+    <CreationDate>2026-04-29T10:00:00Z</CreationDate>
+    <DocumentsCount>1</DocumentsCount>
+    <AiPCount>1</AiPCount>
+  </PackageInfo>
+  <PackageContent>
+    <DiPDocuments>
+      <DocumentClass uuid="CLASS-001" name="Classe Test" version="1" validFrom="2024-01-01">
+        <AiP uuid="AIP-001">
+          <AiPRoot>aip_001</AiPRoot>
+          <Document uuid="DOC-001">
+            <DocumentPath>doc_001</DocumentPath>
+            <Files>
+              <Metadata type="technical">metadata.xml</Metadata>
+              <Primary isMain="true">main.pdf</Primary>
+            </Files>
+          </Document>
+        </AiP>
+      </DocumentClass>
+    </DiPDocuments>
+  </PackageContent>
+</DiPIndex>

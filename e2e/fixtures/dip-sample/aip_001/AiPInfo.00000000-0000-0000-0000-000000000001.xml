@@ -1,0 +1,18 @@
+<AiPInfo>
+  <Process ark-aip:uuid="AIP-001">
+    <Start>
+      <Date>2024-04-29T10:00:00Z</Date>
+    </Start>
+    <PreservationSession>
+      <DocumentsStats>
+        <DocumentsOverallSize ark-aip:unit="KB">1024</DocumentsOverallSize>
+        <SipCount>1</SipCount>
+        <DocumentsCount>1</DocumentsCount>
+        <DocumentsFilesCount>1</DocumentsFilesCount>
+      </DocumentsStats>
+    </PreservationSession>
+    <DocumentClass ark-aip:uuid="CLASS-001">
+      <Version>1</Version>
+    </DocumentClass>
+  </Process>
+</AiPInfo>

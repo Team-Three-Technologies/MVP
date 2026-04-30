@@ -1,0 +1,17 @@
+<Document>
+  <DocumentoInformatico>
+    <IdDoc>
+      <Identificativo>DOC-001</Identificativo>
+    </IdDoc>
+  </DocumentoInformatico>
+  <ArchimemoData adValidFrom="2024-01-01">
+    <DocumentInformation>
+        <DocumentUUID>DOC-001</DocumentUUID>
+        <PreservationProcessUUID>AIP-001</PreservationProcessUUID>
+    </DocumentInformation>
+    <FileInformation isPrimary="true">
+        <FileUUID>DOC-001</FileUUID>
+        <FileSize unit="KB">512</FileSize>
+    </FileInformation>
+  </ArchimemoData>
+</Document>
